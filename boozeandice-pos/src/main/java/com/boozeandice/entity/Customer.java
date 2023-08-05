@@ -65,9 +65,4 @@ public class Customer implements Serializable {
 		this.transaction = transaction;
 	}
 	
-	
-	
-	
-	
-
 }
