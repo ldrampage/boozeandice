@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  
+spring:
+  profiles:
+    active: dev
+  application:
+    name: boozeandice
+    
+logging:
+  level:
+    root: INFO
+    com.boozeandice: DEBUG
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
+  file:
+    path: 'C:\workspace\loggers\boozeandice'
+    name: '${logging.file.path}/${spring.profiles.active}.${spring.application.name}-${date:yyyy-MM-dd}.log'
+
+---
+ 
+spring: 
+  config:
+    activate:
+      on-profile: dev
+  datasource: 
+    url: jdbc:mysql://localhost:3306/boozeandice
+    username: root
+    password: lxbordo
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        generate-ddl: true
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: create
+    hibernate:
+      ddl-auto: create
+  cache:
+    type: simple
+     
