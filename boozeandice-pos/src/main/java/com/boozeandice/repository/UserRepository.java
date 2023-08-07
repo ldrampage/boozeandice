@@ -7,5 +7,5 @@ import com.boozeandice.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+	public User findByUsername(String uname);
 }
