@@ -20,8 +20,8 @@ public class UserService implements Serializable {
 	@Autowired
 	private UserRepository userRepo;
 	
-	public User getByUsername() {
-		return userRepo.findByUsername("lxbordo");
+	public User getByUsername(String username) {
+		return userRepo.findByUsername(username);
 		
 	}
 

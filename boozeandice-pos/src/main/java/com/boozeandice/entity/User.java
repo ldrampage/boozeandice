@@ -1,11 +1,13 @@
 package com.boozeandice.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -136,5 +138,7 @@ public class User implements Serializable {
 	public void setUserActivityLog(List<UserActivityLog> userActivityLog) {
 		this.userActivityLog = userActivityLog;
 	}
+	
+	
 
 }

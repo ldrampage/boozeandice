@@ -11,11 +11,31 @@ public class PageController {
 	}
 	
 	public String productPage(Model model) {
-		return "pages/product";
+		return "pages/product/product";
 	}
 	
 	public String productEdit(Model model) {
-		return "pages/product_edit";
+		return "pages/product/product_edit";
+	}
+	
+	public String productAdd(Model model) {
+		return "pages/product/product_add";
+	}
+	
+	public String productStocks(Model model) {
+		return "pages/product/product_stock";
+	}
+	
+	public String productStocksAdd(Model model) {
+		return "pages/product/product_stock_add";
+	}
+	
+	public String productView(Model model) {
+		return "pages/product/product_view";
+	}
+	
+	public String productCategory() {
+		return "pages/product/product_category";
 	}
 
 }

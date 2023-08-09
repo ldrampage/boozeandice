@@ -56,8 +56,8 @@
 												</div>
 											</div>
 											<div class="add_button ms-2">
-												<a href="#" data-bs-toggle="modal" data-bs-target="#addcategory"
-													class="btn_1">Add New</a>
+												<a th:href="${'/product/products/add'}"
+													class="btn_1">Add Product</a>
 											</div>
 										</div>
 									</div>
@@ -71,7 +71,7 @@
 													<th scope="col">Category</th>
 													<th scope="col">Manufacturer</th>
 													<th scope="col">Supplier</th>
-													<th scope="col">Stock</th>
+													<th scope="col">Stock</th> 
 													<th scope="col">Price</th>
 													<th scope="col">Action</th>
 												</tr>
@@ -85,13 +85,16 @@
 													<td th:text="${product.manufacturer}"></td>
 													<td th:text="${product.supplier}"></td>
 													<td>
-														<span th:text="${product.overallStock}"></span>
+														<span th:text="${product.stocks}"></span>
 													</td>
 													<td th:text="${'Php ' + product.price}"></td>
 													<td>
 														<a th:href="${'/product/products/edit/' + product.id}" class="status_btn">Edit</a>
-														<a th:if="${product.overallStock <= 20}" href="#"  
+														<a th:href="${'/product/products/view/' + product.id}"
+															class="status_btn primary_btn btn-primary">View</a>
+														<a th:if="${product.stocks <= 20}" th:href="${'/product/stocks/add?id=' + product.id}"  
 															class="status_btn yellow_btn">Add stock</a>
+														
 													</td>
 												</tr>
 											</tbody>

@@ -27,8 +27,11 @@ public class ProductStock implements Serializable {
 	@JoinColumn(name="product_id")
 	private Product product; 
 	
-	@Column(name="quantity")
+	@Column(name="quantity", nullable = false)
 	private Long quantity;
+	
+	@Column(name="notes")
+	private String notes;
 	
 	@Column(name="purchase_date", nullable=false)
 	private Date purchaseDate;
@@ -39,17 +42,16 @@ public class ProductStock implements Serializable {
 	@Column(name="createdDate", nullable = false)
 	private Date createdDate;
 	
-	@Column(name="createdBy", nullable = false)
+	@ManyToOne
+	@JoinColumn(name="created_by")	
 	private User createdBy;
 	
-	@Column(name="lastModifiedBy")
+	@ManyToOne
+	@JoinColumn(name="last_modified_by") 
 	private User lastModifiedBy;
 	
 	@Column(name="lastModifiedDate")
 	private Date lastModifiedDate;
-	
-	@Column(name="location")
-	private String location;
 	
 	
 	public Long getId() {
@@ -88,30 +90,39 @@ public class ProductStock implements Serializable {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	public User getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	public User getLastModifiedBy() {
-		return lastModifiedBy;
-	}
-	public void setLastModifiedBy(User lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
+
 	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
+	
+	
+	public User getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+	public void setLastModifiedBy(User lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+	public User getCreatedBy() {
+		if(createdBy == null)
+			createdBy = new User();
+		return createdBy;
+	}
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+	public String getNotes() {
+		return notes;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
+	
+	
+	
 	
 	
 	

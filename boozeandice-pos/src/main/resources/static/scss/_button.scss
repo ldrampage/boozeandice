@@ -309,6 +309,15 @@
     &.yellow_btn{
         background: #ffba00;
     }
+    &.primary_btn {
+		background: #0275d8;
+	}
+	&.info_btn {
+		background: #5bc0de
+	}
+	&.danger_btn {
+		background: #d9534f
+	}
     &:hover{
         color: #fff;
     }

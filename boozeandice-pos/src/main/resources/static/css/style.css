@@ -3064,6 +3064,21 @@ p a:hover {
   background: #ffba00;
 }
 
+/* line 309, G:/admin_project/6 admin/sales/scss/_button.scss */
+.status_btn.primary_btn{
+  background: #0275d8;
+}
+
+/* line 309, G:/admin_project/6 admin/sales/scss/_button.scss */
+.status_btn.info_btn{
+  background: #5bc0de;
+}
+
+/* line 309, G:/admin_project/6 admin/sales/scss/_button.scss */
+.status_btn.danger_btn{
+  background: #d9534f;
+}
+
 /* line 312, G:/admin_project/6 admin/sales/scss/_button.scss */
 .status_btn:hover {
   color: #fff;

@@ -57,7 +57,7 @@ public class Transaction implements Serializable {
 	private String invoiceNumber;
 	
 	@Column(name="transaction_type")
-	private TransactionType transactionType; 
+	private TransactionType transactionType; // this also tells about the status of the transaction
 	
 	@Column(name="payment_method")
 	private PaymentMethod paymentMethod; 

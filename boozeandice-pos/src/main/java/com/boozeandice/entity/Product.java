@@ -37,11 +37,11 @@ public class Product implements Serializable {
 	@Column(name = "price", nullable = false)
 	private Double price;
 
-	@Column(name = "createdDate", nullable = false)
+	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
 
 	@ManyToOne
-	@JoinColumn(name = "created_by")
+	@JoinColumn(name="created_by")
 	private User createdBy;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -57,17 +57,12 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product")
 	private List<ProductStock> productStock;
 	
-	@Transient
-	private Long overallStock;
+	@Column(name="stock_available")
+	private Long stocks;
 	
-	public Long getOverallStock() {
-		return overallStock;
-	}
-
-	public void setOverallStock(Long overallStock) {
-		this.overallStock = overallStock;
-	}
-
+	@Column(name="img_location")
+	private String imgLocation; 
+	
 	public List<ProductStock> getProductStock() {
 		return productStock;
 	}
@@ -150,6 +145,28 @@ public class Product implements Serializable {
 	public void setProductCategory(ProductCategory productCategory) {
 		this.productCategory = productCategory;
 	}
+
+	public String getImgLocation() {
+		return imgLocation;
+	}
+
+	public void setImgLocation(String imgLocation) {
+		this.imgLocation = imgLocation;
+	}
+
+	public Long getStocks() {
+		if(stocks == null)
+			stocks = Long.valueOf(0);
+		return stocks;
+	}
+
+	public void setStocks(Long stocks) {
+		this.stocks = stocks;
+	}
+	
+	
+	
+	
 
 	
 }
