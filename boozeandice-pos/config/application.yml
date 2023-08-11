@@ -1,12 +1,21 @@
 server:
-  port: 8080
+  port: 8081
   
 spring:
   profiles:
     active: dev
   application:
     name: boozeandice
-    
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+      enabled: true
+
+#img upload location
+upload:
+  directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img
+  
 logging:
   level:
     root: INFO

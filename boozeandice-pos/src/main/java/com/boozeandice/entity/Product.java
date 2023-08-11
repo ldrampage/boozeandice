@@ -3,6 +3,7 @@ package com.boozeandice.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -44,7 +45,7 @@ public class Product implements Serializable {
 	@JoinColumn(name="created_by")
 	private User createdBy;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_category_id")
 	private ProductCategory productCategory;
 
@@ -162,6 +163,23 @@ public class Product implements Serializable {
 
 	public void setStocks(Long stocks) {
 		this.stocks = stocks;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(id, other.id);
 	}
 	
 	

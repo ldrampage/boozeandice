@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="crm_body_bg">
+
+	<!-- main content part here -->
+
+	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
+
+	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div class="main_content_iner overly_inner">
+			<div class="container-fluid p-0 ">
+				<!-- page title  -->
+				<div class="row">
+					<div class="col-12">
+						<div class="page_title_box d-flex align-items-center justify-content-between">
+							<div class="page_title_left">
+								<h3 class="f_s_30 f_w_700 text_white">Dashboard</h3>
+								<ol class="breadcrumb page_bradcam mb-0">
+									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
+									<li class="breadcrumb-item active">POS Interface</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="card_box box_shadow position-relative mb_30     ">
+							<div class="white_box_tittle" style="padding:25px;">
+								<div class="main-title2 ">
+									<h6 class="card-subtitle mb-2">By Category</h6>
+									<form method="post" th:action="@{/}">
+										<div class="input-group">
+											<select class="form-select" id="inputGroupSelect04"
+												aria-label="Example select with button addon" name="categoryId">
+												<option value="all" selected="">All...</option>
+												<option th:each="category : ${productCategoryList}" th:value="${category.id}"
+													th:text="${category.name}"></option>
+											</select>
+											<button class="btn btn-success input-group-text" type="submit" name="fetchByCategory">Go</button>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="box_body">
+								<div class=" ">
+									<div class="vertical-scroll scroll-demo ps-container ps-theme-default ps-active-y"
+										style="height:780px;">
+										<div class="horrizontal_width" style="width: 1800px;">
+											<div class="row" th:each="entry : ${productsDisplay}">
+
+												<div class="col-md-3" style="width:15%;" th:each="product : ${entry}">
+													<div class="white_card position-relative mb_20 ">
+														<div class="card-body">
+															<div class="ribbon1 rib1-primary"><span
+																	class="text-white text-center rib1-primary"
+																	th:text="${'Php ' + product.price}"></span>
+															</div>
+															<!--end ribbon--><img
+																th:src="@{/images/} + ${product.imgLocation}"
+																alt="No Image Available" class="d-block mx-auto my-4"
+																height="125">
+															<div class="row my-2">
+																<div class="col"><span class="badge_btn_3  mb-1"
+																		th:if="${product.productCategory != null}"
+																		th:text="${product.productCategory.name}"></span>
+								 
+																	<a href="#"
+																		class="f_w_400 color_text_3 f_s_14 d-block"
+																		th:text="${product.name}"></a>
+																</div>
+															</div>
+															<div class="row my-2">
+																<div class="col-auto">
+																	<h4 class="text-dark mt-0"
+																		th:text="${'Php ' + product.price}">
+
+																		<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
+																	</h4>
+																</div>
+															</div>
+															<form method="post" th:action="@{/}">
+																<div class="d-grid">
+																	<input type="hidden" th:value="${product.id}"
+																		name="productId" />
+																	<button type="submit" class="btn_2"
+																		name="purchase">Purchase</button>
+																</div>
+															</form>
+
+														</div>
+														<!--end card-body-->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-lg-4">
+						<div class="card QA_section border-0">
+							<div class="card-body QA_table ">
+								<div class="table-responsive shopping-cart ">
+									<table class="table mb-0">
+										<thead>
+											<tr>
+												<th class="border-top-0">Product</th>
+												<th class="border-top-0">Price</th>
+												<th class="border-top-0">Quantity</th>
+												<th class="border-top-0">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="product : ${productToPurchaseList}">
+												<td><img th:src="@{/images/} + ${product.imgLocation} " alt="N/A"
+														height="52">
+													<p class="d-inline-block align-middle mb-0"><a href=""
+															class="d-inline-block align-middle mb-0 f_w_600 color_theme2"
+															th:text="${product.name}"></a></p>
+												</td>
+												<td th:text="${'Php ' + product.price}"></td>
+												<td style="width:15%"><input class="form-control" type="number" min="1"
+														th:max="${product.stocks}" step="0" value="1"
+														id="example-number-input1"></td>
+
+												<form method="post" th:action="@{/}">
+													<td>
+														<input type="hidden" th:value="${product.id}"
+															name="productId" />
+														<button name="removePurchase" type="submit"
+															class="btn btn-sm btn-outline-dark">
+															Remove
+														</button>
+													</td>
+												</form>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="row justify-content-end mt_30">
+									<div class="col-md-12">
+										<div class="total-payment">
+											<table class="table">
+												<tbody>
+													<tr>
+														<td style="text-align: center;"><a th:href="@{/}"
+																class="btn btn-outline-danger mb-3"><i
+																	class="far fa-times-circle font_s_18"></i>
+																Cancel</a></td>
+														<td style="text-align: center;"><button
+																class="btn btn-outline-success mb-3"><i
+																	class="fas fa-shopping-bag font_s_18"></i>
+																Checkout</button></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!--end col-->
+								</div>
+								<!--end row-->
+							</div>
+							<!--end card-->
+						</div>
+						<!--end card-body-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- footer part -->
+		<div th:insert="~{fragments/footer :: footer}"></div>
+	</section>
+	<!-- main content part end -->
+
+	<div id="back-top" style="display: none;">
+		<a title="Go to Top" href="#">
+			<i class="ti-angle-up"></i>
+		</a>
+	</div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+</body>
+
+</html>

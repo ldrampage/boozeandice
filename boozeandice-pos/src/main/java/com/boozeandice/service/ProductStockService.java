@@ -39,6 +39,7 @@ public class ProductStockService implements Serializable {
 		return productStockRepo.findByProduct(product);
 	}
 	
+	
 	public ProductStock save(ProductStock productStock) {
 		return productStockRepo.save(productStock);
 	}

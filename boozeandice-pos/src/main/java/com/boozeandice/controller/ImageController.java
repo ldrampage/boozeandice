@@ -27,6 +27,10 @@ public class ImageController {
 	@GetMapping(path="/images/{imageLocalPath}")
 	public ResponseEntity<Resource> fetchImage(@PathVariable String imageLocalPath) throws IOException {
 		logger.debug("{ImageController} Start -> imageLocalPath: " + imageLocalPath);
+		
+		if(imageLocalPath.equals("null")) {
+            return ResponseEntity.ok().build();
+		}
 		 // Load the image file from the upload directory
         Path imagePath = Paths.get(uploadDirectory, imageLocalPath);
         Resource resource = new UrlResource(imagePath.toUri());

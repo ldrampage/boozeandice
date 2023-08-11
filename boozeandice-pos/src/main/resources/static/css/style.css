@@ -4017,7 +4017,7 @@ table.dataTable {
   z-index: 99;
   padding-bottom: 50px;
   position: fixed;
-  width: 270px;
+  width: 230px;
   z-index: 999;
   overflow: hidden;
   overflow-y: auto;
@@ -4868,7 +4868,7 @@ body::-webkit-scrollbar {
 /******** main content css here *********/
 /* line 2, G:/admin_project/6 admin/sales/scss/_main_content.scss */
 .main_content {
-  padding-left: 270px;
+  padding-left: 230px;
   width: 100%;
   padding-top: 0px !important;
   transition: .5s;

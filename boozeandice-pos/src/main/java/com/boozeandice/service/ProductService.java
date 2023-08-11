@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
 import com.boozeandice.repository.ProductRepository;
 
 @Service
@@ -26,6 +27,10 @@ public class ProductService implements Serializable {
 		return productRepo.findAll();
 	}
 	
+	public List<Product> getAllNonZeroStock(){
+		return productRepo.findByStocksNonZero();
+	}
+	
 	public Product getById(Long productId) {
 		Optional<Product> productOpt = productRepo.findById(productId);
 		if(productOpt.isPresent()) {
@@ -36,6 +41,10 @@ public class ProductService implements Serializable {
 	
 	public List<Product> searchByName(String search){
 		return productRepo.findByNameIgnoreCaseLike("%" + search + "%");
+	}
+	
+	public List<Product> getProductByCategory(ProductCategory category){
+		return productRepo.findByProductCategory(category);
 	}
 	
 	public Product save(Product product) {

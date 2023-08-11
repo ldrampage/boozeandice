@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 public class PageController {
 	
 	public String index(Model model) {
-		return "index";
+		return "pages/index";
 	}
 	
 	public String productPage(Model model) {
