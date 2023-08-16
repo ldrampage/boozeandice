@@ -19,10 +19,10 @@
 					<div class="col-12">
 						<div class="page_title_box d-flex align-items-center justify-content-between">
 							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Product</h3>
+								<h3 class="f_s_30 f_w_700 text_white">Inventory</h3>
 								<ol class="breadcrumb page_bradcam mb-0">
 									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Product</a></li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);">Inventory</a></li>
 									<li class="breadcrumb-item active">Product List</li>
 								</ol>
 							</div>
@@ -69,10 +69,10 @@
 												<tr>
 													<th scope="col">Name</th>
 													<th scope="col">Category</th>
-													<th scope="col">Manufacturer</th>
 													<th scope="col">Supplier</th>
 													<th scope="col">Stock</th> 
-													<th scope="col">Price</th>
+													<th scope="col">Retail Price</th>
+													<th scope="col">Cost</th>
 													<th scope="col">Action</th>
 												</tr>
 											</thead>
@@ -82,12 +82,12 @@
 															class="question_content"></a></td>
 													<td><span th:if="${product.productCategory != null}"
 															th:text="${product.productCategory.name}"></span></td>
-													<td th:text="${product.manufacturer}"></td>
 													<td th:text="${product.supplier}"></td>
 													<td>
 														<span th:text="${product.stocks}"></span>
 													</td>
 													<td th:text="${'Php ' + product.price}"></td>
+													<td th:text="${'Php ' + product.cost}"></td>
 													<td>
 														<a th:href="${'/product/products/edit/' + product.id}" class="status_btn">Edit</a>
 														<a th:href="${'/product/products/view/' + product.id}"

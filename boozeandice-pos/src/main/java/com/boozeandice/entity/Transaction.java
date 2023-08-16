@@ -3,6 +3,8 @@ package com.boozeandice.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.TransactionStatus;
@@ -17,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="transaction")
@@ -35,8 +38,11 @@ public class Transaction implements Serializable {
 	@Column(name="shipping")
 	private Double shipping;
 	
-	@Column(name="tax")
-	private Double tax;
+	@Column(name="vatable_sales")
+	private Double vatableSales;
+	
+	@Column(name="vat_amount")
+	private Double vatAmount;
 	
 	@Column(name="total")
 	private Double total;
@@ -52,19 +58,19 @@ public class Transaction implements Serializable {
 	private Customer customer;
 	
 	@OneToMany(mappedBy="transaction")
-	private List<TransactionItem> transactionItem; 
+	private Set<TransactionItem> transactionItem; 
 	
 	@Column(name="invoiceNumber")
 	private String invoiceNumber;
 	
 	@Column(name="transaction_type")
-	private TransactionType transactionType; // this also tells about the status of the transaction
+	private String transactionType; 
 	
 	@Column(name="payment_method")
-	private PaymentMethod paymentMethod; 
+	private String paymentMethod; 
 	
 	@Column(name="transaction_status")
-	private TransactionStatus transactionStatus;
+	private String transactionStatus;
 	
 	@Column(name="payment_reference")
 	private String paymentReference; // A string field to store any reference or transaction ID provided by the payment gateway or processor. 
@@ -73,9 +79,34 @@ public class Transaction implements Serializable {
 	@Column(name="transaction_notes")
 	private String transactionNotes;
 	
+	@Column(name="cash_received")
+	private Double cashReceived;
+	
 	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
+	@JoinColumn(name="cashier_id")
+	private User cashier;
+	
+	@ManyToOne
+	@JoinColumn(name="cashdrawer_id")
+	private CashDrawer cashdrawer;
+	
+	@Transient
+	private Long totalItems = Long.valueOf(0);
+	
+
+	public Long getTotalItems() {
+		if(this.transactionItem != null && this.transactionItem.size() > 0) {
+			for(TransactionItem tI : this.transactionItem) {
+				totalItems = totalItems + tI.getQuantity();
+			}
+			
+		}
+		return totalItems;
+	}
+
+	public void setTotalItems(Long totalItems) {
+		this.totalItems = totalItems;
+	}
 
 	public Long getId() {
 		return id;
@@ -101,12 +132,13 @@ public class Transaction implements Serializable {
 		this.shipping = shipping;
 	}
 
-	public Double getTax() {
-		return tax;
+	
+	public Double getVatAmount() {
+		return vatAmount;
 	}
 
-	public void setTax(Double tax) {
-		this.tax = tax;
+	public void setVatAmount(Double vatAmount) {
+		this.vatAmount = vatAmount;
 	}
 
 	public Double getTotal() {
@@ -141,11 +173,11 @@ public class Transaction implements Serializable {
 		this.customer = customer;
 	}
 
-	public List<TransactionItem> getTransactionItem() {
+	public Set<TransactionItem> getTransactionItem() {
 		return transactionItem;
 	}
 
-	public void setTransactionItem(List<TransactionItem> transactionItem) {
+	public void setTransactionItem(Set<TransactionItem> transactionItem) {
 		this.transactionItem = transactionItem;
 	}
 
@@ -157,28 +189,28 @@ public class Transaction implements Serializable {
 		this.invoiceNumber = invoiceNumber;
 	}
 
-	public TransactionType getTransactionType() {
+	public String getTransactionType() {
 		return transactionType;
 	}
 
 	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
+		this.transactionType = transactionType.getDescription();
 	}
 
-	public PaymentMethod getPaymentMethod() {
+	public String getPaymentMethod() {
 		return paymentMethod;
 	}
 
 	public void setPaymentMethod(PaymentMethod paymentMethod) {
-		this.paymentMethod = paymentMethod;
+		this.paymentMethod = paymentMethod.getDescription();
 	}
 
-	public TransactionStatus getTransactionStatus() {
+	public String getTransactionStatus() {
 		return transactionStatus;
 	}
 
 	public void setTransactionStatus(TransactionStatus transactionStatus) {
-		this.transactionStatus = transactionStatus;
+		this.transactionStatus = transactionStatus.getDescription();
 	}
 
 	public String getPaymentReference() {
@@ -197,13 +229,70 @@ public class Transaction implements Serializable {
 		this.transactionNotes = transactionNotes;
 	}
 
-	public User getUser() {
-		return user;
+	public Double getVatableSales() {
+		return vatableSales;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setVatableSales(Double vatableSales) {
+		this.vatableSales = vatableSales;
 	}
+
+	public Double getCashReceived() {
+		return cashReceived;
+	}
+
+	public void setCashReceived(Double cashReceived) {
+		this.cashReceived = cashReceived;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public void setTransactionStatus(String transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+
+	public User getCashier() {
+		return cashier;
+	}
+
+	public void setCashier(User cashier) {
+		this.cashier = cashier;
+	}
+
+	public CashDrawer getCashdrawer() {
+		return cashdrawer;
+	}
+
+	public void setCashdrawer(CashDrawer cashdrawer) {
+		this.cashdrawer = cashdrawer;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transaction other = (Transaction) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
+	
+	
 	
 	
 	

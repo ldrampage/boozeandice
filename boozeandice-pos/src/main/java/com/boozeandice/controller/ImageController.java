@@ -31,7 +31,7 @@ public class ImageController {
 		if(imageLocalPath.equals("null")) {
             return ResponseEntity.ok().build();
 		}
-		 // Load the image file from the upload directory
+		// Load the image file from the upload directory
         Path imagePath = Paths.get(uploadDirectory, imageLocalPath);
         Resource resource = new UrlResource(imagePath.toUri());
 

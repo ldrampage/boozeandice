@@ -32,8 +32,7 @@ public class ProductStockDataStore {
 	private UserRepository userRepo;
 	
 	@PostConstruct
-	public void init() {
-		
+	public void init() throws InterruptedException {
 		ProductStock productStock = new ProductStock();
 		
 		Optional<Product> product = productRepo.findById(Long.valueOf(1));
@@ -97,7 +96,69 @@ public class ProductStockDataStore {
 		
 		productStockRepo.save(productStock);
 		productRepo.save(product.get());
+		
+		
+		productStock = new ProductStock();
+		product = productRepo.findById(Long.valueOf(5));
+		productStock.setProduct(product.get());
+		productStock.setCost(Double.valueOf(1894));
+		productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setCreatedBy(user);
+		productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setQuantity(Long.valueOf(50));
+		
+		newStockBatch = productStock.getQuantity();
+		product.get().setStocks(product.get().getStocks() + newStockBatch);
+		
+		productStockRepo.save(productStock);
+		productRepo.save(product.get());
+		
+		
+		productStock = new ProductStock();
+		product = productRepo.findById(Long.valueOf(6));
+		productStock.setProduct(product.get());
+		productStock.setCost(Double.valueOf(1894));
+		productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setCreatedBy(user);
+		productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setQuantity(Long.valueOf(50));
+		
+		newStockBatch = productStock.getQuantity();
+		product.get().setStocks(product.get().getStocks() + newStockBatch);
+		
+		productStockRepo.save(productStock);
+		productRepo.save(product.get());
 
+		
+		productStock = new ProductStock();
+		product = productRepo.findById(Long.valueOf(7));
+		productStock.setProduct(product.get());
+		productStock.setCost(Double.valueOf(1894));
+		productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setCreatedBy(user);
+		productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setQuantity(Long.valueOf(50));
+		
+		newStockBatch = productStock.getQuantity();
+		product.get().setStocks(product.get().getStocks() + newStockBatch);
+		
+		productStockRepo.save(productStock);
+		productRepo.save(product.get());
+		
+		productStock = new ProductStock();
+		product = productRepo.findById(Long.valueOf(8));
+		productStock.setProduct(product.get());
+		productStock.setCost(Double.valueOf(1894));
+		productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setCreatedBy(user);
+		productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+		productStock.setQuantity(Long.valueOf(50));
+		
+		newStockBatch = productStock.getQuantity();
+		product.get().setStocks(product.get().getStocks() + newStockBatch);
+		
+		productStockRepo.save(productStock);
+		productRepo.save(product.get());
 
 	}
 

@@ -60,8 +60,8 @@
                                                 </span><span class="text-danger fw-bold ms-2">50% Off</span>
                                             </h2>
                                             <h6 class="text-muted font_s_13 mt-2 mb-1" th:text="${'Stocks available : ' + product.stocks}"></h6>
-                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:text="${'Category : ' + product.productCategory.name}"></h6>
-                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:if="${product.supplier != null}"th:text="${'Supplier : ' + product.supplier}"></h6>
+                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:if="${product.productCategory != null}" th:text="${'Category : ' + product.productCategory.name}"></h6>
+                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:if="${product.supplier != null}" th:text="${'Supplier : ' + product.supplier}"></h6>
                                             <!--<ul class="list-unstyled pro-features border-0">
                                                 <li>It is a long established fact that a reader will be distracted.</li>
                                                 <li>Contrary to popular belief, Lorem Ipsum is not text.</li>

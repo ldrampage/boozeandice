@@ -19,11 +19,11 @@
 					<div class="col-12">
 						<div class="page_title_box d-flex align-items-center justify-content-between">
 							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Inventory</h3>
+								<h3 class="f_s_30 f_w_700 text_white">Transaction</h3>
 								<ol class="breadcrumb page_bradcam mb-0">
 									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Inventory</a></li>
-									<li class="breadcrumb-item active">Product Category List</li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);">Transaction</a></li>
+									<li class="breadcrumb-item active">Transaction List</li>
 								</ol>
 							</div>
 						</div>
@@ -36,7 +36,7 @@
 							<div class="white_card_header">
 								<div class="box_header m-0">
 									<div class="main-title">
-										<h3 class="m-0">Product Category Table</h3>
+										<h3 class="m-0">Transaction Table</h3>
 									</div>
 								</div>
 							</div>
@@ -47,17 +47,14 @@
 										<div class="box_right d-flex lms_block">
 											<div class="serach_field_2">
 												<div class="search_inner">
-													<form method="post" th:action="@{/product/category}">
+													<form method="post" th:action="@{/transaction}">
 														<div class="search_field">
 															<input type="text" name="search" th:value="${search}"
-																placeholder="Search by product name...">
+																placeholder="Search by ...">
 														</div>
 														<button type="submit"> <i class="ti-search"></i> </button>
 													</form>
 												</div>
-											</div>
-											<div class="add_button ms-2">
-												<a th:href="${'/product/category/add'}" class="btn_1">Add Category</a>
 											</div>
 										</div>
 									</div>
@@ -67,18 +64,42 @@
 										<table class="table lms_table_active ">
 											<thead>
 												<tr>
-													<th scope="col">Name</th>
-													<th scope="col">Description</th>
+													<th scope="col">Invoice Number</th>
+													<th scope="col">Transaction Date Time</th>
+													<th scope="col">Transaction Status</th>
+													<th scope="col">Customer</th>
+													<th scope="col">Cashier</th>
+													<th scope="col">Items</th>
+													<th scope="col">Total</th>
 													<th scope="col">Action</th>
+
 												</tr>
 											</thead>
 											<tbody>
-												<tr th:each="productCategory : ${productCategoryList}">
-													<td th:text="${productCategory.name}" scope="row"> <a href="#"
+												<tr th:each="transaction : ${transactionList}">
+													<td th:text="${transaction.invoiceNumber}" scope="row"> <a href="#"
 															class="question_content"></a></td>
-													<td th:text="${productCategory.description}"></td>
+													<td><span th:text="${transaction.transactionDateTime}"></span></td>
+													<td th:text="${transaction.transactionStatus}"></td>
 													<td>
-														<a th:href="${'#'}" class="status_btn">Edit</a>
+														<span th:if="${transaction.customer != null}"
+															th:text="${transaction.customer.fname}"></span>
+														<span th:unless="${transaction.customer != null}"
+															th:text="${transaction.soldTo}"></span>
+													</td>
+													<td th:if="${transaction.cashier != null}"
+														th:text="${transaction.cashier.username}"></td>
+													<td><span th:if="${transaction.transactionItem != null and transaction.transactionItem.size() > 0}"
+														th:text="${transaction.totalItems}"></span></td>
+													<td th:text="${'Php ' + transaction.total}"></td>
+													<td>
+														<a th:href="${'/transaction/view/' + transaction.id}"
+															class="status_btn primary_btn btn-primary">View</a>
+
+														<a th:if="${transaction.transactionStatus == 'PENDING'}"
+															th:href="${'/checkout/' + transaction.id}"
+															class="status_btn yellow_btn">Continue Checkout</a>
+
 													</td>
 												</tr>
 											</tbody>

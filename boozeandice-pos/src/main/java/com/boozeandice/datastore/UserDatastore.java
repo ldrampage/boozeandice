@@ -26,6 +26,5 @@ public class UserDatastore {
 		user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 		userRepo.save(user);
 	}
-
 	
 }

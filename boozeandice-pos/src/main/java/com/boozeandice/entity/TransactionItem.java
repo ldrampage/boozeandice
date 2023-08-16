@@ -24,7 +24,7 @@ public class TransactionItem implements Serializable {
 	@Column(name="id", nullable = false, unique=true)
 	private Long id;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="product_id" , nullable = false)
 	private Product product;
 	

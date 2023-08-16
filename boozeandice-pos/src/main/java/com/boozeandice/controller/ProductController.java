@@ -84,6 +84,8 @@ public class ProductController {
 			}
 		} 
 		
+		//TODO to add trasactions in the products view
+		
 		model.addAttribute("totalCost", totalCost);
 		model.addAttribute("productStockList", productStockList);
 		model.addAttribute("product", product);
@@ -193,6 +195,7 @@ public class ProductController {
 		product.setManufacturer(parameters.get("manufacturer"));
 		product.setSupplier(parameters.get("supplier"));
 		product.setPrice(Double.valueOf(parameters.get("price")));
+		product.setCost(Double.valueOf(parameters.get("cost")));
 
 		Path filePath = null;
 		Map<String, String> message = new HashMap<String, String>();

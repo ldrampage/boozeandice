@@ -37,6 +37,9 @@ public class Product implements Serializable {
 
 	@Column(name = "price", nullable = false)
 	private Double price;
+	
+	@Column(name="cost", nullable = false)
+	private Double cost;
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
@@ -64,6 +67,20 @@ public class Product implements Serializable {
 	@Column(name="img_location")
 	private String imgLocation; 
 	
+	@Transient
+	private Long qtyToPurchase;
+	
+	public Long getQtyToPurchase() {
+		if(qtyToPurchase == null) {
+			qtyToPurchase = Long.valueOf(1);
+		}
+		return qtyToPurchase;
+	}
+
+	public void setQtyToPurchase(Long qtyToPurchase) {
+		this.qtyToPurchase = qtyToPurchase;
+	}
+
 	public List<ProductStock> getProductStock() {
 		return productStock;
 	}
@@ -163,6 +180,14 @@ public class Product implements Serializable {
 
 	public void setStocks(Long stocks) {
 		this.stocks = stocks;
+	}
+
+	public Double getCost() {
+		return cost;
+	}
+
+	public void setCost(Double cost) {
+		this.cost = cost;
 	}
 
 	@Override

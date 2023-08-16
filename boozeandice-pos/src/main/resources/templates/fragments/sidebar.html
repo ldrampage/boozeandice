@@ -12,8 +12,17 @@
 			</div>
 		</div>
 		<ul id="sidebar_menu">
+		
+			<li class="">
+				<a th:href="${'/'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/dashboard.svg}" alt="">
+					</div>
+					<span>POS Interface</span>
+				</a>
+			</li>
 
-			<li class="mm-active">
+			<!--<li class="mm-active">
 				<a class="has-arrow" href="#" aria-expanded="false">
 					<div class="icon_menu">
 						<img th:src="@{/img/menu-icon/dashboard.svg}" alt="">
@@ -24,6 +33,15 @@
 					<li><a th:href="${'/'}">POS Interface</a></li>
 					<li><a href="#">Sales</a></li>
 				</ul>
+			</li> -->
+			
+			<li class="">
+				<a th:href="${'/transaction'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/5.svg}" alt="">
+					</div>
+					<span>Transaction</span>
+				</a>
 			</li>
 			
 			<li class="mm-active">
@@ -31,7 +49,7 @@
 					<div class="icon_menu">
 						<img th:src="@{/img/menu-icon/8.svg}" alt="">
 					</div>
-					<span>Product</span>
+					<span>Inventory</span>
 				</a>
 				<ul>
 					<li><a th:href="${'/product/products'}">Product List</a></li>
@@ -39,7 +57,44 @@
 					<li><a th:href="${'/product/category'}">Product Category</a></li>
 				</ul>
 			</li>
-
+			
+			<li class="">
+				<a th:href="${'/customer'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/5.svg}" alt="">
+					</div>
+					<span>Customer</span>
+				</a>
+			</li>
+			
+			<li class="">
+				<a th:href="${'/staff'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/5.svg}" alt="">
+					</div>
+					<span>Staff</span>
+				</a>
+			</li>
+			
+			<li class="">
+				<a th:href="${'/cashdrawer'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/5.svg}" alt="">
+					</div>
+					<span>Cash Drawer</span>
+				</a>
+			</li>
+			
+			<li class="">
+				<a th:href="${'/reports'}" aria-expanded="false">
+					<div class="icon_menu">
+						<img th:src="@{/img/menu-icon/5.svg}" alt="">
+					</div>
+					<span>Reports</span>
+				</a>
+			</li>
+			
+			<!--
 			<li class="">
 				<a class="has-arrow" href="#" aria-expanded="false">
 					<div class="icon_menu">
@@ -259,7 +314,7 @@
 					<li><a href="forgot_pass.html">Forgot Password</a></li>
 					<li><a href="gallery.html">Gallery</a></li>
 				</ul>
-			</li>
+			</li>-->
 
 		</ul>
 	</nav>

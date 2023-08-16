@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="crm_body_bg">
+
+	<!-- main content part here -->
+
+	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
+
+	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div class="main_content_iner overly_inner">
+			<div class="container-fluid p-0 ">
+				<!-- page title  -->
+				<div class="row">
+					<div class="col-12">
+						<div class="page_title_box d-flex align-items-center justify-content-between">
+							<div class="page_title_left">
+								<h3 class="f_s_30 f_w_700 text_white">Customer</h3>
+								<ol class="breadcrumb page_bradcam mb-0">
+									<li class="breadcrumb-item"><a th:href="${'/'}">Booze and Ice </a></li>
+									<li class="breadcrumb-item"><a th:href="${'/customer'}">Customer</a></li>
+									<li class="breadcrumb-item active">Customer Edit</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col-lg-12" th:if="${message != null and message['status'] == 'success'}">
+                    <div class="white_box mb_30">
+                        <div class="box_header ">
+                            <div class="main-title">
+                                <h3 class="mb-0" >Additional Notifications</h3>
+                            </div>
+                        </div>
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Well done!</h4>
+                            <p>Aww yeah, you successfully edited the information.</p>
+                          </div>
+                    </div>
+                </div>
+
+				<div class="row justify-content-center">
+					<div class="col-lg-12">
+						<div class="white_card card_height_100 mb_30">
+							<div class="white_card_header">
+								<div class="box_header m-0">
+									<div class="main-title">
+										<h3 class="m-0">Customer Information</h3>
+									</div>
+								</div>
+							</div>
+							<div class="white_card_body">
+								<div class="card-body">
+									<form method="post" th:action="@{/customer/edit/} + ${customer.id}" enctype="multipart/form-data">
+										<div class="row mb-3">
+											<div class="col-md-6">
+												<label class="form-label" for="first_name">First Name</label>
+												<input type="text" class="form-control" id="first_name" name="first_name"
+													th:value="${customer.fname}" placeholder="First name" required>
+											</div>
+											<div class="col-md-6">
+												<label class="form-label" for="last_name">Last Name</label>
+												<input type="text" class="form-control" id="last_name" name="last_name"
+													th:value="${customer.lname}" placeholder="Last name">
+											</div>
+										</div>
+										
+										<div class="row mb-3">
+											<div class=" col-md-12">
+												<label class="form-label" for="email_address">Email address</label>
+												<input type="email" class="form-control" id="email_address" name="email_address"
+													th:value="${customer.emailAddress}"
+													placeholder="Email address"></input>
+											</div>
+										</div>
+										<!--
+										<div class="row mb-3">
+											<div class=" col-md-6">
+												<label class="form-label" for="file">Image File</label>
+												<input type="file" class="form-control" id="file" name="file"/>
+											</div>
+											<div th:if="${product.imgLocation}" class=" col-md-6">
+												<label for="image">Current Image</label>
+												<img id="image" th:src="@{/images/} + ${customer.imgLocation}" alt="Existing Image" style="max-width:300px"/>
+											</div>
+										</div> -->
+										<input type="hidden" th:value="${customer.id}" name="customerId" />
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- footer part -->
+		<div th:insert="~{fragments/footer :: footer}"></div>
+	</section>
+	<!-- main content part end -->
+
+	<div id="back-top" style="display: none;">
+		<a title="Go to Top" href="#">
+			<i class="ti-angle-up"></i>
+		</a>
+	</div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+</body>
+
+</html>

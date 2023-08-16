@@ -89,6 +89,27 @@
 											</div>
 										</div>
 										<div class="row mb-3">
+											<div class=" col-md-3">
+												<label class="form-label" for="price">Price</label>
+												<input type="number" class="form-control" id="price" name="price"
+													step="0.01" placeholder="Price" required>
+											</div>
+											<div class=" col-md-3">
+												<label class="form-label" for="cost">Cost</label>
+												<input type="number" class="form-control" id="cost" name="cost"
+													step="0.01" placeholder="Cost" required>
+											</div>
+											<div class=" col-md-6">
+												<label class="form-label" for="categoryId">Category</label>
+												<select class="form-select" id="categoryId" name="categoryId">
+													<option value="0"></option>
+													<option th:each="category : ${categoryList}"
+														th:value="${category.id}" th:text="${category.name}"
+														th:selected="${category.id == selectedValue}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="row mb-3">
 											<div class="col-md-4">
 
 												<label class="form-label" for="file">Image file</label>
@@ -105,22 +126,6 @@
 												<label class="form-label" for="supplier">Supplier</label>
 												<input type="text" class="form-control" id="supplier" name="supplier"
 													placeholder="Supplier">
-											</div>
-										</div>
-										<div class="row mb-3">
-											<div class=" col-md-6">
-												<label class="form-label" for="price">Price</label>
-												<input type="number" class="form-control" id="price" name="price"
-													step="0.01" placeholder="Price" required>
-											</div>
-											<div class=" col-md-6">
-												<label class="form-label" for="categoryId">Category</label>
-												<select class="form-select" id="categoryId" name="categoryId">
-													<option value="0"></option>
-													<option th:each="category : ${categoryList}"
-														th:value="${category.id}" th:text="${category.name}"
-														th:selected="${category.id == selectedValue}"></option>
-												</select>
 											</div>
 										</div>
 										<input type="hidden" name="productId" />

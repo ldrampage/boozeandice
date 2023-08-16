@@ -39,6 +39,9 @@ public class ProductStock implements Serializable {
 	@Column(name="cost", nullable = false)
 	private Double cost;
 	
+	@Column(name="expenses")
+	private Double expenses;
+	
 	@Column(name="createdDate", nullable = false)
 	private Date createdDate;
 	
@@ -119,6 +122,14 @@ public class ProductStock implements Serializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	public Double getExpenses() {
+		return expenses;
+	}
+	public void setExpenses(Double expenses) {
+		this.expenses = expenses;
+	}
+	
+	
 	
 	
 	
