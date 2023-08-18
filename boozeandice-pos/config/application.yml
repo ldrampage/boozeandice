@@ -19,6 +19,7 @@ upload:
 logging:
   level:
     root: INFO
+    org.hibernate: INFO
     com.boozeandice: DEBUG
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
@@ -39,7 +40,7 @@ spring:
     password: lxbordo
     #driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         generate-ddl: true

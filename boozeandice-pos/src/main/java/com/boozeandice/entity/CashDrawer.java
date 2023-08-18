@@ -36,7 +36,7 @@ public class CashDrawer implements Serializable {
 	private Set<CashAdded> cashAdded;
 
 	@OneToMany(mappedBy = "cashdrawer")
-	private Set<Expenses> expenses;
+	private Set<Expense> expenses;
 
 	@Column(name = "created_date")
 	private Date createdDate;
@@ -56,6 +56,17 @@ public class CashDrawer implements Serializable {
 
 	@Transient
 	private Double totalCashSales;
+	
+	@Transient
+	private Double totalCashInDrawer;
+	
+	public Double getTotalCashInDrawer() {
+		return totalCashInDrawer;
+	}
+
+	public void setTotalCashInDrawer(Double totalCashInDrawer) {
+		this.totalCashInDrawer = totalCashInDrawer;
+	}
 
 	public Long getId() {
 		return id;
@@ -105,11 +116,11 @@ public class CashDrawer implements Serializable {
 		this.cashAdded = cashAdded;
 	}
 
-	public Set<Expenses> getExpenses() {
+	public Set<Expense> getExpenses() {
 		return expenses;
 	}
 
-	public void setExpenses(Set<Expenses> expenses) {
+	public void setExpenses(Set<Expense> expenses) {
 		this.expenses = expenses;
 	}
 

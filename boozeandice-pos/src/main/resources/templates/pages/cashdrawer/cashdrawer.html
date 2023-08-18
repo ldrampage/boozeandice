@@ -89,8 +89,7 @@
 													<form method="post" th:action="@{/cashdrawer}">
 														<td style="text-align: center;">
 
-															<input type="number" class="form-control" value="0"
-																step="100" id="add_cash" name="add_cash" />
+															<input type="number" class="form-control" step="100" id="add_cash" name="add_cash" required/>
 
 														</td>
 														<td>
@@ -113,22 +112,6 @@
 														<h3 class="color_gray f_w_700 "
 															th:text="${'Php ' + cashDrawerToday.totalExpenses}"></h3>
 													</td>
-													<!--<form method="post" th:action="@{/cashdrawer}">
-														<td style="text-align: center;">
-
-															<input type="number" class="form-control" value="0"
-																step="100" id="add_cash" name="add_cash" />
-
-														</td>
-														<td>
-															<button type="submit" name="add_cash_btn"
-																class="btn btn-outline-success mb-3">
-																<i
-																		class="fas fa-shopping-bag font_s_18"></i>
-																ADD CASH
-															</button>
-														</td>
-													</form>-->
 												</tr>
 											</tbody>
 										</table>
@@ -138,24 +121,23 @@
 													<td>
 														<h5 class="byer_name  f_s_16 f_w_600 color_theme2">Cash Sales
 															Since</h5>
-														<h3 class="color_gray f_w_700 " th:text="${cashDrawerToday.totalCashSales}"></h3>
+														<h3 class="color_gray f_w_700 " th:if="${cashDrawerToday.totalCashSales > 0}" th:text="${'Php ' + cashDrawerToday.totalCashSales}"></h3>
+														<h3 class="color_gray f_w_700 " th:unless="${cashDrawerToday.totalCashSales > 0}">Php 0.0</h3>
+
 													</td>
-													<!--<form method="post" th:action="@{/cashdrawer}">
-														<td style="text-align: center;">
+												</tr>
+											</tbody>
+										</table>
+										
+										<table class="table">
+											<tbody>
+												<tr>
+													<td>
+														<h5 class="byer_name  f_s_16 f_w_600 color_theme2">Total Cash</h5>
+														<h3 class="color_gray f_w_700 " th:if="${cashDrawerToday.totalCashInDrawer > 0}" th:text="${'Php ' + cashDrawerToday.totalCashInDrawer}"></h3>
+														<h3 class="color_gray f_w_700 " th:unless="${cashDrawerToday.totalCashInDrawer > 0}">Php 0.0</h3>
 
-															<input type="number" class="form-control" value="0"
-																step="100" id="add_cash" name="add_cash" />
-
-														</td>
-														<td>
-															<button type="submit" name="add_cash_btn"
-																class="btn btn-outline-success mb-3">
-																<i
-																		class="fas fa-shopping-bag font_s_18"></i>
-																ADD CASH
-															</button>
-														</td>
-													</form>-->
+													</td>
 												</tr>
 											</tbody>
 										</table>
@@ -197,25 +179,25 @@
 								</div>
 							</div>
 							<div class="white_card_body">
-								<form method="post">
+								<form method="post" th:action="@{/cashdrawer}">
 									<div class="row">
 										<div class="col-lg-6">
 											<div class="form-group">
-												<label for="expense">Expense</label>
-												<input type="number" class="form-control" id="expense" name="expense"
+												<label for="expense_amount">Expense</label>
+												<input type="number" class="form-control" id="expense_amount" name="expense_amount"
 													placeholder="Expense Amount" required />
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="form-group">
-												<label for="expense">Notes</label>
-												<textarea type="number" class="form-control" id="expense" name="expense"
+												<label for="expense_reason">Notes</label>
+												<textarea type="number" class="form-control" id="expense_reason" name="expense_reason"
 													placeholder="Enter expense reason" required></textarea>
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="form-group">
-												<input type="submit" value="Add New Expense"
+												<input type="submit" name="add_expense" value="Add New Expense"
 													class="btn btn-md btn-success" />
 											</div>
 										</div>
@@ -235,23 +217,11 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<th scope="row">1</th>
-														<td>Mark</td>
-														<td>Otto</td>
-														<td>@mdo</td>
-													</tr>
-													<tr>
-														<th scope="row">2</th>
-														<td>Jacob</td>
-														<td>Thornton</td>
-														<td>@fat</td>
-													</tr>
-													<tr>
-														<th scope="row">3</th>
-														<td>Larry</td>
-														<td>the Bird</td>
-														<td>@twitter</td>
+													<tr th:each="expense : ${expenseList}">
+														<th scope="row"><span th:text="${expense.id}"></span></th>
+														<td><span th:text="${'Php ' + expense.expense}"></span></td>
+														<td><span th:text="${expense.createdDate}"></span></td>
+														<td><span th:text="${expense.note}"></span></td>
 													</tr>
 												</tbody>
 											</table>
