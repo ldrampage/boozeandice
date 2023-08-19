@@ -57,39 +57,49 @@ public class ProductController {
 
 	@Value("${upload.directory}")
 	private String uploadDirectory;
-
-	@GetMapping(path = "/stocks")
-	public String productStocks(Model model) {
-		List<ProductStock> productStockList = productStockService.getAll();
-		model.addAttribute("productStockList", productStockList);
-		return pageController.productStocks(model);
-	}
 	
 	@GetMapping(path="/category")
 	public String productCategory(Model model) {
 		List<ProductCategory> productCategoryList = categoryService.getAll();
 		model.addAttribute("productCategoryList", productCategoryList);
-		return pageController.productCategory();
+		return pageController.productCategory(model);
 	}
 	
-	@GetMapping(path="/products/view/{productStockId}")
-	public String productView(Model model, @PathVariable("productStockId") Long productId) {
-		Product product = productService.getById(productId);
-		List<ProductStock> productStockList = null;
-		Double totalCost = 0.0;
-		if(product.getProductStock() != null) {
-			productStockList = productStockService.getByProduct(product);
-			for(ProductStock ps : productStockList) {
-				totalCost = totalCost + ps.getCost();
-			}
-		} 
-		
-		//TODO to add trasactions in the products view
-		
-		model.addAttribute("totalCost", totalCost);
+	@GetMapping(path="/category/add")
+	public String productCategoryCreatePage(Model model) {
+		return pageController.productCategoryCreatePage(model);
+
+	}
+	
+	@PostMapping(path="/category/add")
+	public String productCategoryCreateProcess(Model model, @RequestParam Map<String, String> parameters) {
+		ProductCategory productCategory = new ProductCategory();
+		productCategory.setName(parameters.get("category_name"));
+		productCategory.setDescription(parameters.get("category_description"));
+		Map<String, String> message = new HashMap<String, String>();
+
+		try {
+			categoryService.save(productCategory);
+			message.put("status", "success");
+		} catch (Exception e) {
+			message.put("status", "error");
+			message.put("message", e.getMessage());
+			e.printStackTrace();
+		}
+		return pageController.productCategoryCreatePage(model);
+	}
+	
+	/**
+	 * 
+	 *  Stocks
+	 *  
+	 */
+	
+	@GetMapping(path = "/stocks")
+	public String productStocks(Model model) {
+		List<ProductStock> productStockList = productStockService.getAll();
 		model.addAttribute("productStockList", productStockList);
-		model.addAttribute("product", product);
-		return pageController.productView(model);
+		return pageController.productStocks(model);
 	}
 	
 	
@@ -155,6 +165,34 @@ public class ProductController {
 		model.addAttribute("productList", productList);
 		model.addAttribute("message", message);
 		return pageController.productStocksAdd(model);
+	}
+	
+	
+	/**
+	 * 
+	 * Products
+	 * 
+	 */
+	
+	
+	@GetMapping(path="/products/view/{productStockId}")
+	public String productView(Model model, @PathVariable("productStockId") Long productId) {
+		Product product = productService.getById(productId);
+		List<ProductStock> productStockList = null;
+		Double totalCost = 0.0;
+		if(product.getProductStock() != null) {
+			productStockList = productStockService.getByProduct(product);
+			for(ProductStock ps : productStockList) {
+				totalCost = totalCost + ps.getCost();
+			}
+		} 
+		
+		//TODO to add trasactions in the products view
+		
+		model.addAttribute("totalCost", totalCost);
+		model.addAttribute("productStockList", productStockList);
+		model.addAttribute("product", product);
+		return pageController.productView(model);
 	}
 
 	@GetMapping(path = "/products")

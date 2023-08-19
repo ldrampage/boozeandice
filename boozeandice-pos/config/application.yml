@@ -12,6 +12,11 @@ spring:
       max-request-size: 2MB
       enabled: true
 
+
+#application settings
+business_name: Booze and Ice
+
+
 #img upload location
 upload:
   directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img

@@ -21,7 +21,7 @@
 							<div class="page_title_left">
 								<h3 class="f_s_30 f_w_700 text_white">Checkout</h3>
 								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);" th:text="${business_name}"></a></li>
 									<li class="breadcrumb-item"><a href="javascript:void(0);">POS Interface</a></li>
 									<li class="breadcrumb-item active">Checkout</li>
 								</ol>
@@ -116,13 +116,28 @@
 													To</label>
 												<div th:if="${transaction.customer != null}">
 													<input th:value="${transaction.customer.fname}" class="form-control"
-														type="text" id="registeredCustomer" name="registeredCustomer" disabled />
+														type="text" id="registeredCustomer" name="registeredCustomer"
+														disabled />
 												</div>
 												<div th:unless="${transaction.customer != null}">
 													<input class="form-control" type="text" id="soldTo" name="soldTo"
-														required />
+														th:value="${transaction.soldTo}" required />
 												</div>
 											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="mb-3"><label class="form-label" for="table_no">Table No.</label>
+												<select class="form-select" name="table_no" id="table_no">
+													<option value="1" th:selected="${transaction.tableNo == '1'}">Table 1</option>
+													<option value="2" th:selected="${transaction.tableNo == '2'}">Table 2</option>
+													<option value="3" th:selected="${transaction.tableNo == '3'}">Table 3</option>
+													<option value="4" th:selected="${transaction.tableNo == '4'}">Table 4</option>
+													<option value="5" th:selected="${transaction.tableNo == '5'}">Table 5</option>
+												</select>
+											</div>
+
 										</div>
 									</div>
 									<div class="row">
@@ -151,7 +166,12 @@
 										<button type="submit" name="cash_payment"
 											class="btn_2 mt-1 mb-1 w-100">CHARGE</button>
 										</form>
-										<a th:href="${'/'}" class="btn_3 mt-1 mb-1 w-100" style="text-align: center;">PAY LATER</a>
+										<form id="pay_later_form" method="post" th:action="@{/checkout}">
+											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
+											<input type="hidden" name="pay_later_btn"/>
+											<button type="submit"class="btn_3 mt-1 mb-1 w-100">PAY
+												LATER</button>
+										</form>
 										<!--<form method="post" th:action="@{/}">
 											<button type="submit" name="pay_later" class="btn_3 mt-1 mb-1 w-100"
 												style="text-align: center;">PAY LATER</button>
@@ -160,7 +180,7 @@
 											<input type="hidden" name="addMoreToPurchase" />
 											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
 											<button type="submit" name="cash_payment"
-												class="btn_4 mt-1 mb-1 w-100">ADD/DEDUCT PURCHASE</button>
+												class="btn_4 mt-1 mb-1 w-100">ADD / DEDUCT PURCHASE</button>
 										</form>
 									</div>
 								</div>
@@ -185,6 +205,25 @@
 		</a>
 	</div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		$(document).ready(function () {
+			$("#pay_later_form").submit(function (event) {
+				event.preventDefault();
+
+				var soldTo = $('#soldTo').val();
+				var tableNo = $('#table_no').val();
+				if (soldTo.trim() === '') {
+					alert("Sold To Field is Required!");
+					return;
+				}
+
+				$('#pay_later_form').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
+				$('#pay_later_form').append('<input type="hidden" name="table_no" value="' + tableNo + '">');
+				$('#pay_later_form')[0].submit();
+			})
+
+		})
+	</script>
 	<!--<script>
 		$(document).ready(function () {
 			$("#chargeForm").submit(function (event) {

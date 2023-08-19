@@ -26,6 +26,10 @@ public class CategoryService implements Serializable{
 		return categoryRepo.findAll();
 	}
 	
+	public ProductCategory save(ProductCategory pcategory) {
+		return categoryRepo.save(pcategory);
+	}
+	
 	public ProductCategory getById(Long id) {
 		Optional<ProductCategory> pcOpt = categoryRepo.findById(id);
 		if(pcOpt.isPresent()) {

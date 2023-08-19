@@ -53,6 +53,9 @@ public class Transaction implements Serializable {
 	@Column(name="soldTo")
 	private String soldTo;
 	
+	@Column(name="table_no")
+	private String tableNo;
+	
 	@ManyToOne
 	@JoinColumn(name="customer_id") 
 	private Customer customer;
@@ -271,6 +274,14 @@ public class Transaction implements Serializable {
 
 	public void setCashdrawer(CashDrawer cashdrawer) {
 		this.cashdrawer = cashdrawer;
+	}
+	
+	public String getTableNo() {
+		return tableNo;
+	}
+
+	public void setTableNo(String tableNo) {
+		this.tableNo = tableNo;
 	}
 
 	@Override

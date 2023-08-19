@@ -21,7 +21,7 @@
 							<div class="page_title_left">
 								<h3 class="f_s_30 f_w_700 text_white">POS Interface</h3>
 								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);" th:text="${business_name}"></a></li>
 									<li class="breadcrumb-item active">POS Interface</li>
 								</ol>
 							</div>
@@ -88,8 +88,10 @@
 																<div class="d-grid">
 																	<input type="hidden" th:value="${product.id}"
 																		name="productId" />
-																	<button type="submit" class="btn_2"
-																		name="purchase">Purchase</button>
+																	<input class="quantityclass" type="hidden"
+																		name="purchased_quantity" />
+																	<button type="submit" onclick="setQuantityValue()"
+																		class="btn_2" name="purchase">Purchase</button>
 																</div>
 															</form>
 
@@ -242,7 +244,7 @@
 		</a>
 	</div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
-	<script>
+	<script th:inline="javascript">
 		$(document).ready(function () {
 
 			$(document).on("click", "#checkoutButton", function () {
@@ -292,7 +294,21 @@
 				}
 
 			})
+		}
 
+		function setQuantityValue() {
+			let userInput = prompt("Enter quantity: ");
+			if (userInput.trim === "") {
+				alert("Value cannot be blank")
+			} else if (!isNaN(userInput)) {
+
+			} else {
+				alert("Please enter a valid numeric value.")
+			}
+			const inputElements = document.getElementsByClassName("quantityclass")
+			for (let i = 0; i < inputElements.length; i++) {
+				inputElements[i].value = userInput;
+			}
 		}
 	</script>
 </body>
