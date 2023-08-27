@@ -4,262 +4,330 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
+		<div th:insert="~{fragments/preload :: preload}"></div>
 
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
-
-	<section class="main_content dashboard_part large_header_bg">
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Checkout</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);" th:text="${business_name}"></a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">POS Interface</a></li>
-									<li class="breadcrumb-item active">Checkout</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="white_card">
-							<div class="white_card_header border_bottom_1px">
-								<h4 class="card-title mb-0">Order Summary</h4>
-							</div>
-							<!--end white_card_header border_bottom_1px-->
-							<div class="card-body">
-								<div class="table-responsive shopping-cart">
-									<table class="table mb-0">
-										<thead>
-											<tr>
-												<th class="border-top-0">Product</th>
-												<th class="border-top-0">Quantity</th>
-												<th class="border-top-0">Total</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="purchases : ${transaction.transactionItem}">
-												<td>
-													<img th:src="@{/images/} + ${purchases.product.imgLocation}" alt=""
-														height="52" />
-													<p th:text="${purchases.product.name}"
-														class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
-													</p>
-												</td>
-												<td th:text="${purchases.quantity}"></td>
-												<td th:text="${'Php ' + purchases.quantity * purchases.product.price}">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<!--end re-table-->
-								<div class="total-payment">
-									<table class="table mb-0">
-										<tbody>
-											<tr>
-												<td class="payment-title">Subtotal</td>
-												<td th:text="${'Php ' + transaction.subTotal}"></td>
-											</tr>
-											<tr>
-												<td class="payment-title">Shipping</td>
-												<td th:text="${'Php ' + transaction.shipping}"></td>
-											</tr>
-											<tr>
-												<td class="payment-title">Total Amount Due</td>
-												<td class="text-success"><strong style="font-size: 32px;"
-														th:text="${'Php ' + transaction.total}"></strong></td>
-											</tr>
-											<tr>
-												<td class="payment-title">VATable sales</td>
-												<td th:text="${'Php ' + transaction.vatableSales}"></td>
-											</tr>
-											<tr>
-												<td class="payment-title">VAT (12%)</td>
-												<td th:text="${'Php ' + transaction.vatAmount}"></td>
-											</tr>
 
-										</tbody>
-									</table>
-									<!--end table-->
-								</div>
-								<!--end total-payment-->
-							</div>
-							<!--end card-body-->
-						</div>
-						<!--end card-->
-					</div>
-					<!--end col-->
-					<div class="col-lg-6">
-						<div class="white_card mb_20">
-							<div class="white_card_header border_bottom_1px">
-								<h4 class="card-title mb-0">Billing Details</h4>
-							</div>
-							<!--end white_card_header border_bottom_1px-->
-							<div class="card-body">
-								<form id="chargeForm" method="post" th:action="@{/invoice}">
-
-									<div class="row">
-										<div class="col-md-12">
-											<div class="mb-3">
-												<label class="form-label col-xl-3 col-lg-3 col-form-label">Sold
-													To</label>
-												<div th:if="${transaction.customer != null}">
-													<input th:value="${transaction.customer.fname}" class="form-control"
-														type="text" id="registeredCustomer" name="registeredCustomer"
-														disabled />
-												</div>
-												<div th:unless="${transaction.customer != null}">
-													<input class="form-control" type="text" id="soldTo" name="soldTo"
-														th:value="${transaction.soldTo}" required />
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="mb-3"><label class="form-label" for="table_no">Table No.</label>
-												<select class="form-select" name="table_no" id="table_no">
-													<option value="1" th:selected="${transaction.tableNo == '1'}">Table 1</option>
-													<option value="2" th:selected="${transaction.tableNo == '2'}">Table 2</option>
-													<option value="3" th:selected="${transaction.tableNo == '3'}">Table 3</option>
-													<option value="4" th:selected="${transaction.tableNo == '4'}">Table 4</option>
-													<option value="5" th:selected="${transaction.tableNo == '5'}">Table 5</option>
-												</select>
-											</div>
-
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="mb-3"><label class="form-label" for="cash_received">Cash
-													Received</label>
-												<input id="cash_received" type="number" step="0.0"
-													th:min="${transaction.total}" class="form-control"
-													name="cash_received" required="" placeholder="Cash Received" />
-											</div>
-
-										</div>
-									</div>
-							</div>
-							<!--end card-body-->
-						</div>
-						<!--end card-->
-						<div class="white_card">
-							<div class="white_card_header border_bottom_1px">
-								<h4 class="card-title mb-0">Action</h4>
-							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="col-md-12">
-										<input type="hidden" name="transactionId" th:value="${transaction.id}" />
-										<button type="submit" name="cash_payment"
-											class="btn_2 mt-1 mb-1 w-100">CHARGE</button>
-										</form>
-										<form id="pay_later_form" method="post" th:action="@{/checkout}">
-											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
-											<input type="hidden" name="pay_later_btn"/>
-											<button type="submit"class="btn_3 mt-1 mb-1 w-100">PAY
-												LATER</button>
-										</form>
-										<!--<form method="post" th:action="@{/}">
-											<button type="submit" name="pay_later" class="btn_3 mt-1 mb-1 w-100"
-												style="text-align: center;">PAY LATER</button>
-										</form>-->
-										<form method="post" th:action="@{/}">
-											<input type="hidden" name="addMoreToPurchase" />
-											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
-											<button type="submit" name="cash_payment"
-												class="btn_4 mt-1 mb-1 w-100">ADD / DEDUCT PURCHASE</button>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!--end col-->
-
-				</div>
-
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+								<li class="breadcrumb-item"><a href="#">Checkout</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
 			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Product</th>
+														<th>Quantity</th>
+														<th>Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="purchases : ${transaction.transactionItem}">
+														<td>
+															<img th:src="@{/images/} + ${purchases.product.imgLocation}"
+																alt="" style="height:52px; width:52px;" />
+															<p th:text="${purchases.product.name}"
+																class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
+															</p>
+														</td>
+														<td th:text="${purchases.quantity}"></td>
+														<td
+															th:text="${'Php ' + purchases.quantity * purchases.product.price}">
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<tbody>
+													<tr>
+														<td class="payment-title">Subtotal</td>
+														<td th:text="${'Php ' + transaction.subTotal}"></td>
+													</tr>
+													<tr th:if="${transaction.packaging > 0}">
+														<td class="payment-title">Packaging</td>
+														<td th:text="${'Php ' + transaction.packaging}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Discount</td>
+														<td th:text="${'Php ' + transaction.discount}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Total Amount Due</td>
+														<td class="text-success"><strong style="font-size: 32px;"
+																th:text="${'Php ' + transaction.total}"></strong></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VATable sales</td>
+														<td th:text="${'Php ' + transaction.vatableSales}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VAT (12%)</td>
+														<td th:text="${'Php ' + transaction.vatAmount}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="card card-primary card-outline card-outline-tabs">
+								<div class="card-header p-0 border-bottom-0">
+									<ul class="nav nav-tabs" id="custom-tabs-four-home-tab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" id="tabs-cash-tab" data-toggle="pill"
+												href="#custom-tabs-four-home" role="tab"
+												aria-controls="custom-tabs-four-home" aria-selected="true">CASH</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+												href="#custom-tabs-four-profile" role="tab"
+												aria-controls="custom-tabs-four-profile" aria-selected="false">GCASH</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill"
+												href="#custom-tabs-four-messages" role="tab"
+												aria-controls="custom-tabs-four-messages" aria-selected="false">PAY
+												MAYA</a>
+										</li>
+									</ul>
+								</div>
+								<div class="card-body">
+									<div class="tab-content" id="custom-tabs-four-tabContent">
+										<div class="tab-pane fade show active" id="custom-tabs-four-home"
+											role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+											<div class="row">
+												<div class="col-md-12">
+													<form id="chargeForm" method="post" th:action="@{/invoice}">
+														<div class="form-group">
+															<label class="form-label" style="font-size: 24px;"
+																for="cash_received">Cash Received</label>
+															<input id="cash_received" type="number"
+																style="font-size: 32px; font-weight:900; color:cornflowerblue; height:calc(3.50rem + 2px);"
+																step="0.0" th:min="${transaction.total}"
+																class="form-control input-lg" name="cash_received"
+																required="" placeholder="Cash Received" />
+														</div>
+														<div class="form-group">
+															<label class="form-label" style="font-size: 18px;"
+																for="cash_received">Change</label>
+															<input type="hidden" th:value="${transaction.total}"
+																id="transactionTotal" />
+															<input id="change" type="text"
+																style="font-size: 28px; font-weight:900; color:coral; height:calc(2.5rem + 2px);"
+																class="form-control input-lg" name="change" required=""
+																placeholder="Change" disabled />
+														</div>
+														<div class="form-group">
+															<label class="form-label">Sold
+																To</label>
+															<div th:if="${transaction.customer != null}">
+																<input class="form-control" type="text"
+																	th:value="${transaction.customer.fname}" disabled />
+																<input type="hidden"
+																	th:value="${transaction.customer.id}"
+																	id="registeredCustomer" name="registeredCustomer" />
+															</div>
+															<div th:unless="${transaction.customer != null}">
+																<input class="form-control" type="text" id="soldTo"
+																	name="soldTo" th:value="${transaction.soldTo}"
+																	placeholder="Sold To" />
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label for="tableno form-label">Table No.</label>
+															<select class="form-control select2bs4" id="tableno"
+																name="tableno">
+																<option value="1"
+																	th:selected="${transaction.tableNo == '1'}">
+																	Table
+																	1</option>
+																<option value="2"
+																	th:selected="${transaction.tableNo == '2'}">
+																	Table
+																	2</option>
+																<option value="3"
+																	th:selected="${transaction.tableNo == '3'}">
+																	Table
+																	3</option>
+																<option value="4"
+																	th:selected="${transaction.tableNo == '4'}">
+																	Table
+																	4</option>
+																<option value="5"
+																	th:selected="${transaction.tableNo == '5'}">
+																	Table
+																	5</option>
+															</select>
+														</div>
+														<table class="table table-bordered text-center">
+															<tbody>
+																<tr>
+																	<td>
+																		<input type="hidden" name="transactionId"
+																			th:value="${transaction.id}" />
+																		<button type="submit" name="cash_payment"
+																			class="btn btn-block bg-gradient-success btn-lg">CHARGE</button>
+													</form>
+													</td>
+													</tr>
+													<tr>
+														<td>
+															<form id="pay_later_form" method="post"
+																th:action="@{/checkout}">
+																<input type="hidden" name="transactionId"
+																	th:value="${transaction.id}" />
+																<input type="hidden" name="pay_later_btn" />
+																<button type="submit"
+																	class="btn btn-block bg-gradient-info btn-lg">PAY
+																	LATER</button>
+															</form>
+														</td>
+													</tr>
+
+													<tr>
+														<td>
+															<form method="post" th:action="@{/}">
+																<input type="hidden" name="addMoreToPurchase" />
+																<input type="hidden" name="transactionId"
+																	th:value="${transaction.id}" />
+																<button type="submit" name="cash_payment"
+																	class="btn btn-block bg-gradient-secondary btn-lg">ADD
+																	/ DEDUCT PURCHASE</button>
+															</form>
+														</td>
+													</tr>
+
+
+													</tbody>
+													</table>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+											aria-labelledby="custom-tabs-four-profile-tab">
+											Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris
+											pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum
+											dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in
+											faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas
+											sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere
+											purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at,
+											posuere nec nunc. Nunc euismod pellentesque diam.
+										</div>
+										<div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
+											aria-labelledby="custom-tabs-four-messages-tab">
+											Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris.
+											Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa
+											eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer
+											vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit
+											condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis
+											velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum
+											odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla
+											lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum
+											metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac
+											ornare magna.
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
 		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+		<!-- /.content-wrapper -->
 	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
 	<script>
+
+		$(document).ready(function () {
+			$("#cash_received").keyup(function () {
+				var inputValue = $(this).val();
+				var transactionTotal = $("#transactionTotal").val();
+				if (inputValue === "") {
+					$("#change").val("");
+
+				} else {
+					$("#change").val("Php " + (inputValue - transactionTotal).toFixed(2));
+				}
+
+			})
+		})
+
+
 		$(document).ready(function () {
 			$("#pay_later_form").submit(function (event) {
 				event.preventDefault();
 
 				var soldTo = $('#soldTo').val();
-				var tableNo = $('#table_no').val();
-				if (soldTo.trim() === '') {
-					alert("Sold To Field is Required!");
-					return;
+				var tableNo = $('#tableno').val();
+				var registeredCustomer = $("#registeredCustomer").val();
+
+				$('#pay_later_form').append('<input type="hidden" name="tableno" value="' + tableNo + '">');
+
+				if (soldTo != null) {
+					$('#pay_later_form').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
 				}
 
-				$('#pay_later_form').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
-				$('#pay_later_form').append('<input type="hidden" name="table_no" value="' + tableNo + '">');
+				if (registeredCustomer != null) {
+					$('#pay_later_form').append('<input type="hidden" name="registeredCustomer" value="' + registeredCustomer + '">');
+				}
+
 				$('#pay_later_form')[0].submit();
 			})
 
 		})
-	</script>
-	<!--<script>
-		$(document).ready(function () {
-			$("#chargeForm").submit(function (event) {
-				event.preventDefault();
 
-				var soldTo = $('#soldTo').val();
-				var cashReceived = $('#cash_received').val();
+		//Initialize Select2 Elements
+		$('.select2bs4').select2({
+			theme: 'bootstrap4'
+		})
+		function submitCategory() {
 
-				if (soldTo.trim() === '') {
-					alert("Sold To Field is Required!");
-					return;
-				}
-
-				if (cashReceived.trim() === '') {
-					alert("Cash Received Field is Required!");
-					return;
-				}
-
-				if (!isValidNumber(cashReceived)) {
-					alert("Cash Received must be a valid number!");
-					return;
-				}
-
-				$('#chargeForm').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
-				$('#chargeForm').append('<input type="hidden" name="cash_received" value="' + cashReceived + '">');
-
-				$('#chargeForm')[0].submit();
-
-			})
-		});
-
-		// Function to check if a value is a valid number
-		function isValidNumber(value) {
-			return !isNaN(value);
 		}
-	</script> -->
+	</script>
 </body>
 
 </html>

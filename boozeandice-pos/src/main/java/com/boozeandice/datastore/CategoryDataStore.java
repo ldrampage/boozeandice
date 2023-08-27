@@ -39,27 +39,27 @@ public class CategoryDataStore implements Serializable {
 	@Autowired
 	private ProductCategoryRepository productCatRepo;
 
-//	private static void sendCashDrawerCommand(PrintService printer) throws PrintException {
-//		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
-//		Doc doc = new SimpleDoc(new byte[] { /* Your cash drawer command bytes */ }, flavor, null);
-//		PrintRequestAttributeSet attributeSet = new HashPrintRequestAttributeSet();
-//		DocPrintJob printJob = printer.createPrintJob();
-//		printJob.print(doc, attributeSet);
-//	}
-//
-//	private static PrintService findPrinter(String printerName) {
-//		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-//		for (PrintService printService : printServices) {
-//			if (printService.getName().equals(printerName)) {
-//				return printService;
-//			}
-//		}
-//		return null;
-//	}
+	private static void sendCashDrawerCommand(PrintService printer) throws PrintException {
+		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+		Doc doc = new SimpleDoc(new byte[] { /* Your cash drawer command bytes */ }, flavor, null);
+		PrintRequestAttributeSet attributeSet = new HashPrintRequestAttributeSet();
+		DocPrintJob printJob = printer.createPrintJob();
+		printJob.print(doc, attributeSet);
+	}
+
+	private static PrintService findPrinter(String printerName) {
+		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+		for (PrintService printService : printServices) {
+			if (printService.getName().equals(printerName)) {
+				return printService;
+			}
+		}
+		return null;
+	}
 
 	@PostConstruct
 	public void init() {
-		
+//		
 //		logger.debug("Enter printOrderSlip()");
 //		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
 //
@@ -105,7 +105,7 @@ public class CategoryDataStore implements Serializable {
 		logger.debug("Start inserting product categories");
 		List<ProductCategory> productCategoryList = new ArrayList<>();
 		ProductCategory category = null;
-		String[] drinks = { "beer", "wine" };
+		String[] drinks = { "Beer", "Silog Meals"};
 		for (int x = 0; x < drinks.length; x++) {
 			category = new ProductCategory();
 			category.setName(drinks[x]);

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Staff</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Staff</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Staff</h3>
+									<small class="float-right">
+										<a th:href="${'/product/products/add'}" class="btn btn-info">Staff</a>
+									</small>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body">
+									<table id="staff_table" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th scope="col">Name</th>
+												<th scope="col">Roles</th>
+												<th scope="col">Transactions Made</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="staff : ${staffList}">
+												<td th:text="${staff.fname + ' ' + staff.lname}" scope="row"> <a href="#"
+														class="question_content"></a></td>
+												<td><span th:if="${product.productCategory != null}"
+														th:text="${product.productCategory.name}"></span></td>
+												<td th:text="${product.supplier}"></td>
+												<td>
+													<span th:text="${product.stocks}"></span>
+												</td>
+												<td th:text="${'Php ' + product.price}"></td>
+												<td>
+													<a th:href="${'/product/products/edit/' + product.id}"
+														class="btn bg-gradient-primary btn-xs">Edit</a>
+													<a th:href="${'/product/products/view/' + product.id}"
+														class="btn bg-gradient-info btn-xs">View</a>
+													<a th:if="${product.stocks <= 20}"
+														th:href="${'/product/stocks/add?id=' + product.id}"
+														class="btn bg-gradient-warning btn-xs">Add stock</a>
+												</td>
+											</tr>
+										</tbody>
+										<!--<tfoot>
+
+								</tfoot> -->
+									</table>
+								</div>
+								<!-- /.card-body -->
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<!-- DataTables  & Plugins -->
+	<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/lugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+
+	<script>
+		$(function () {
+			$("#staff_table").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": false,
+				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+				"searching": true,
+
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+		});
+	</script>
+</body>
+
+</html>

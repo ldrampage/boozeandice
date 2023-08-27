@@ -44,6 +44,7 @@ public class CashDrawerController {
 
 	@Autowired
 	private CashAddedService cashAddedService;
+	
 	@GetMapping(path = "")
 	private String cashdrawerPage(Model model) {
 		CashDrawer cashDrawerToday = cashDrawerService.getByToday();

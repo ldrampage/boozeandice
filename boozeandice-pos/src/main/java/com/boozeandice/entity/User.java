@@ -45,6 +45,9 @@ public class User implements Serializable {
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
+	
+	@Column(name="position")
+	private String position;
 
 	@Column(name = "last_login_date_time")
 	private Date lastLoginDateTime;
@@ -138,6 +141,16 @@ public class User implements Serializable {
 	public void setUserActivityLog(List<UserActivityLog> userActivityLog) {
 		this.userActivityLog = userActivityLog;
 	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+	
+	
 	
 	
 

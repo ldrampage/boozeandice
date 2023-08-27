@@ -35,17 +35,20 @@ public class Product implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "notes")
+	private String notes;
+
 	@Column(name = "price", nullable = false)
 	private Double price;
-	
-	@Column(name="cost", nullable = false)
+
+	@Column(name = "cost", nullable = false)
 	private Double cost;
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
 
 	@ManyToOne
-	@JoinColumn(name="created_by")
+	@JoinColumn(name = "created_by")
 	private User createdBy;
 
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -60,18 +63,18 @@ public class Product implements Serializable {
 
 	@OneToMany(mappedBy = "product")
 	private List<ProductStock> productStock;
-	
-	@Column(name="stock_available")
+
+	@Column(name = "stock_available")
 	private Long stocks;
-	
-	@Column(name="img_location")
-	private String imgLocation; 
-	
+
+	@Column(name = "img_location")
+	private String imgLocation;
+
 	@Transient
 	private Long qtyToPurchase;
-	
+
 	public Long getQtyToPurchase() {
-		if(qtyToPurchase == null) {
+		if (qtyToPurchase == null) {
 			qtyToPurchase = Long.valueOf(1);
 		}
 		return qtyToPurchase;
@@ -154,7 +157,7 @@ public class Product implements Serializable {
 	}
 
 	public ProductCategory getProductCategory() {
-		if(productCategory == null) {
+		if (productCategory == null) {
 			return new ProductCategory();
 		}
 		return productCategory;
@@ -173,7 +176,7 @@ public class Product implements Serializable {
 	}
 
 	public Long getStocks() {
-		if(stocks == null)
+		if (stocks == null)
 			stocks = Long.valueOf(0);
 		return stocks;
 	}
@@ -188,6 +191,14 @@ public class Product implements Serializable {
 
 	public void setCost(Double cost) {
 		this.cost = cost;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	@Override
@@ -206,10 +217,5 @@ public class Product implements Serializable {
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
-	
 
-	
 }

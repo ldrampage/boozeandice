@@ -1,6 +1,6 @@
 package com.boozeandice.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +27,9 @@ public class TransactionController {
 	
 	@GetMapping(path="")
 	public String transaction(Model model) {
-		List<Transaction> transactionList = transactionService.getAll();
+		Set<Transaction> transactionList = transactionService.getAll();
+		Set<Transaction> transactionListToday = transactionService.getByToday();
+		model.addAttribute("transactionListToday", transactionListToday);
 		model.addAttribute("transactionList", transactionList);
 		return pageController.transactionPage(model);
 	}

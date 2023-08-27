@@ -38,6 +38,12 @@ public class Transaction implements Serializable {
 	@Column(name="shipping")
 	private Double shipping;
 	
+	@Column(name="packaging")
+	private Double packaging;
+	
+	@Column(name="discount")
+	private Double discount;
+	
 	@Column(name="vatable_sales")
 	private Double vatableSales;
 	
@@ -282,6 +288,22 @@ public class Transaction implements Serializable {
 
 	public void setTableNo(String tableNo) {
 		this.tableNo = tableNo;
+	}
+
+	public Double getPackaging() {
+		return packaging;
+	}
+
+	public void setPackaging(Double packaging) {
+		this.packaging = packaging;
+	}
+
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 
 	@Override

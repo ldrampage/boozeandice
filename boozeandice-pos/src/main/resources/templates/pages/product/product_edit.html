@@ -4,140 +4,170 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
+		<div th:insert="~{fragments/preload :: preload}"></div>
 
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
 
-	<section class="main_content dashboard_part large_header_bg">
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Product</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a th:href="${'/'}">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Product</a></li>
-									<li class="breadcrumb-item active"><a th:href="${'/product/products'}">Product
-											List</a></li>
-									<li class="breadcrumb-item ">Product Edit</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col-lg-12" th:if="${message != null and message['status'] == 'success'}">
-                    <div class="white_box mb_30">
-                        <div class="box_header ">
-                            <div class="main-title">
-                                <h3 class="mb-0" >Additional Notifications</h3>
-                            </div>
-                        </div>
-                        <div class="alert alert-success" role="alert">
-                            <h4 class="alert-heading">Well done!</h4>
-                            <p>Aww yeah, you successfully edited the product.</p>
-                          </div>
-                    </div>
-                </div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="white_card card_height_100 mb_30">
-							<div class="white_card_header">
-								<div class="box_header m-0">
-									<div class="main-title">
-										<h3 class="m-0">Product Information</h3>
-									</div>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Inventory</a></li>
+								<li class="breadcrumb-item"><a href="#">Product Edit</a></li>
+
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+				
+					<div th:if="${message != null and message['status'] == 'success'}" class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully edited a product.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}" class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
+				
+				
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Product information</h3>
 								</div>
-							</div>
-							<div class="white_card_body">
 								<div class="card-body">
-									<form method="post" th:action="@{/product/products/edit}" enctype="multipart/form-data">
-										<div class="row mb-3">
+									<form method="post" th:action="@{/product/products/edit}"
+										enctype="multipart/form-data">
+										<div class="row">
 											<div class="col-md-12">
-												<label class="form-label" for="name">Name</label>
-												<input type="text" class="form-control" id="name" name="name"
-													th:value="${product.name}" placeholder="Name" required>
+												<div class="form-group">
+													<label class="form-label" for="name">Name</label>
+													<input type="text" class="form-control" id="name" name="name"
+														th:value="${product.name}" placeholder="Name" required>
+												</div>
+											</div>
+
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="form-label" for="price">Price</label>
+													<input type="number" class="form-control" id="price" name="price"
+														step="0.01" th:value="${product.price}" placeholder="Price">
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="form-label" for="categoryId">Category</label>
+													<select class="form-control" id="categoryId" name="categoryId">
+														<option value="0"></option>
+														<option th:each="category : ${categoryList}"
+															th:value="${category.id}" th:text="${category.name}"
+															th:selected="${category.id == selectedValue}"></option>
+													</select>
+												</div>
 											</div>
 										</div>
-										<div class="row mb-3">
-											<div class=" col-md-12">
-												<label class="form-label" for="description">Description</label>
-												<textarea class="form-control" id="description" name="description"
-													th:value="${product.description}"
-													placeholder="Description"></textarea>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="description">Description</label>
+													<textarea class="form-control" id="description" name="description"
+														th:value="${product.description}"
+														placeholder="Description"></textarea>
+												</div>
 											</div>
 										</div>
-										<div class="row mb-3">
-											<div class=" col-md-6">
-												<label class="form-label" for="file">Image File</label>
-												<input type="file" class="form-control" id="file" name="file"/>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="description">Notes</label>
+													<textarea class="form-control" id="notes" name="notes"
+														th:value="${product.notes}" placeholder="Notes"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<div class="custom-file">
+														<input type="file" class="custom-file-input" id="file"
+															name="file" />
+														<label class="custom-file-label" for="file">Image File</label>
+													</div>
+												</div>
 											</div>
 											<div th:if="${product.imgLocation}" class=" col-md-6">
 												<label for="image">Current Image</label>
-												<img id="image" th:src="@{/images/} + ${product.imgLocation}" alt="Existing Image" style="max-width:300px"/>
+												<img id="image" th:src="@{/images/} + ${product.imgLocation}"
+													alt="Existing Image" style="max-width:300px" />
 											</div>
 										</div>
-										<div class="row mb-3">
+										<div class="row">
 											<div class="col-md-6">
-												<label class="form-label" for="manufacturer">Manufacturer</label>
-												<input type="text" class="form-control" id="manufacturer"
-													name="manufacturer" th:value="${product.manufacturer}"
-													placeholder="Manufacturer">
+												<div class="form-group">
+													<label class="form-label" for="manufacturer">Manufacturer</label>
+													<input type="text" class="form-control" id="manufacturer"
+														name="manufacturer" th:value="${product.manufacturer}"
+														placeholder="Manufacturer">
+												</div>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label" for="supplier">Supplier</label>
-												<input type="text" class="form-control" id="supplier" name="supplier"
-													th:value="${product.supplier}" placeholder="Supplier">
+												<div class="form-group">
+
+													<label class="form-label" for="supplier">Supplier</label>
+													<input type="text" class="form-control" id="supplier"
+														name="supplier" th:value="${product.supplier}"
+														placeholder="Supplier">
+												</div>
 											</div>
 										</div>
-										<div class="row mb-3">
-											<div class=" col-md-6">
-												<label class="form-label" for="price">Price</label>
-												<input type="number" class="form-control" id="price" name="price" step="0.01"
-													th:value="${product.price}" placeholder="Price">
-											</div>
-											<div class=" col-md-6">
-												<label class="form-label" for="categoryId">Category</label>
-												<select class="form-select" id="categoryId" name="categoryId">
-													<option value="0"></option>
-													<option th:each="category : ${categoryList}"
-														th:value="${category.id}" th:text="${category.name}"
-														th:selected="${category.id == selectedValue}"></option>
-												</select>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<input type="hidden" th:value="${product.id}" name="productId" />
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
 											</div>
 										</div>
-										<input type="hidden" th:value="${product.id}" name="productId" />
-										<button type="submit" class="btn btn-primary">Submit</button>
 									</form>
+
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-12">
-
-					</div>
-				</div>
-			</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
 		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+		<!-- /.content-wrapper -->
 	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
 </body>
 

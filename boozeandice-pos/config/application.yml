@@ -1,5 +1,6 @@
 server:
-  port: 8081
+  port: 8080
+  address: lyndon
   
 spring:
   profiles:
@@ -15,11 +16,15 @@ spring:
 
 #application settings
 business_name: Booze and Ice
-
+senior_citizen_discount: 0.20 #20 PERCENT SENIOR CITIZEN DISCOUNT
+packaging_fee: 7.5 
+productSilogCategory: 'silog meals'
 
 #img upload location
 upload:
   directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img
+
+
   
 logging:
   level:

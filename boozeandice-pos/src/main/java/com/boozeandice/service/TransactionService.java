@@ -1,5 +1,8 @@
 package com.boozeandice.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,8 +28,9 @@ public class TransactionService {
 		return transactionRepo.save(transaction);
 	}
 	
-	public List<Transaction> getAll(){
-		return transactionRepo.findAll();
+	public Set<Transaction> getAll(){
+		Set<Transaction> setT = new HashSet<>(transactionRepo.findAll());
+		return setT;
 	}
 	
 	public Transaction getById(Long transactionId) {
@@ -43,6 +47,23 @@ public class TransactionService {
 	
 	public void delete(Transaction transaction) {
 		transactionRepo.delete(transaction);
+	}
+	
+	public Set<Transaction> getByToday() {
+		Calendar startOfDay = Calendar.getInstance();
+        startOfDay.setTime(new Date());
+        startOfDay.set(Calendar.HOUR_OF_DAY, 0);
+        startOfDay.set(Calendar.MINUTE, 0);
+        startOfDay.set(Calendar.SECOND, 0);
+        startOfDay.set(Calendar.MILLISECOND, 0);
+
+        Calendar endOfDay = Calendar.getInstance();
+        endOfDay.setTime(new Date()); 
+        endOfDay.set(Calendar.HOUR_OF_DAY, 23);
+        endOfDay.set(Calendar.MINUTE, 59);
+        endOfDay.set(Calendar.SECOND, 59);
+        endOfDay.set(Calendar.MILLISECOND, 999);
+		return transactionRepo.findByTransactionDateTimeBetween(startOfDay.getTime(), endOfDay.getTime());
 	}
 
 }

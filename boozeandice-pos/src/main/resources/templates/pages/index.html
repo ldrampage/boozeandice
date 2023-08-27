@@ -4,257 +4,332 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
-
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
-
-	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/preload :: preload}"></div>
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">POS Interface</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);" th:text="${business_name}"></a></li>
-									<li class="breadcrumb-item active">POS Interface</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div th:if="${cashDrawerToday != null}" class="row">
-					<div class="col-lg-8">
-						<div class="card_box box_shadow position-relative mb_30     ">
-							<div class="white_box_tittle" style="padding:25px;">
-								<div class="main-title2 ">
-									<h6 class="card-subtitle mb-2">By Category</h6>
-									<form method="post" th:action="@{/}">
-										<div class="input-group">
-											<select class="form-select" id="inputGroupSelect04"
-												aria-label="Example select with button addon" name="categoryId">
-												<option value="all">All...</option>
-												<option th:each="category : ${productCategoryList}"
-													th:value="${category.id}" th:text="${category.name}"
-													th:selected="${category.id == categoryFilterValue}"></option>
-											</select>
-											<button class="btn btn-success input-group-text" type="submit"
-												name="fetchByCategory">Go</button>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div th:if="${cashDrawerToday != null}" class="row">
+						<div class="col-12">
+							<div class="card">
+
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<table class="table table-hover text-nowrap">
+												<thead>
+													<tr>
+														<th>Product</th>
+														<th>Price</th>
+														<th>Quantity</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="product : ${productToPurchaseList}">
+														<td><img th:src="@{/images/} + ${product.imgLocation} "
+																alt="N/A" style="height:50px; width:50px;">
+															<p class="d-inline-block align-middle mb-0"><a href=""
+																	class="d-inline-block align-middle mb-0 f_w_600 color_theme2"
+																	th:text="${product.name}"></a></p>
+														</td>
+														<td th:text="${'Php ' + product.price}"></td>
+														<td style="width:15%">
+															<input th:onChange="quantityHandler(this)"
+																th:class="${'form-control ' + '_product'}" type="number"
+																inputmode="numeric" min="1" th:max="${product.stocks}"
+																step="0"
+																th:value="${product.qtyToPurchase == 0 ? 1 : product.qtyToPurchase}"
+																th:name="${'product_' + product.id}">
+														</td>
+														<form method="post" th:action="@{/}">
+															<td>
+																<input type="hidden" th:value="${product.id}"
+																	name="productId" />
+																<button name="removePurchase" type="submit"
+																	class="btn btn-sm btn-outline-dark">
+																	Remove
+																</button>
+															</td>
+														</form>
+													</tr>
+												</tbody>
+											</table>
+											<div th:if="${productToPurchaseList == null or productToPurchaseList.size <= 0}"
+												style="text-align: center;">
+												<h5>No data available in table</h5>
+											</div>
+
+											<form
+												th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
+												id="checkoutForm" method="post" th:action="@{/checkout}">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-check">
+																	<input style="width: 2em; height:2em;"
+																		type="checkbox" class="form-check-input"
+																		id="takeout" name="takeout">
+																	<label
+																		style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
+																		class="form-check-label" for="takeout">Take
+																		away</label>
+																</div>
+																<div class="form-group">
+																	<label for="discount">Discount</label>
+																	<select class="form-control select2bs4"
+																		id="discount" name="discount">
+																		<option value="" selected>None</option>
+																		<option th:value="${seniorCitizenDiscount}">
+																			Senior
+																			Citizen and PWD
+																		</option>
+																	</select>
+																</div>
+																<div class="form-group">
+																	<label for="customer">Customer</label>
+																	<input type="hidden"
+																		name="checkoutCreateTransaction" />
+																	<select class="form-control select2bs4"
+																		id="customer" name="customerId">
+																		<option value=""
+																			th:selected="${customerFilterValue == null}">
+																			None</option>
+																		<option th:each="customer : ${customerList}"
+																			th:value="${customer.id}"
+																			th:selected="${customerFilterValue == customer.id}"
+																			th:text="${customer.emailAddress}">
+																		</option>
+																	</select>
+																</div>
+
+																<table class="table">
+																	<tbody>
+																		<tr>
+																			<td style="text-align: center;"><a
+																					th:href="@{/}"
+																					class="btn btn-block bg-gradient-secondary btn-lg"><i
+																						class="far fa-times-circle font_s_18"></i>
+																					Cancel</a></td>
+																			<td style="text-align: center;">
+																				<button id="checkoutButton"
+																					class="btn btn-block bg-gradient-success btn-lg"><i
+																						class="fas fa-shopping-bag font_s_18"></i>
+																					Checkout</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+											<!--<div class="card"
+												th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}">
+												<div class="card-body">
+													<div class="row">
+														<div class="col-md-12">
+															<div class="total-payment">
+																<table class="table">
+																	<tbody>
+																		<tr>
+																			<td style="text-align: center;"><a
+																					th:href="@{/}"
+																					class="btn btn-block bg-gradient-secondary btn-lg"><i
+																						class="far fa-times-circle font_s_18"></i>
+																					Cancel</a></td>
+																			<td style="text-align: center;">
+																				<button id="checkoutButton"
+																					class="btn btn-block bg-gradient-success btn-lg"><i
+																						class="fas fa-shopping-bag font_s_18"></i>
+																					Checkout</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> -->
 										</div>
-									</form>
+									</div><!-- /.card-body -->
 								</div>
+								<!-- /.card -->
+
 							</div>
-							<div class="box_body">
-								<div class=" ">
-									<div class="visible-scroll always-visible scroll-demo ps-container ps-theme-default ps-active-x ps-active-y"
-										style="height:780px;">
-										<div class="horrizontal_width" style="width: 1800px;">
+							<!-- /.row -->
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="card">
+										<div class="card-header" style="padding:25px;">
+											<div class="main-title2 ">
+												<h6 class="card-subtitle mb-2">By Category</h6>
+												<form id="category_form" method="post" th:action="@{/}">
+													<div class="input-group">
+														<input type="hidden" name="fetchByCategory" />
+														<select onchange="submitCategory()"
+															class="form-control select2bs4" name="categoryId">
+															<option value="all">All...</option>
+															<option th:each="category : ${productCategoryList}"
+																th:value="${category.id}" th:text="${category.name}"
+																th:selected="${category.id == categoryFilterValue}">
+															</option>
+														</select>
+													</div>
+												</form>
+											</div>
+										</div>
+										<div class="card-body">
+											<!--<div class="visible-scroll always-visible scroll-demo ps-container ps-theme-default ps-active-x ps-active-y"
+													style="height:780px;"> -->
+											<!-- <div class="horrizontal_width" style="width: 1800px;"> -->
 											<div class="row" th:each="entry : ${productsDisplay}">
-												<div class="col-md-3" style="width:15%;" th:each="product : ${entry}">
-													<div class="white_card position-relative mb_20 ">
+												<div class="col-md-4" th:each="product : ${entry}">
+													<div class="card">
 														<div class="card-body">
 															<div class="ribbon1 rib1-primary"><span
 																	class="text-white text-center rib1-primary"
 																	th:text="${'Php ' + product.price}"></span>
 															</div>
-															<!--end ribbon--><img
-																th:src="@{/images/} + ${product.imgLocation}"
-																alt="No Image Available" class="d-block mx-auto my-4"
-																height="125">
-															<div class="row my-2">
-																<div class="col"><span class="badge_btn_3  mb-1"
-																		th:if="${product.productCategory != null}"
-																		th:text="${product.productCategory.name}"></span>
-																	<a href="#"
-																		class="f_w_400 color_text_3 f_s_14 d-block"
-																		th:text="${product.name}"></a>
+															<!--end ribbon-->
+															<div class="row">
+																<div class="col-md-6">
+																	<form method="post" th:action="@{/}">
+																		<div class="d-grid">
+																			<input type="hidden"
+																				th:value="${product.id}"
+																				name="productId" />
+																			<input class="quantityclass" type="hidden"
+																				name="purchased_quantity" />
+																			<button type="submit"
+																				onclick="setQuantityValue()"
+																				class="btn btn-block bg-gradient-primary btn-lg"
+																				name="purchase"
+																				style="height:20rem;">Purchase</button>
+																		</div>
+																	</form>
 																</div>
-															</div>
-															<div class="row my-2">
-																<div class="col-auto">
-																	<h4 class="text-dark mt-0"
-																		th:text="${'Php ' + product.price}">
+																<div class="col-md-6">
+																	<img th:src="@{/images/} + ${product.imgLocation}"
+																		alt="No Image Available"
+																		class="d-block mx-auto my-4"
+																		style="height: 150px; width:150px;">
+																	<div class="row my-2">
+																		<div class="col"><span class="badge_btn_3  mb-1"
+																				th:if="${product.productCategory != null}"
+																				th:text="${product.productCategory.name}"></span>
+																			<a href="#"
+																				class="f_w_400 color_text_3 f_s_28 d-block"
+																				th:text="${product.name}"></a>
+																		</div>
+																	</div>
+																	<div class="row my-2">
+																		<div class="col-auto">
+																			<h4 class="text-dark mt-0"
+																				th:text="${'Php ' + product.price}">
 
-																		<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
-																	</h4>
+																				<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
+																			</h4>
+																		</div>
+																	</div>
 																</div>
+																
 															</div>
-															<form method="post" th:action="@{/}">
-																<div class="d-grid">
-																	<input type="hidden" th:value="${product.id}"
-																		name="productId" />
-																	<input class="quantityclass" type="hidden"
-																		name="purchased_quantity" />
-																	<button type="submit" onclick="setQuantityValue()"
-																		class="btn_2" name="purchase">Purchase</button>
-																</div>
-															</form>
+
 
 														</div>
 														<!--end card-body-->
 													</div>
 												</div>
 											</div>
+											<!--	</div> -->
+											<!--</div> -->
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-
-					<div class="col-lg-4">
-						<div class="card QA_section border-0">
-							<div class="card-body QA_table ">
-								<div class="table-responsive shopping-cart ">
-									<table class="table mb-0">
-										<thead>
-											<tr>
-												<th class="border-top-0">Product</th>
-												<th class="border-top-0">Price</th>
-												<th class="border-top-0">Quantity</th>
-												<th class="border-top-0">Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="product : ${productToPurchaseList}">
-												<td><img th:src="@{/images/} + ${product.imgLocation} " alt="N/A"
-														height="52">
-													<p class="d-inline-block align-middle mb-0"><a href=""
-															class="d-inline-block align-middle mb-0 f_w_600 color_theme2"
-															th:text="${product.name}"></a></p>
-												</td>
-												<td th:text="${'Php ' + product.price}"></td>
-												<td style="width:15%">
-													<input th:onChange="quantityHandler(this)"
-														th:class="${'form-control ' + '_product'}" type="number" min="1"
-														th:max="${product.stocks}" step="0"
-														th:value="${product.qtyToPurchase == 0 ? 1 : product.qtyToPurchase}"
-														th:name="${'product_' + product.id}">
-												</td>
-												<form method="post" th:action="@{/}">
-													<td>
-														<input type="hidden" th:value="${product.id}"
-															name="productId" />
-														<button name="removePurchase" type="submit"
-															class="btn btn-sm btn-outline-dark">
-															Remove
-														</button>
-													</td>
-												</form>
-											</tr>
-										</tbody>
-									</table>
+					<div th:unless="${cashDrawerToday != null}" class="row">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">
+										Setup the cashdrawer
+									</h4>
 								</div>
-
-
-								<div th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
-									class="row justify-content-end mt_30">
-									<form id="checkoutForm" method="post" th:action="@{/checkout}">
-										<div class="col-md-12">
-											<h6 class="card-subtitle mb-2">Customer</h6>
-											<div class="input-group">
-												<input type="hidden" name="checkoutCreateTransaction" />
-												<select class="form-select" id="customer"
-													aria-label="Example select with button addon" name="customerId">
-													<option value=""></option>
-													<option th:each="customer : ${customerList}"
-														th:value="${customer.id}"
-														th:selected="${customerFilterValue == customer.id}"
-														th:text="${customer.emailAddress}">
-													</option>
-												</select>
-											</div>
-										</div>
-									</form>
-
-								</div>
-
-								<div th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
-									class="row justify-content-end mt_30">
-									<div class="col-md-12">
-										<div class="total-payment">
-											<table class="table">
-												<tbody>
-													<tr>
-														<td style="text-align: center;"><a th:href="@{/}"
-																class="btn btn-outline-danger mb-3"><i
-																	class="far fa-times-circle font_s_18"></i>
-																Cancel</a></td>
-														<td style="text-align: center;">
-															<button id="checkoutButton"
-																class="btn btn-outline-success mb-3"><i
-																	class="fas fa-shopping-bag font_s_18"></i>
-																Checkout</button>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
+								<div class="card-body">
+									<div class="col-lg-12">
+										<form method="post" th:action="@{/cashdrawer}">
+											<h2 class="color_gray f_w_700" style="text-align: center;">Create
+												Starting
+												Cash for Today</h2>
+											<a th:href="${'/cashdrawer/create'}" type="submit" name="cash_payment"
+												class="btn btn-block bg-gradient-success btn-lg"
+												style="text-align: center;">Create</a>
+										</form>
 									</div>
-									<!--end col-->
-								</div>
-								<!--end row-->
-							</div>
-							<!--end card-->
-						</div>
-						<!--end card-body-->
-					</div>
-				</div>
-				<div th:unless="${cashDrawerToday != null}" class="row">
-					<div class="col-lg-12">
-						<div class="white_card card_height_100  mb_20">
-							<div class="white_card_header">
-								<div class="box_header m-0">
-									<div class="main-title">
-										<h3 class="m-0">Setup the cashdrawer</h3>
-									</div>
-								</div>
-							</div>
-							<div class="white_card_body">
-								<div class="col-lg-12">
-									<form method="post" th:action="@{/cashdrawer}">
-										<h2 class="color_gray f_w_700" style="text-align: center;">Create Starting
-											Cash for Today</h2>
-										<a th:href="${'/cashdrawer/create'}" type="submit" name="cash_payment"
-											class="btn_2 mt-1 mb-1 w-100" style="text-align: center;">Create</a>
-									</form>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-			</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
 		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+		<!-- /.content-wrapper -->
 	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
-	<script th:inline="javascript">
+	<script>
+		//Initialize Select2 Elements
+		$('.select2bs4').select2({
+			theme: 'bootstrap4'
+		})
+		function submitCategory() {
+			var categoryForm = $("#category_form");
+			categoryForm.submit();
+		}
+
 		$(document).ready(function () {
 
 			$(document).on("click", "#checkoutButton", function () {
-				console.dir("i got clicked");
 				var checkoutForm = $("#checkoutForm");
-
 				var inputFields = $("._product");
-
 				inputFields.each(function (index, element) {
-					checkoutForm.append($(element).clone());
+					console.dir(element.value);
+					console.dir(element.name);
+					checkoutForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
 				})
 
 				//var formFields = checkoutForm.find("input, select, textarea");
@@ -268,6 +343,7 @@
 
 			})
 		})
+
 
 		function quantityHandler(inputElement) {
 			var value = inputElement.value;
@@ -310,6 +386,7 @@
 				inputElements[i].value = userInput;
 			}
 		}
+
 	</script>
 </body>
 

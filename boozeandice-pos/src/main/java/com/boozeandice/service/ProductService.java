@@ -1,8 +1,10 @@
 package com.boozeandice.service;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,11 +25,11 @@ public class ProductService implements Serializable {
 	@Autowired
 	private ProductRepository productRepo;
 	
-	public List<Product> getAll(){
-		return productRepo.findAll();
+	public Set<Product> getAll(){
+		return new HashSet<Product>(productRepo.findAll());
 	}
 	
-	public List<Product> getAllNonZeroStock(){
+	public Set<Product> getAllNonZeroStock(){
 		return productRepo.findByStocksNonZero();
 	}
 	
@@ -39,12 +41,16 @@ public class ProductService implements Serializable {
 		return null;
 	}
 	
-	public List<Product> searchByName(String search){
+	public Set<Product> searchByName(String search){
 		return productRepo.findByNameIgnoreCaseLike("%" + search + "%");
 	}
 	
-	public List<Product> getProductByCategory(ProductCategory category){
+	public Set<Product> getProductByCategory(ProductCategory category){
 		return productRepo.findByProductCategory(category);
+	}
+	
+	public Set<Product> getByProductCategoryAndProductStockGreaterThan(ProductCategory category){
+		return productRepo.findByProductCategoryAndStocksGreaterThan(category, Long.valueOf(0));
 	}
 	
 	public Product save(Product product) {

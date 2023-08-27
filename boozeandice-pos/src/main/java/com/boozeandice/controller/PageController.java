@@ -114,6 +114,16 @@ public class PageController {
 		return "pages/customer/customer_edit";
 	}
 	
+	/**
+	 * 
+	 * Staff
+	 * 
+	 */
+	
+	public String staffPage(Model model) {
+		model.addAttribute("business_name", business_name);
+		return "pages/staff/staff";
+	}
 	
 
 }

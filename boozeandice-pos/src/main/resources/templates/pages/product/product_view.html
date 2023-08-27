@@ -4,49 +4,54 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
+		<div th:insert="~{fragments/preload :: preload}"></div>
 
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
 
-	<section class="main_content dashboard_part large_header_bg">
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Product</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Product</a></li>
-									<li class="breadcrumb-item active">Product Stock View</li>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row">
-                    <div class="col-12">
-                        <div class="white_card position-relative mb_20">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-6 align-self-center">
-                                        <img th:src="@{/images/} + ${product.imgLocation}" alt="No Image Available" class="mx-auto d-block sm_w_100" height="300" />
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-lg-6 align-self-center">
-                                        <div class="single-pro-detail">
-                                            <!--<p class="mb-1">Dastyle</p>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Product View</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-lg-6 align-self-center">
+											<img th:src="@{/images/} + ${product.imgLocation}" alt="No Image Available"
+												class="mx-auto d-block sm_w_100" height="300" />
+										</div>
+										<div class="col-lg-6 align-self-center">
+											<div class="single-pro-detail">
+												<!--<p class="mb-1">Dastyle</p>
                                             <div class="custom-border mb-3"></div>-->
-                                            <h3 class="pro-title" th:text="${product.name}"></h3>
-                                            <p class="text-muted mb-0" th:text="${product.description}"></p>
-                                            <!--<ul class="list-inline mb-2 product-review">
+												<h3 class="pro-title" th:text="${product.name}"></h3>
+												<p class="text-muted mb-0" th:text="${product.description}"></p>
+												<!--<ul class="list-inline mb-2 product-review">
                                                 <li class="list-inline-item"><i class="fas fa-star text-warning"></i></li>
                                                 <li class="list-inline-item"><i class="fas fa-star text-warning"></i></li>
                                                 <li class="list-inline-item"><i class="fas fa-star text-warning"></i></li>
@@ -54,15 +59,20 @@
                                                 <li class="list-inline-item"><i class="fas fa-star-half text-warning"></i></li>
                                                 <li class="list-inline-item">4.5 (9830 reviews)</li>
                                             </ul> -->
-                                            <h2 class="pro-price" th:text="${'Php ' + product.price}">
-                                                <span>
-                                                	<del>$180.00</del>
-                                                </span><span class="text-danger fw-bold ms-2">50% Off</span>
-                                            </h2>
-                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:text="${'Stocks available : ' + product.stocks}"></h6>
-                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:if="${product.productCategory != null}" th:text="${'Category : ' + product.productCategory.name}"></h6>
-                                            <h6 class="text-muted font_s_13 mt-2 mb-1" th:if="${product.supplier != null}" th:text="${'Supplier : ' + product.supplier}"></h6>
-                                            <!--<ul class="list-unstyled pro-features border-0">
+												<h2 class="pro-price" th:text="${'Php ' + product.price}">
+													<span>
+														<del>$180.00</del>
+													</span><span class="text-danger fw-bold ms-2">50% Off</span>
+												</h2>
+												<h6 class="text-muted font_s_13 mt-2 mb-1"
+													th:text="${'Stocks available : ' + product.stocks}"></h6>
+												<h6 class="text-muted font_s_13 mt-2 mb-1"
+													th:if="${product.productCategory != null}"
+													th:text="${'Category : ' + product.productCategory.name}"></h6>
+												<h6 class="text-muted font_s_13 mt-2 mb-1"
+													th:if="${product.supplier != null}"
+													th:text="${'Supplier : ' + product.supplier}"></h6>
+												<!--<ul class="list-unstyled pro-features border-0">
                                                 <li>It is a long established fact that a reader will be distracted.</li>
                                                 <li>Contrary to popular belief, Lorem Ipsum is not text.</li>
                                             </ul> 
@@ -81,92 +91,88 @@
                                                     <i class="fa fa-cart-plus me-2"></i>Add to Cart
                                                 </a>
                                             </div>-->
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                </div>
-                                <!--end row-->
-                            </div>
-                            <!--end card-body-->
-                        </div>
-                        <!--end card-->
-                    </div>
-                    <!--end col-->
-                </div>
-                
-                <div class="row ">
-                    <div class="col-12 QA_section" >
-                        <div class="card QA_table ">
-                            <div class="card-header">
-                                <strong>Stock List</strong>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive-sm">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">#</th>
-                                                <th>Batch Date</th>
-                                                <th>Purchase Date</th>
-                                                <th class="right">Cost</th>
-                                                <th class="center">Qty</th>
-                                                <th class="right">Created By</th>
-                                                <th class="right">Notes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="productStock : ${productStockList}">
-                                                <td class="center" th:text="${productStock.id}"></td>
-                                                <td class="left strong" th:text="${productStock.createdDate}"></td>
-                                                <td class="left" th:text="${productStock.purchaseDate}"></td>
-                                                <td class="right" th:text="${'Php ' + productStock.cost}"></td>
-                                                <td class="center" th:text="${productStock.quantity}"></td>
-                                                <td class="right" th:text="${productStock.createdBy.username}"></td>
-                                                <td class="right" th:text="${productStock.notes}"></td>
-                                            </tr>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4 col-sm-5">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Stock List</h3>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="table-responsive-sm">
+												<table class="table table-striped">
+													<thead>
+														<tr>
+															<th class="center">#</th>
+															<th>Batch Date</th>
+															<th>Purchase Date</th>
+															<th class="right">Cost</th>
+															<th class="center">Qty</th>
+															<th class="right">Created By</th>
+															<th class="right">Notes</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="productStock : ${productStockList}">
+															<td class="center" th:text="${productStock.id}">
+															</td>
+															<td class="left strong"
+																th:text="${productStock.createdDate}"></td>
+															<td class="left" th:text="${productStock.purchaseDate}">
+															</td>
+															<td class="right" th:text="${'Php ' + productStock.cost}">
+															</td>
+															<td class="center" th:text="${productStock.quantity}"></td>
+															<td class="right"
+																th:text="${productStock.createdBy.username}">
+															</td>
+															<td class="right" th:text="${productStock.notes}">
+															</td>
+														</tr>
 
-                                    </div>
-
-                                    <div class="col-lg-4 col-sm-5 ms-auto QA_section">
-                                        <table class="table table-clear QA_table">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="left">
-                                                        <strong>Total Cost</strong>
-                                                    </td>
-                                                    <td class="right">
-                                                        <strong th:text="${'Php ' + totalCost}"></strong>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-			</div>
-		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<table class="table table-clear QA_table">
+												<tbody>
+													<tr>
+														<td class="left">
+															<strong>Total Cost</strong>
+														</td>
+														<td class="right">
+															<strong th:text="${'Php ' + totalCost}"></strong>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div><!-- /.container-fluid -->
+		</section>
+		<!-- /.content -->
 	</div>
+	<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
 </body>
 

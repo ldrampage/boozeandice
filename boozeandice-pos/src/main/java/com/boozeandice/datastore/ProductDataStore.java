@@ -69,6 +69,7 @@ public class ProductDataStore implements Serializable {
 			product.setPrice(prices[x]);
 			product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			product.setCost(cost[x]);
+			product.setImgLocation("beer.png");
 			
 			product.setCreatedBy(user);
 			
