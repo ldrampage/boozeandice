@@ -101,7 +101,14 @@
 																name="cost" step="0.01" placeholder="Cost">
 														</div>
 													</div>
-													<div class="col-md-6">
+													<div class="col-md-3">
+														<div class="form-group">
+															<label class="form-label" for="packaging_fee">Packaging fee</label>
+															<input type="number" class="form-control" id="packaging_fee"
+																name="packaging_fee" step="0.01" placeholder="Packaging fee" required>
+														</div>
+													</div>
+													<div class="col-md-3">
 														<div class="form-group">
 															<label class="form-label" for="categoryId">Category</label>
 															<select class="form-control" id="categoryId"
@@ -180,6 +187,13 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<!-- bs-custom-file-input -->
+	<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+	<script>
+		$(function () {
+			bsCustomFileInput.init();
+		});
+	</script>
 </body>
 
 </html>

@@ -33,9 +33,21 @@ public class User implements Serializable {
 
 	@Column(name = "fname", nullable = false)
 	private String fname;
+	
+	@Column(name="mname")
+	private String mname;
 
 	@Column(name = "lname", nullable = false)
 	private String lname;
+	
+	@Column(name="about")
+	private String about;
+	
+	@Column(name="position")
+	private String position;
+	
+	@Column(name="mobile_number")
+	private String mobileNumber;
 
 	@Column(name = "username", nullable = false)
 	private String username;
@@ -45,9 +57,6 @@ public class User implements Serializable {
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
-	
-	@Column(name="position")
-	private String position;
 
 	@Column(name = "last_login_date_time")
 	private Date lastLoginDateTime;
@@ -149,6 +158,34 @@ public class User implements Serializable {
 	public void setPosition(String position) {
 		this.position = position;
 	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getMname() {
+		return mname;
+	}
+
+	public void setMname(String mname) {
+		this.mname = mname;
+	}
+	
+	
+	
+	
 	
 	
 	

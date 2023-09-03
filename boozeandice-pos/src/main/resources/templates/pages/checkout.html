@@ -39,6 +39,17 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Payment Summary</h3>
+									<div class="float-right">
+										<b class="badge badge-success" th:if="${transaction.takeOut == false}">Dine
+											In</b>
+										<b class="badge badge-warning" th:unless="${transaction.takeOut == false}">Take
+											Out</b>
+									</div>
+
+
+								</div>
 								<div class="card-body">
 									<div class="row">
 										<div class="col-md-12">
@@ -46,6 +57,7 @@
 												<thead>
 													<tr>
 														<th>Product</th>
+														<th th:if="${transaction.takeOut == true}">Package Fee</th>
 														<th>Quantity</th>
 														<th>Total</th>
 													</tr>
@@ -59,6 +71,8 @@
 																class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
 															</p>
 														</td>
+														<td th:if="${transaction.takeOut == true}"
+															th:text="${purchases.product.packagingFee}"></td>
 														<td th:text="${purchases.quantity}"></td>
 														<td
 															th:text="${'Php ' + purchases.quantity * purchases.product.price}">
@@ -227,9 +241,7 @@
 																<input type="hidden" name="addMoreToPurchase" />
 																<input type="hidden" name="transactionId"
 																	th:value="${transaction.id}" />
-																<button type="submit" name="cash_payment"
-																	class="btn btn-block bg-gradient-secondary btn-lg">ADD
-																	/ DEDUCT PURCHASE</button>
+																<button type="submit" class="btn btn-block bg-gradient-secondary btn-lg">ADD / DEDUCT PURCHASE</button>
 															</form>
 														</td>
 													</tr>
@@ -244,13 +256,59 @@
 
 										<div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
 											aria-labelledby="custom-tabs-four-profile-tab">
-											Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris
-											pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum
-											dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in
-											faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas
-											sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere
-											purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at,
-											posuere nec nunc. Nunc euismod pellentesque diam.
+											<div class="row">
+												<div class="col-md-12">
+													<form method="post" th:action="@{/invoice}">
+														<div class="form-group">
+															<label class="form-label" style="font-size: 24px;"
+																for="cash_received">Cash Received</label>
+															<input id="cash_received" type="number"
+																style="font-size: 28px; font-weight:900; color:cornflowerblue; height:calc(3.25rem + 2px);"
+																step="0.0" th:min="${transaction.total}"
+																th:value="${transaction.total}"
+																class="form-control input-lg" name="cash_received"
+																placeholder="Cash Received" required />
+														</div>
+														<div class="form-group">
+															<label class="form-label">Sold
+																To</label>
+															<div th:if="${transaction.customer != null}">
+																<input class="form-control" type="text"
+																	th:value="${transaction.customer.fname}" disabled />
+																<input type="hidden"
+																	th:value="${transaction.customer.id}"
+																	id="registeredCustomer" name="registeredCustomer" />
+															</div>
+															<div th:unless="${transaction.customer != null}">
+																<input class="form-control" type="text" id="soldTo"
+																	name="soldTo" th:value="${transaction.soldTo}"
+																	placeholder="Sold To" />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Phone no.</label>
+															<input type="text" class="form-control" name="phone_number" required>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Reference no.</label>
+															<input type="text" class="form-control"
+																name="reference_number" required>
+														</div>
+														<table class="table table-bordered text-center">
+															<tbody>
+																<tr>
+																	<td>
+																		<input type="hidden" name="transactionId"
+																			th:value="${transaction.id}" />
+																		<button type="submit" name="gcash_payment"
+																			class="btn btn-block bg-gradient-success btn-lg">SUBMIT</button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</form>
+												</div>
+											</div>
 										</div>
 										<div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
 											aria-labelledby="custom-tabs-four-messages-tab">

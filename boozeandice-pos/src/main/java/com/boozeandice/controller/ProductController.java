@@ -56,7 +56,7 @@ public class ProductController {
 	@Autowired
 	private UserService userService;
 
-	@Value("${upload.directory}")
+	@Value("${upload.product.directory}")
 	private String uploadDirectory;
 
 	@GetMapping(path = "/category")
@@ -90,6 +90,20 @@ public class ProductController {
 		model.addAttribute("message", message);
 		return pageController.productCategoryCreatePage(model);
 	}
+	
+	@GetMapping(path = "/category/edit/{id}")
+	public String productCategoryEditPage(Model model, @PathVariable("id") String id) {
+		
+		ProductCategory category = categoryService.getById(Long.valueOf(id));
+		
+		model.addAttribute("category", category);
+		return pageController.productCategoryEditPage(model);
+	}
+	
+//	@GetMapping(path="/cateegory")
+//	public String productCategoryEditProcess(Model model, @RequestParam Map<String, String> parameters) {
+//		
+//	}
 
 	/**
 	 * 
@@ -233,13 +247,20 @@ public class ProductController {
 		product.setSupplier(parameters.get("supplier"));
 		product.setNotes(parameters.get("notes"));
 		product.setPrice(Double.valueOf(parameters.get("price")));
-		if(parameters.get("cost") != null && !parameters.get("cost").isBlank())
+		
+		if(parameters.get("packaging_fee") != null && !parameters.get("packaging_fee").isBlank())
+			product.setPackagingFee(Double.valueOf(parameters.get("packaging_fee")));
+		else
+			product.setPackagingFee(0.0);
+		
+		if (parameters.get("cost") != null && !parameters.get("cost").isBlank())
 			product.setCost(Double.valueOf(parameters.get("cost")));
 		else
 			product.setCost(0.0);
+		
 		Path filePath = null;
 		Map<String, String> message = new HashMap<String, String>();
-		try { 
+		try {
 			if (!file.isEmpty()) {
 				filePath = Paths.get(uploadDirectory, file.getOriginalFilename());
 				Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -273,11 +294,19 @@ public class ProductController {
 			@RequestParam("file") MultipartFile file) {
 
 		Product product = productService.getById(Long.valueOf(parameters.get("productId")));
+		product.setName(parameters.get("name"));
 		product.setDescription(parameters.get("description"));
 		product.setManufacturer(parameters.get("manufacturer"));
+		product.setNotes(parameters.get("notes"));
 		product.setSupplier(parameters.get("supplier"));
 		product.setPrice(Double.valueOf(parameters.get("price")));
-
+		
+		if(parameters.get("packaging_fee") != null && !parameters.get("packaging_fee").isBlank())
+			product.setPackagingFee(Double.valueOf(parameters.get("packaging_fee")));
+		
+		if (parameters.get("cost") != null && !parameters.get("cost").isBlank())
+			product.setCost(Double.valueOf(parameters.get("cost")));
+		
 		Path filePath = null;
 		Map<String, String> message = new HashMap<String, String>();
 		try {
@@ -286,13 +315,15 @@ public class ProductController {
 			if (!file.isEmpty()) {
 				if (product.getImgLocation() != null) {
 					Path imagePath = Paths.get(uploadDirectory, product.getImgLocation());
-					Files.delete(imagePath);
+					if (Files.exists(imagePath)) {
+						Files.delete(imagePath);
+					}
 				}
 				// save the new image file
 				filePath = Paths.get(uploadDirectory, file.getOriginalFilename());
 				Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 				product.setImgLocation(file.getOriginalFilename());
-			} 
+			}
 
 			ProductCategory productCategory = categoryService.getById(Long.valueOf(parameters.get("categoryId")));
 			product.setProductCategory(productCategory);

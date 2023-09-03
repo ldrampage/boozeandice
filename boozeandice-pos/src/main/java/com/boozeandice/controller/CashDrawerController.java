@@ -23,6 +23,7 @@ import com.boozeandice.service.CashAddedService;
 import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.ExpenseService;
 import com.boozeandice.service.TransactionService;
+import com.boozeandice.utility.Utilities;
 
 @Controller
 @RequestMapping(path = "/cashdrawer")
@@ -44,6 +45,9 @@ public class CashDrawerController {
 
 	@Autowired
 	private CashAddedService cashAddedService;
+	
+	@Autowired
+	private Utilities utility;
 	
 	@GetMapping(path = "")
 	private String cashdrawerPage(Model model) {
@@ -118,6 +122,7 @@ public class CashDrawerController {
 			cashDrawer.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			// cashDrawer.setCreatedBy(); TODO
 			cashDrawerService.save(cashDrawer);
+			utility.openCashDrawer();
 			return "redirect:/cashdrawer";
 		}
 		
@@ -147,10 +152,7 @@ public class CashDrawerController {
 			cashAddedService.save(cashAdded);
 			return "redirect:/cashdrawer";
 		}
-		
-		
-		
-		
+
 		return pageController.cashdrawerPage(model);
 	}
 }

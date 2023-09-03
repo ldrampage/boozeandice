@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Transaction</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Transaction Details</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-3">
+							<!-- Profile Image -->
+							<div class="card card-primary card-outline">
+								<div class="card-body box-profile">
+									<div class="text-center">
+										<img class="profile-user-img img-fluid img-circle"
+											src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+									</div>
+
+									<h3 class="profile-username text-center" th:text="${transaction.soldTo}"></h3>
+
+									<p class="text-muted text-center">Customer</p>
+
+									<ul class="list-group list-group-unbordered mb-3">
+										<li class="list-group-item">
+											<b>Invoice #</b> <a class="float-right"
+												th:text="${transaction.invoiceNumber}"></a>
+										</li>
+										<li class="list-group-item">
+											<b>Transaction Date: </b> <a class="float-right"
+												th:text="${#dates.format(transaction.transactionDateTime, 'dd-MMM-yyyy')}"></a>
+										</li>
+										<li class="list-group-item">
+											<b>Transaction Time: </b> <a class="float-right"
+												th:text="${#dates.format(transaction.transactionDateTime, 'hh:mm a')}"></a>
+										</li>
+										<li class="list-group-item">
+											<b>Total item purchased: </b> <a class="float-right"
+												th:text="${transaction.totalItems}"></a>
+										</li>
+
+										<li class="list-group-item">
+											<b>Dine In: </b>
+											<span class="badge badge-success float-right"
+												th:if="${transaction.takeOut == false}">Yes</span>
+											<span class="badge badge-warning float-right"
+												th:unless="${transaction.takeOut == false}">No</span>
+										</li>
+
+										<li class="list-group-item">
+											<b>Transaction status: </b>
+											<span class="badge badge-warning float-right"
+												th:if="${transaction.transactionStatus == 'REFUND'}"
+												th:text="${transaction.transactionStatus}"></span>
+											<span class="badge badge-danger float-right"
+												th:if="${transaction.transactionStatus == 'CANCELLED'}"
+												th:text="${transaction.transactionStatus}"></span>
+											<span class="badge badge-primary float-right"
+												th:if="${transaction.transactionStatus == 'PENDING'}"
+												th:text="${transaction.transactionStatus}"></span>
+											<span class="badge badge-success float-right"
+												th:if="${transaction.transactionStatus == 'PAID'}"
+												th:text="${transaction.transactionStatus}"></span>
+										</li>
+										
+										<li class="list-group-item">
+											<b>Transaction Type: </b>
+											<span class="badge badge-warning float-right"
+												th:if="${transaction.transactionType == 'REFUND'}"
+												th:text="${transaction.transactionType}"></span>
+											<span class="badge badge-danger float-right"
+												th:if="${transaction.transactionType == 'CANCELLED'}"
+												th:text="${transaction.transactionType}"></span>
+											<span class="badge badge-primary float-right"
+												th:if="${transaction.transactionType == 'PURCHASE'}"
+												th:text="${transaction.transactionType}"></span>
+											<span class="badge badge-success float-right"
+												th:if="${transaction.transactionType == 'SALE'}"
+												th:text="${transaction.transactionType}"></span>
+										</li>
+										
+										<li class="list-group-item">
+											<b>Payment Method: </b>
+											<span class="badge badge-success float-right"
+												th:if="${transaction.paymentMethod == 'CASH'}"
+												th:text="${transaction.paymentMethod}"></span>
+											<span class="badge badge-info float-right"
+												th:if="${transaction.paymentMethod == 'GCASH'}"
+												th:text="${transaction.paymentMethod}"></span>
+											<span class="badge badge-primary float-right"
+												th:if="${transaction.paymentMethod == 'PAYMAYA'}"
+												th:text="${transaction.paymentMethod}"></span>
+										</li>
+										<li class="list-group-item" th:if="${transaction.paymentMethod == 'GCASH'}">
+											<div class="row">
+												<div class="col-md-12">
+													
+													<table class="table table-striped">
+														<tbody>
+															<tr>
+																<td>GCASH Phone #</td>
+																<td th:text="${transaction.phoneNumber}"></td>
+															</tr>
+															<tr>
+																<td>GCASH Reference #</td>
+																<td th:text="${transaction.paymentReference}"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+
+								<!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+						</div>
+
+						<div class="col-md-9">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Payment Summary</h3>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Product</th>
+														<th>Quantity</th>
+														<th>Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="purchases : ${transaction.transactionItem}">
+														<td>
+															<img th:src="@{/images/} + ${purchases.product.imgLocation}"
+																alt="" style="height:52px; width:52px;" />
+															<p th:text="${purchases.product.name}"
+																class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
+															</p>
+														</td>
+														<td th:text="${purchases.quantity}"></td>
+														<td
+															th:text="${'Php ' + purchases.quantity * purchases.product.price}">
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<tbody>
+													<tr>
+														<td class="payment-title">Subtotal</td>
+														<td th:text="${'Php ' + transaction.subTotal}"></td>
+													</tr>
+													<tr th:if="${transaction.packaging > 0}">
+														<td class="payment-title">Packaging</td>
+														<td th:text="${'Php ' + transaction.packaging}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Discount</td>
+														<td th:text="${'Php ' + transaction.discount}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VATable sales</td>
+														<td th:text="${'Php ' + transaction.vatableSales}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VAT (12%)</td>
+														<td th:text="${'Php ' + transaction.vatAmount}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Total Amount Due</td>
+														<td class="text-success"><strong style="font-size: 22px;"
+																th:text="${'Php ' + transaction.total}"></strong></td>
+													</tr>
+													<tr th:if="${transaction.transactionStatus != 'PENDING'}">
+														<td class="payment-title">Cash Received</td>
+														<td class="text-info"><strong style="font-size: 22px;"
+																th:text="${'Php ' + transaction.cashReceived}"></strong>
+														</td>
+													</tr>
+													<tr th:if="${transaction.transactionStatus != 'PENDING'}">
+														<td class="payment-title">Change</td>
+														<td class="text-warning"><strong style="font-size: 22px;"
+																th:text="${'Php ' + (transaction.cashReceived - transaction.total)}"></strong>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6" th:if="${transaction.transactionStatus == 'PAID'}">
+											<form method="post" action="#">
+												<input type="submit" class="btn btn-secondary btn-danger"
+													value="Refund" />
+											</form>
+										</div>
+										<div class="col-md-6" th:if="${transaction.transactionStatus == 'PENDING'}">
+											<a th:href="${'/checkout/' + transaction.id}"
+												class="btn btn-secondary btn-warning">Continue Checkout</a>
+										</div>
+										<!--<div class="col-md-6">
+											<form method="post" action"#">
+												<input type="submit" value="Cancel" class="btn btn-danger">
+											</form>
+										</div> -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+</body>
+
+</html>

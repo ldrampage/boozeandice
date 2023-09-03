@@ -47,6 +47,7 @@
 										<th scope="col">Invoice Number</th>
 										<th scope="col">Transaction Date Time</th>
 										<th scope="col">Transaction Status</th>
+										<th scope="col">Payment Method</th>
 										<th scope="col">Customer</th>
 										<th scope="col">Table No.</th>
 										<th scope="col">Cashier</th>
@@ -57,10 +58,13 @@
 									<tr th:each="transaction : ${transactionListToday}">
 										<td th:text="${transaction.invoiceNumber}" scope="row"> <a href="#"
 												class="question_content"></a></td>
-										<td><span th:text="${transaction.transactionDateTime}"></span></td>
+										<td><span th:text="${#dates.format(transaction.transactionDateTime, 'dd-MMM-yyy') + ' - ' + #dates.format(transaction.transactionDateTime, 'hh:mm a')}"></span></td>
 										<td>
 											<span class="badge badge-primary" th:if="${transaction.transactionStatus == 'PENDING'}" th:text="${transaction.transactionStatus}"></span>
 											<span class="badge badge-success" th:if="${transaction.transactionStatus == 'PAID'}" th:text="${transaction.transactionStatus}"></span>
+										</td>
+										<td>
+											<span th:text="${transaction.paymentMethod}"></span>
 										</td>
 										<td>
 											<span th:if="${transaction.customer != null}"
@@ -101,6 +105,7 @@
 										<th scope="col">Invoice Number</th>
 										<th scope="col">Transaction Date Time</th>
 										<th scope="col">Transaction Status</th>
+										<th scope="col">Payment Method</th>
 										<th scope="col">Customer</th>
 										<th scope="col">Table No.</th>
 										<th scope="col">Cashier</th>
@@ -115,6 +120,9 @@
 										<td>
 											<span class="badge badge-primary" th:if="${transaction.transactionStatus == 'PENDING'}" th:text="${transaction.transactionStatus}"></span>
 											<span class="badge badge-success" th:if="${transaction.transactionStatus == 'PAID'}" th:text="${transaction.transactionStatus}"></span>
+										</td>
+										<td>
+											<span th:text="${transaction.paymentMethod}"></span>
 										</td>
 										<td>
 											<span th:if="${transaction.customer != null}"
@@ -164,7 +172,7 @@
 	<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
 	<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
 	<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
-	<script th:src="@{/lugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 
 	<script>

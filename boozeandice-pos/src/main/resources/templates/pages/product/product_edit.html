@@ -73,14 +73,28 @@
 
 										</div>
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-3">
 												<div class="form-group">
 													<label class="form-label" for="price">Price</label>
 													<input type="number" class="form-control" id="price" name="price"
 														step="0.01" th:value="${product.price}" placeholder="Price">
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="cost">Cost</label>
+													<input type="number" class="form-control" id="cost" name="cost"
+														step="0.01" th:value="${product.cost}" placeholder="Cost">
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="packaging_fee">Packaging Fee</label>
+													<input type="number" class="form-control" id="packaging_fee" name="packaging_fee"
+														step="0.01" th:value="${product.packagingFee}" placeholder="Packaging Fee">
+												</div>
+											</div>
+											<div class="col-md-3">
 												<div class="form-group">
 													<label class="form-label" for="categoryId">Category</label>
 													<select class="form-control" id="categoryId" name="categoryId">
@@ -169,6 +183,13 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<!-- bs-custom-file-input -->
+	<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+	<script>
+		$(function () {
+			bsCustomFileInput.init();
+		});
+	</script>
 </body>
 
 </html>

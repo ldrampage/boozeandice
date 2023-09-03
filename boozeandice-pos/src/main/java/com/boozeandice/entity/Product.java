@@ -40,26 +40,29 @@ public class Product implements Serializable {
 
 	@Column(name = "price", nullable = false)
 	private Double price;
+	
+	@Column(name="packaging_fee")
+	private Double packagingFee;
 
 	@Column(name = "cost", nullable = false)
 	private Double cost;
 
 	@Column(name = "created_date", nullable = false)
 	private Date createdDate;
-
-	@ManyToOne
-	@JoinColumn(name = "created_by")
-	private User createdBy;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_category_id")
-	private ProductCategory productCategory;
-
+	
 	@Column(name = "manufacturer")
 	private String manufacturer;
 
 	@Column(name = "supplier")
 	private String supplier;
+
+	@ManyToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;
+
+	@ManyToOne
+	@JoinColumn(name = "product_category_id")
+	private ProductCategory productCategory;
 
 	@OneToMany(mappedBy = "product")
 	private List<ProductStock> productStock;
@@ -199,6 +202,14 @@ public class Product implements Serializable {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	public Double getPackagingFee() {
+		return packagingFee;
+	}
+
+	public void setPackagingFee(Double packagingFee) {
+		this.packagingFee = packagingFee;
 	}
 
 	@Override

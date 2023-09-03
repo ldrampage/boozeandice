@@ -23,7 +23,7 @@
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Product Category Create</a></li>
+								<li class="breadcrumb-item"><a href="#">Product Category Edit</a></li>
 							</ol>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -39,8 +39,7 @@
 						class="alert alert-success alert-dismissible">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4 class="alert-heading">Well done!</h4>
-						<p>Aww yeah, you successfully created a new category. Go to the <a
-								th:href="${'/product/category'}">categories </a> see it.</p>
+						<p>Aww yeah, you successfully edited a category.</p>
 					</div>
 
 					<div th:if="${message != null and message['status'] == 'error'}"
@@ -54,16 +53,17 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<h3 class="card-title">Create Category Form</h3>
+									<h3 class="card-title">Edit Category</h3>
 								</div>
 								<div class="card-body">
-									<form method="post" th:action="@{/product/category/add}">
+									<form method="post" th:action="@{/product/category/edit}">
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
 													<label class="form-label" for="category_name">Category Name</label>
-													<input type="text" class="form-control" id="category_name"
-														name="category_name" placeholder="Category Name" required>
+													<input th:value="${category.name}" type="text" class="form-control"
+														id="category_name" name="category_name"
+														placeholder="Category Name" required>
 												</div>
 											</div>
 										</div>
@@ -72,8 +72,8 @@
 												<div class="form-group">
 													<label class="form-label" for="category_description">Category
 														Description</label>
-													<textarea class="form-control" id="category_description"
-														name="category_description"
+													<textarea class="form-control" th:value="${category.description}"
+														id="category_description" name="category_description"
 														placeholder="Category Description"></textarea>
 												</div>
 											</div>
@@ -91,6 +91,7 @@
 						</div>
 					</div>
 				</div><!-- /.container-fluid -->
+
 			</section>
 			<!-- /.content -->
 		</div>

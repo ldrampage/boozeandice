@@ -52,6 +52,11 @@ public class PageController {
 		return "pages/transaction/transaction";
 	}
 	
+	public String transactionViewPage(Model model) {
+		model.addAttribute("business_name", business_name);
+		return "pages/transaction/transaction_view";
+	}
+	
 	/**
 	 * 
 	 * Product 
@@ -98,6 +103,11 @@ public class PageController {
 		return "pages/product/product_category_add";
 	}
 	
+	public String productCategoryEditPage(Model model) {
+		model.addAttribute("bussiness_name", business_name);
+		return "pages/product/product_category_edit";
+	}
+	
 	/*
 	 * 
 	 * Customer 
@@ -125,5 +135,18 @@ public class PageController {
 		return "pages/staff/staff";
 	}
 	
+	public String createAccountPage(Model model) {
+		return "pages/staff/createaccount";
+	}
+	
+	/**
+	 * 
+	 * Reports
+	 * 
+	 */
+	
+	public String reportsPage(Model model) {
+		return "pages/reports/reports";
+	}
 
 }

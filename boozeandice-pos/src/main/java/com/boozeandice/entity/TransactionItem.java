@@ -32,6 +32,9 @@ public class TransactionItem implements Serializable {
 	@JoinColumn(name="transaction_id", nullable = false)
 	private Transaction transaction;
 	
+	@Column(name="batch_number")
+	private String batchNumber;
+	
 	@Column(name="quantity")
 	private Long quantity;
 	
@@ -77,6 +80,15 @@ public class TransactionItem implements Serializable {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+
+	public String getBatchNumber() {
+		return batchNumber;
+	} 
+
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
+	}
+	
 	
 	
 	

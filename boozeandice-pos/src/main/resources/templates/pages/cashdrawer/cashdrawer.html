@@ -53,7 +53,7 @@
 																		Starting
 																		Cash
 																	</h5>
-																	<h3 class="color_gray f_w_700 "
+																	<h3 class="color_gray f_w_700"
 																		th:text="${'Php ' + cashDrawerToday.startingCash}">
 																	</h3>
 																</td>
@@ -84,7 +84,7 @@
 																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
 																		Cash added
 																	</h5>
-																	<h3 class="color_gray f_w_700 "
+																	<h3 class="color_gray f_w_700"
 																		th:text="${'Php ' + cashDrawerToday.totalCashAdded}">
 																	</h3>
 																</td>
@@ -92,7 +92,7 @@
 																	<td style="text-align: center;">
 
 																		<input type="number" class="form-control"
-																			step="100" id="add_cash" name="add_cash"
+																			step="0.01" id="add_cash" name="add_cash"
 																			required />
 
 																	</td>
@@ -135,8 +135,6 @@
 																	<h3 class="color_gray f_w_700 "
 																		th:unless="${cashDrawerToday.totalCashSales > 0}">
 																		Php 0.0</h3>
-
-																	*
 																</td>
 															</tr>
 														</tbody>

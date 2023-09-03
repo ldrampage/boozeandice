@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.boozeandice.entity.Transaction;
@@ -29,9 +30,17 @@ public class TransactionController {
 	public String transaction(Model model) {
 		Set<Transaction> transactionList = transactionService.getAll();
 		Set<Transaction> transactionListToday = transactionService.getByToday();
+		
 		model.addAttribute("transactionListToday", transactionListToday);
 		model.addAttribute("transactionList", transactionList);
 		return pageController.transactionPage(model);
+	}
+	
+	@GetMapping(path="/view/{id}")
+	public String transactionViewPage(Model model, @PathVariable("id") String id) {
+		Transaction transaction = transactionService.getById(Long.valueOf(id));
+		model.addAttribute("transaction", transaction);
+		return pageController.transactionViewPage(model);
 	}
 
 }

@@ -21,12 +21,12 @@ public class ImageController {
 	
 	private static final Logger logger = LogManager.getLogger(ImageController.class);
 	
-	@Value("${upload.directory}")
+	@Value("${upload.product.directory}")
 	private String uploadDirectory;
 	
 	@GetMapping(path="/images/{imageLocalPath}")
 	public ResponseEntity<Resource> fetchImage(@PathVariable String imageLocalPath) throws IOException {
-		logger.debug("{ImageController} Start -> imageLocalPath: " + imageLocalPath);
+		logger.debug("{ImageController} Start -> imageLocalPath: " + uploadDirectory + imageLocalPath);
 		
 		if(imageLocalPath.equals("null")) {
             return ResponseEntity.ok().build();

@@ -38,6 +38,9 @@ public class Transaction implements Serializable {
 	@Column(name="shipping")
 	private Double shipping;
 	
+	@Column(name="take_out")
+	private Boolean takeOut = false;
+	
 	@Column(name="packaging")
 	private Double packaging;
 	
@@ -99,6 +102,12 @@ public class Transaction implements Serializable {
 	@JoinColumn(name="cashdrawer_id")
 	private CashDrawer cashdrawer;
 	
+	@Column(name="phone_number")
+	private String phoneNumber;
+	
+	@Column(name="card_brand")
+	private String cardBrand;
+	
 	@Transient
 	private Long totalItems = Long.valueOf(0);
 	
@@ -112,6 +121,16 @@ public class Transaction implements Serializable {
 		}
 		return totalItems;
 	}
+	
+	public String getCardBrand() {
+		return cardBrand;
+	}
+
+	public void setCardBrand(String cardBrand) {
+		this.cardBrand = cardBrand;
+	}
+
+
 
 	public void setTotalItems(Long totalItems) {
 		this.totalItems = totalItems;
@@ -304,6 +323,24 @@ public class Transaction implements Serializable {
 
 	public void setDiscount(Double discount) {
 		this.discount = discount;
+	}
+
+	public Boolean getTakeOut() {
+		return takeOut;
+	}
+
+	public void setTakeOut(Boolean takeOut) {
+		this.takeOut = takeOut;
+	}
+	
+	
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override
