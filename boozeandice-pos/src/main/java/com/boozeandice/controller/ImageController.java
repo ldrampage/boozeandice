@@ -24,6 +24,9 @@ public class ImageController {
 	@Value("${upload.product.directory}")
 	private String uploadDirectory;
 	
+	@Value("${upload.profile.directory}")
+	private String uploadProfileDirectory;
+	
 	@GetMapping(path="/images/{imageLocalPath}")
 	public ResponseEntity<Resource> fetchImage(@PathVariable String imageLocalPath) throws IOException {
 		logger.debug("{ImageController} Start -> imageLocalPath: " + uploadDirectory + imageLocalPath);
@@ -33,6 +36,29 @@ public class ImageController {
 		}
 		// Load the image file from the upload directory
         Path imagePath = Paths.get(uploadDirectory, imageLocalPath);
+        Resource resource = new UrlResource(imagePath.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on the image type
+                    .body(resource);
+        } else {
+            // Return a default image or an error response if the image does not exist or is not readable
+            // For example:
+            return ResponseEntity.notFound().build();
+        }
+	}
+	
+	
+	@GetMapping(path="/images/profile/{imageLocalPath}")
+	public ResponseEntity<Resource> fetchImageforProfile(@PathVariable String imageLocalPath) throws IOException {
+		logger.debug("{ImageController} Start -> imageLocalPath: " + uploadProfileDirectory + "\\" +  imageLocalPath);
+		
+		if(imageLocalPath.equals("null")) {
+            return ResponseEntity.ok().build();
+		}
+		// Load the image file from the upload directory
+        Path imagePath = Paths.get(uploadProfileDirectory, imageLocalPath);
         Resource resource = new UrlResource(imagePath.toUri());
 
         if (resource.exists() && resource.isReadable()) {

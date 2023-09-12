@@ -25,6 +25,9 @@ public class Customer implements Serializable {
 	@Column(name="fname", nullable = false)
 	private String fname;
 	
+	@Column(name="middle_initial")
+	private String middleInitial;
+	
 	@Column(name="lname")
 	private String lname;
 	
@@ -64,5 +67,13 @@ public class Customer implements Serializable {
 	public void setTransaction(List<Transaction> transaction) {
 		this.transaction = transaction;
 	}
+	public String getMiddleInitial() {
+		return middleInitial;
+	}
+	public void setMiddleInitial(String middleInitial) {
+		this.middleInitial = middleInitial;
+	}
+	
+	
 	
 }

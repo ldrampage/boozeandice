@@ -36,6 +36,21 @@
 			<section class="content">
 				<div class="container-fluid">
 
+					<div th:if="${message != null and message['status'] == 'success'}"
+						class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully created a new user. Click <a th:href="${'/staff'}">here</a> to see
+							it.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}"
+						class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card card-primary">
@@ -56,7 +71,8 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label for="fname">First name</label>
-													<input type="text" id="fname" name="fname" class="form-control">
+													<input type="text" id="fname" name="fname" class="form-control"
+														required>
 												</div>
 											</div>
 											<div class="col-md-4">
@@ -68,7 +84,8 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label for="lname">Last name</label>
-													<input type="text" id="lname" name="lname" class="form-control">
+													<input type="text" id="lname" name="lname" class="form-control"
+														required>
 												</div>
 											</div>
 										</div>
@@ -76,16 +93,9 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label for="username">Username</label>
-													<input type="text" id="username" name="username"
-														class="form-control">
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="password">Password</label>
+													<label for="password">Account Password</label>
 													<input type="password" id="password" name="password"
-														class="form-control">
+														class="form-control" required>
 												</div>
 											</div>
 											<div class="col-md-4">
@@ -95,14 +105,25 @@
 														class="form-control">
 												</div>
 											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="name">Profile picture</label>
+													<div class="custom-file">
+														<input type="file" class="custom-file-input" id="file"
+															name="file" />
+														<label class="custom-file-label" for="file">Image
+															File</label>
+													</div>
+												</div>
+											</div>
 										</div>
 										<div class="row">
-											<div class="col-12 col-sm-6">
+											<div class="col-sm-4">
 												<div class="form-group">
 													<label>POS Role</label>
 													<div class="select2-purple">
 														<select class="select2" multiple="multiple"
-															data-placeholder="Select a State"
+															data-placeholder="Select a role"
 															data-dropdown-css-class="select2-purple"
 															style="width: 100%;" name="roles[]">
 															<option th:each="role : ${existingRoles}"
@@ -112,22 +133,19 @@
 												</div>
 												<!-- /.form-group -->
 											</div>
-											<div class="col-12 col-sm-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label>Job Position</label>
-													<div class="select2-purple">
-														<select class="select2" multiple="multiple"
-															data-placeholder="Select a State"
-															data-dropdown-css-class="select2-purple"
-															style="width: 100%;" name="jobpositions[]">
-															<option th:each="jobposition : ${existingJobPositions}"
-																th:value="${jobposition.id}"
-																th:text="${jobposition.name}"></option>
-														</select>
-													</div>
+													<select class="form-control select2" style="width: 100%;"
+														name="jobpositions">
+														<option th:each="jobposition : ${existingJobPositions}"
+															th:value="${jobposition.id}" th:text="${jobposition.name}">
+														</option>
+													</select>
 												</div>
 												<!-- /.form-group -->
 											</div>
+
 										</div>
 										<div class="row">
 											<div class="col-md-2">
@@ -154,17 +172,14 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
-	<!-- Select2 -->
-	<script src="../../plugins/select2/js/select2.full.min.js"></script>
 	<!-- bs-custom-file-input -->
-	<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+	<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
 	<script>
-		$(function () {
-			//Initialize Select2 Elements
-			$('.select2').select2()
-		})
+
 		$(function () {
 			bsCustomFileInput.init();
+			//Initialize Select2 Elements
+			$('.select2').select2();
 		});
 	</script>
 </body>

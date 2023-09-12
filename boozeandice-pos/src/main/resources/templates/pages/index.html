@@ -190,20 +190,33 @@
 									<div class="card">
 										<div class="card-header" style="padding:25px;">
 											<div class="main-title2 ">
-												<h6 class="card-subtitle mb-2">By Category</h6>
-												<form id="category_form" method="post" th:action="@{/}">
-													<div class="input-group">
-														<input type="hidden" name="fetchByCategory" />
-														<select onchange="submitCategory()"
-															class="form-control select2bs4" name="categoryId">
-															<option value="all">All...</option>
-															<option th:each="category : ${productCategoryList}"
-																th:value="${category.id}" th:text="${category.name}"
-																th:selected="${category.id == categoryFilterValue}">
-															</option>
-														</select>
+												<div class="row">
+													<div class="col-md-6">
+														<h6 class="card-subtitle mb-2">By Category</h6>
+														<form id="category_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="hidden" name="fetchByCategory" />
+																<select onchange="submitCategory()"
+																	class="form-control select2bs4" name="categoryId">
+																	<option value="all">All...</option>
+																	<option th:each="category : ${productCategoryList}"
+																		th:value="${category.id}"
+																		th:text="${category.name}"
+																		th:selected="${category.id == categoryFilterValue}">
+																	</option>
+																</select>
+															</div>
+														</form>
 													</div>
-												</form>
+													<div class="col-md-6">
+														<h6 class="card-subtitle mb-2">Search</h6>
+														<form id="search_product_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="text" id="search_input" name="searchByProductName" class="form-control" placeholder="Product name"/>
+															</div>
+														</form>
+													</div>
+												</div>
 											</div>
 										</div>
 										<div class="card-body">
@@ -225,7 +238,7 @@
 															class="btn btn-block btn-default btn-lg" name="purchase">
 															<img th:src="@{/images/} + ${product.imgLocation}"
 																alt="No Image Available" class="d-block mx-auto my-4"
-																style="height: 150px; width:150px;">
+																style="width:50%;">
 															<div class="row my-2">
 																<div class="col"><span class="badge_btn_3 mb-1"
 																		style="font-size:14px;"
@@ -238,7 +251,8 @@
 															</div>
 															<div class="row my-2">
 																<div class="col">
-																	<h4 class="text-dark mt-0"
+																	<h4 class="mt-0 badge badge-success"
+																		style="font-size: 90%;"
 																		th:text="${'Php ' + product.price}">
 
 																		<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
@@ -537,7 +551,7 @@
 											class="btn btn-block btn-success btn-lg">Submit</button>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 						<!--<div class="modal-footer justify-content-between">
@@ -656,6 +670,15 @@
 			//console.dir(inputElement.value);
 			$("#" + inputElement.value).submit();
 		}
+		
+		$(document).ready(function() {
+            $("#search_input").on("keydown", function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    $("#search_product_form").submit();
+                }
+            });
+        });
 
 	</script>
 </body>

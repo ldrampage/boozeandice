@@ -53,6 +53,10 @@ public class ProductService implements Serializable {
 		return productRepo.findByProductCategoryAndStocksGreaterThan(category, Long.valueOf(0));
 	}
 	
+	public Set<Product> getByNameContainingAndStocksGreaterThan(String productName){
+		return productRepo.findByNameContainingAndStocksGreaterThan(productName, Long.valueOf(0));
+	}
+	
 	public Product save(Product product) {
 		return productRepo.save(product);
 	}

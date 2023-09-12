@@ -49,6 +49,10 @@ public class TransactionService {
 		transactionRepo.delete(transaction);
 	}
 	
+	public Set<Transaction> getByTransactionDate(Date date) {
+		return transactionRepo.findByTransactionDateTimeBetween(date, date);
+	}
+	
 	public Set<Transaction> getByToday() {
 		Calendar startOfDay = Calendar.getInstance();
         startOfDay.setTime(new Date());

@@ -1,18 +1,20 @@
 package com.boozeandice.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boozeandice.entity.ProductCategory;
 import com.boozeandice.entity.Transaction;
@@ -30,6 +32,8 @@ import com.bozeandice.vo.SalesTaxSummaryVO;
 @RequestMapping(path="/reports")
 public class ReportsController {
 	
+	private static final Logger logger = LogManager.getLogger(ReportsController.class);
+	
 	@Autowired
 	private PageController pageController;
 	
@@ -39,12 +43,24 @@ public class ReportsController {
 	@Autowired
 	private CategoryService productCatService;
 	
-	@GetMapping(path="")
-	public String reportsPage(Model model) {
-		
+	@GetMapping(path="/")
+	public String reportsPage(Model model, @RequestParam(name="zdate", required=false) String zdate) throws Exception {
+		logger.debug("Start reportsPage() -> zdate: " + zdate);
 		//Z Report Start
-		Set<Transaction> transactionList = transactionService.getByToday();
-		Set<Transaction> transactionListPaid = this.filterPaidTransaction(transactionList);
+		
+		Set<Transaction> transactionList = null;
+		Set<Transaction> transactionListPaid  = null;
+		if(zdate != null) {
+			Date zdateformat = new SimpleDateFormat("MM/dd/yyyy").parse(zdate);	
+			transactionList = transactionService.getByTransactionDate(zdateformat);
+			transactionListPaid = this.filterPaidTransaction(transactionList);
+			model.addAttribute("zdate", zdate);
+		} else {
+			transactionList = transactionService.getByToday();
+			transactionListPaid = this.filterPaidTransaction(transactionList);
+			SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy");
+			model.addAttribute("zdate", outputFormat.format(new Date()));
+		}
 		
 		//Sales and Tax Summary Start
 		SalesTaxSummaryVO sts = new SalesTaxSummaryVO();

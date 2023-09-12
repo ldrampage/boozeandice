@@ -1,7 +1,7 @@
 server:
   port: 8080
   address: lyndon
-  
+
 spring:
   profiles:
     active: dev
@@ -22,11 +22,11 @@ productSilogCategory: 'silog meals'
 #img upload location
 upload:
   product:
-    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img
+    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\products
   profile:
     directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\profile
-
-
+  barcode:
+    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\barcodes
   
 logging:
   level:

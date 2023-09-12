@@ -24,5 +24,9 @@ public class UserService implements Serializable {
 		return userRepo.findByUsername(username);
 		
 	}
+	
+	public User save(User user) {
+		return userRepo.save(user);
+	}
 
 }

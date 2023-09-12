@@ -19,5 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	public Set<Product> findByProductCategory(ProductCategory category);
 	
 	public Set<Product> findByProductCategoryAndStocksGreaterThan(ProductCategory category, Long stock);
+	
+	public Set<Product> findByNameContainingAndStocksGreaterThan(String productName, Long stock);
 
 }

@@ -43,8 +43,9 @@ public class User implements Serializable {
 	@Column(name="about")
 	private String about;
 	
-	@Column(name="position")
-	private String position;
+	@ManyToOne
+	@JoinColumn(name="job_position")
+	private JobPosition jobPosition;
 	
 	@Column(name="mobile_number")
 	private String mobileNumber;
@@ -60,6 +61,12 @@ public class User implements Serializable {
 
 	@Column(name = "last_login_date_time")
 	private Date lastLoginDateTime;
+	
+	@Column(name="user_status")
+	private String userStatus;
+	
+	@Column(name="img_location")
+	private String imgLocation;
 
 	@ManyToMany
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -150,13 +157,14 @@ public class User implements Serializable {
 	public void setUserActivityLog(List<UserActivityLog> userActivityLog) {
 		this.userActivityLog = userActivityLog;
 	}
+	
 
-	public String getPosition() {
-		return position;
+	public JobPosition getJobPosition() {
+		return jobPosition;
 	}
 
-	public void setPosition(String position) {
-		this.position = position;
+	public void setJobPosition(JobPosition jobPosition) {
+		this.jobPosition = jobPosition;
 	}
 
 	public String getAbout() {
@@ -182,6 +190,28 @@ public class User implements Serializable {
 	public void setMname(String mname) {
 		this.mname = mname;
 	}
+
+	public String getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
+
+	public String getImgLocation() {
+		return imgLocation;
+	}
+
+	public void setImgLocation(String imgLocation) {
+		this.imgLocation = imgLocation;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

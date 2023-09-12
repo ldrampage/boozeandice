@@ -1,6 +1,7 @@
 package com.boozeandice.service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +22,14 @@ public class JobPositionService {
 	
 	public Set<JobPosition> getAll(){
 		Set<JobPosition> set = new HashSet<JobPosition>(jobPosRepo.findAll());
-		
 		return set;
+	}
+	
+	public JobPosition getById(Long id) {
+		Optional<JobPosition> jobPosition = jobPosRepo.findById(id);
+		if(jobPosition.isPresent())
+			return jobPosition.get();
+		return null;
 	}
 
 }

@@ -45,7 +45,7 @@
 												href="#custom-tabs-one-home" role="tab"
 												aria-controls="custom-tabs-one-home" aria-selected="true">Z Report</a>
 										</li>
-										<li class="nav-item">
+										<!--<li class="nav-item">
 											<a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
 												href="#custom-tabs-one-profile" role="tab"
 												aria-controls="custom-tabs-one-profile"
@@ -62,7 +62,7 @@
 												href="#custom-tabs-one-settings" role="tab"
 												aria-controls="custom-tabs-one-settings"
 												aria-selected="false">Settings</a>
-										</li>
+										</li> -->
 									</ul>
 								</div>
 								<div class="card-body">
@@ -72,7 +72,7 @@
 											<div class="row">
 												<div class="col-md-12">
 													<div class="form-group">
-														
+
 													</div>
 												</div>
 											</div>
@@ -83,10 +83,33 @@
 														<!-- title row -->
 														<div class="row">
 															<div class="col-6 mx-auto text-center">
-																<h4>
-																	<i class="fas fa-file float-left"> Z Report</i> 
-																	<small class="float-right">Date: 2/10/2014</small>
-																</h4>
+																<h6>
+																	<i class="fas fa-file float-left"> Z Report</i>
+																	<!--<small class="float-right">Date: 2/10/2014</small> -->
+																	<form id="zreportform" method="get"
+																		th:action="@{/reports/}">
+																		<div class="form-group float-right">
+																			<label>Date:</label>
+																			<div class="input-group date"
+																				id="zreportdate"
+																				data-target-input="nearest">
+																				<input type="text" id="zdate" th:value="${zdate}" name="zdate"
+																					class="form-control datetimepicker-input"
+																					data-target="#zreportdate" />
+																				<div class="input-group-append"
+																					data-target="#zreportdate"
+																					data-toggle="datetimepicker">
+																					<div class="input-group-text"><i
+																							class="fa fa-calendar"></i>
+																					</div>
+																				</div>
+																			</div>
+																			<input type="submit" value="Submit"
+																				style="display:none;">
+
+																		</div>
+																	</form>
+																</h6>
 																<br>
 															</div>
 															<!-- /.col -->
@@ -99,16 +122,24 @@
 																<table class="table table-striped">
 																	<tbody>
 																		<tr>
-																			<td style="text-align: left;">Total Net Sales</td>
-																			<td style="text-align: left;"><span th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalNetSales, 0, 'COMMA', 2, 'POINT')}"></span></td>
+																			<td style="text-align: left;">Total Net
+																				Sales</td>
+																			<td style="text-align: left;"><span
+																					th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalNetSales, 0, 'COMMA', 2, 'POINT')}"></span>
+																			</td>
 																		</tr>
 																		<tr>
 																			<td style="text-align: left;">Tax</td>
-																			<td style="text-align: left;"><span th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalTax, 0, 'COMMA', 2, 'POINT')}"></span></td>
+																			<td style="text-align: left;"><span
+																					th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalTax, 0, 'COMMA', 2, 'POINT')}"></span>
+																			</td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Sales</b></td>
-																			<td style="text-align: left;"><span th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalSales, 0, 'COMMA', 2, 'POINT')}"></span></td>
+																			<td style="text-align: left;"><b>Total
+																					Sales</b></td>
+																			<td style="text-align: left;"><span
+																					th:text="${'Php ' + #numbers.formatDecimal(salesTaxSummaryVO.totalSales, 0, 'COMMA', 2, 'POINT')}"></span>
+																			</td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -119,80 +150,113 @@
 																		<tr>
 																			<th style="text-align: left;">Category</th>
 																			<th style="text-align: left;">Sold</th>
-																			<th style="text-align: left;">Quantity Net Sales</th>
+																			<th style="text-align: left;">Quantity Net
+																				Sales</th>
 																		</tr>
 																	</thead>
 																	<tbody>
 																		<tr th:each="category : ${productCategoryList}">
-																			<td style="text-align: left;"><span th:text="${category.name}"></span></td>
-																			<td style="text-align: left;"><span th:text="'(' + ${category.soldCount} + ')'"></span></td>
-																			<td style="text-align: left;"><span th:text="${'Php ' + category.quantityNetSales}"></span></td>
+																			<td style="text-align: left;"><span
+																					th:text="${category.name}"></span>
+																			</td>
+																			<td style="text-align: left;"><span
+																					th:text="'(' + ${category.soldCount} + ')'"></span>
+																			</td>
+																			<td style="text-align: left;"><span
+																					th:text="${'Php ' + category.quantityNetSales}"></span>
+																			</td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Net Sales: </b></td>
-																			<td style="text-align: left;"><span th:text="'(' + ${totalSoldCount} + ')'"></span></td>
-																			<td style="text-align: left;" span="2"><span th:text="${'Php ' + totalQuantityNetSales}"></span></td>
+																			<td style="text-align: left;"><b>Total Net
+																					Sales: </b></td>
+																			<td style="text-align: left;"><span
+																					th:text="'(' + ${totalSoldCount} + ')'"></span>
+																			</td>
+																			<td style="text-align: left;" span="2"><span
+																					th:text="${'Php ' + totalQuantityNetSales}"></span>
+																			</td>
 																		</tr>
 																	</tbody>
 																</table>
-																
-																
+
+
 																<h4 style="text-align: center;">PAYMENT DETAILS</h4>
 																<table class="table table-striped">
 																	<tbody>
-																		<tr th:each="paymentDetails : ${paymentDetailsList}">
-																			<td style="text-align: left;" ><span th:text="${paymentDetails.paymentMethod}"></span></td>
-																			<td style="text-align: left;" ><span th:text="${paymentDetails.total}"></span></td>
+																		<tr
+																			th:each="paymentDetails : ${paymentDetailsList}">
+																			<td style="text-align: left;"><span
+																					th:text="${paymentDetails.paymentMethod}"></span>
+																			</td>
+																			<td style="text-align: left;"><span
+																					th:text="${paymentDetails.total}"></span>
+																			</td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Payments</b></td>
-																			<td style="text-align: left;" th:text="${totalPayments}"></td>
+																			<td style="text-align: left;"><b>Total
+																					Payments</b></td>
+																			<td style="text-align: left;"
+																				th:text="${totalPayments}"></td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Payments - Total Sales</b></td>
-																			<td style="text-align: left;"  th:text="${totalPaymentsMinusTotalSales}"></td>
+																			<td style="text-align: left;"><b>Total
+																					Payments - Total Sales</b></td>
+																			<td style="text-align: left;"
+																				th:text="${totalPaymentsMinusTotalSales}">
+																			</td>
 																		</tr>
 																	</tbody>
 																</table>
-																				
-																<h4 style="text-align: center;">PAYMAYA PAYMENT BREAKDOWN</h4>
+
+																<h4 style="text-align: center;">PAYMAYA PAYMENT
+																	BREAKDOWN</h4>
 																<table class="table table-striped">
 																	<tbody>
 																		<tr>
 																			<td style="text-align: left;">AMEX</td>
-																			<td style="text-align: left;" th:text="${pmpbd.amex}"></td>
+																			<td style="text-align: left;"
+																				th:text="${pmpbd.amex}"></td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;">Mastercard</td>
-																			<td style="text-align: left;" th:text="${pmpbd.mastercard}"></td>
+																			<td style="text-align: left;">Mastercard
+																			</td>
+																			<td style="text-align: left;"
+																				th:text="${pmpbd.mastercard}"></td>
 																		</tr>
 																		<tr>
 																			<td style="text-align: left;">Visa</td>
-																			<td style="text-align: left;" th:text="${pmpbd.visa}"></td>
+																			<td style="text-align: left;"
+																				th:text="${pmpbd.visa}"></td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: left;"><b>Total</b></td>
-																			<td style="text-align: left;" th:text="${pmpbd.total}"></td>
+																			<td style="text-align: left;"><b>Total</b>
+																			</td>
+																			<td style="text-align: left;"
+																				th:text="${pmpbd.total}"></td>
 																		</tr>
 																	</tbody>
 																</table>
-																
+
 																<h4 style="text-align: center;">TOTAL PACKAGING</h4>
 																<table class="table table-striped">
 																	<tbody>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Packaging</b></td>
-																			<td style="text-align: left;" th:text="${totalDiscounts}"></td>
+																			<td style="text-align: left;"><b>Total
+																					Packaging</b></td>
+																			<td style="text-align: left;"
+																				th:text="${totalDiscounts}"></td>
 																		</tr>
 																	</tbody>
 																</table>
-																
+
 																<h4 style="text-align: center;">TOTAL DISCOUNTS</h4>
 																<table class="table table-striped">
 																	<tbody>
 																		<tr>
-																			<td style="text-align: left;"><b>Total Discounts</b></td>
-																			<td style="text-align: left;" th:text="${totalDiscounts}"></td>
+																			<td style="text-align: left;"><b>Total
+																					Discounts</b></td>
+																			<td style="text-align: left;"
+																				th:text="${totalDiscounts}"></td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -275,6 +339,22 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		$(document).ready(function () {
+			//Date picker
+			$('#zreportdate').datetimepicker({
+				format: 'L',
+
+			});
+
+			$("#zdate").on("blur", function () {
+				$("#zreportform").submit(); // Submit the form on input field blur
+			});
+
+		})
+
+
+	</script>
 </body>
 
 </html>

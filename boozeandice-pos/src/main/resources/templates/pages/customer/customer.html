@@ -4,112 +4,110 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
-
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
-
-	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/preload :: preload}"></div>
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Customer</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a href="javascript:void(0);">Customer</a></li>
-									<li class="breadcrumb-item active">Customer List</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="white_card card_height_100 mb_30">
-							<div class="white_card_header">
-								<div class="box_header m-0">
-									<div class="main-title">
-										<h3 class="m-0">Customer Table</h3>
-									</div>
-								</div>
-							</div>
-							<div class="white_card_body">
-								<div class="QA_section">
-									<div class="white_box_tittle list_header">
-										<h4>Table</h4>
-										<div class="box_right d-flex lms_block">
-											<div class="serach_field_2">
-												<div class="search_inner">
-													<form method="post" th:action="@{/customer}">
-														<div class="search_field">
-															<input type="text" name="search" th:value="${search}" placeholder="Search by customer name...">
-														</div>
-														<button type="submit"> <i class="ti-search"></i> </button>
-													</form>
-												</div>
-											</div>
-											<div class="add_button ms-2">
-												<a th:href="${'/customer/add'}"
-													class="btn_1">New Customer</a>
-											</div>
-										</div>
-									</div>
 
-									<div class="QA_table mb_30">
-										<!-- table-responsive -->
-										<table class="table lms_table_active ">
-											<thead>
-												<tr>
-													<th scope="col">Name</th>
-													<th scope="col">Email Address</th>
-													<th scope="col">Total Number Of Transactions</th>
-													<th scope="col">Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr th:each="customer : ${customerList}">
-													<td th:text="${customer.fname + ' ' + customer.lname}" scope="row"> <a href="#"
-															class="question_content"></a></td>
-													<td><span th:text="${customer.emailAddress}"></span></td>
-													<td><span th:if="${customer.transaction != null}" th:text="${customer.transaction.size}"></span></td>
-													<td>
-														<a th:href="${'/customer/edit/' + customer.id}" class="status_btn">Edit</a>
-														<a th:href="${'/customer/view/' + customer.id}"
-															class="status_btn primary_btn btn-primary">View</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-12">
-
-					</div>
-				</div>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Customer</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Customer List</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
 			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title"></h3>
+									<small class="float-right">
+										<a th:href="${'/product/products/add'}" class="btn btn-info">New Customer</a>
+									</small>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body">
+									<table id="products_table" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th scope="col">Name</th>
+												<th scope="col">Email Address</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="customer : ${customerList}">
+												<td th:text="${customer.fname + ' ' + customer.middleInitial + '. ' + customer.lname }" scope="row"> <a href="#"
+														class="question_content"></a></td>
+												<td><span th:text="${customer.emailAddress}"></span></td>
+												<td>
+													<a th:href="${'/product/products/edit/' }"
+														class="btn bg-gradient-primary btn-xs">Edit</a>
+													<a th:href="${'/product/products/view/' }"
+														class="btn bg-gradient-info btn-xs">View</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.card-body -->
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+
 		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+		<!-- /.content-wrapper -->
 	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+
+	<!-- DataTables  & Plugins -->
+	<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+
+	<script>
+		$(function () {
+			$("#products_table").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": false,
+				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+				"searching": true,
+
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+		});
+	</script>
 </body>
 
 </html>

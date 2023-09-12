@@ -173,6 +173,11 @@ public class IndexController implements Serializable {
 				this.categoryFilterId = "all";
 			}
 		}
+		
+		if(parameters.get("searchByProductName") != null) {
+			productList = productService.getByNameContainingAndStocksGreaterThan(parameters.get("searchByProductName"));
+			productsDisplay = utility.organizeProductsDisplay(productList);
+		}
 
 		if (parameters.get("quantityHandler") != null) {
 			logger.debug("Product ID: " + parameters.get("productId_QH"));
