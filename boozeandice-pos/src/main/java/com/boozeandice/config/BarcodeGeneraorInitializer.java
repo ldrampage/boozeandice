@@ -17,7 +17,7 @@
 //	public CommandLineRunner initializeDataBar() {
 //		return args -> {
 //			
-//			barGen.generateCode128Barcode("1", "1", "TapSilog", 100, 50);
+//			barGen.generateUPCABarcode("453", "432","", 100, 50);
 //			
 //		};
 //	}

@@ -25,7 +25,7 @@ public class ProductStock implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="product_id")
-	private Product product; 
+	private Product product;  
 	
 	@Column(name="quantity", nullable = false)
 	private Long quantity;
@@ -38,6 +38,12 @@ public class ProductStock implements Serializable {
 	
 	@Column(name="cost", nullable = false)
 	private Double cost;
+	
+	@Column(name="barcodeDigits")
+	private Long barcodeDigits;
+	
+	@Column(name="barcodeImageLocation")
+	private String barcodeImageLocation;
 	
 	@Column(name="expenses")
 	private Double expenses;
@@ -128,6 +134,22 @@ public class ProductStock implements Serializable {
 	public void setExpenses(Double expenses) {
 		this.expenses = expenses;
 	}
+	public String getBarcodeImageLocation() {
+		return barcodeImageLocation;
+	}
+	public void setBarcodeImageLocation(String barcodeImageLocation) {
+		this.barcodeImageLocation = barcodeImageLocation;
+	}
+	public Long getBarcodeDigits() {
+		return barcodeDigits;
+	}
+	public void setBarcodeDigits(Long barcodeDigits) {
+		this.barcodeDigits = barcodeDigits;
+	}
+	
+	
+	
+	
 	
 	
 	
