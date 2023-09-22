@@ -1,28 +1,49 @@
 package com.boozeandice.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
-@Controller
+import com.boozeandice.config.UserDetailsImpl;
+import com.boozeandice.entity.User;
+
+import jakarta.servlet.http.HttpSession;
+
+@Component
 public class PageController {
+	
+	private static final Logger logger = LogManager.getLogger(PageController.class);
 	
 	@Value("${business_name}")
 	private String business_name;
 	
+	public String accessDeniedPage(Model model) {
+		addAttributes(model);
+		return "pages/accessDenied";
+	}
+	
 	public String index(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/index";
 	}
 	
 	public String checkoutPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/checkout";
 	}
 	
 	public String invoicePage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/invoice";
+	}
+	
+	public String loginPage(Model model) {
+		return "pages/login";
 	}
 	
 	/**
@@ -32,12 +53,12 @@ public class PageController {
 	 */
 	
 	public String cashdrawerPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/cashdrawer/cashdrawer";
 	}
 	
 	public String cashDrawerCreate(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/cashdrawer/cashdrawer_create";
 	}
 	
@@ -48,12 +69,12 @@ public class PageController {
 	 */
 	
 	public String transactionPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/transaction/transaction";
 	}
 	
 	public String transactionViewPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/transaction/transaction_view";
 	}
 	
@@ -64,47 +85,52 @@ public class PageController {
 	 */
 	
 	public String productPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product";
 	}
 	
 	public String productEdit(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_edit";
 	}
 	
 	public String productAdd(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_add";
 	}
 	
 	public String productStocks(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_stock"; 
 	}
 	
 	public String productStocksAdd(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_stock_add";
 	}
 	
+	public String productStocksEdit(Model model) {
+		addAttributes(model);
+		return "pages/product/product_stock_edit";
+	}
+	
 	public String productView(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_view";
 	}
 	
 	public String productCategory(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_category";
 	}
 	
 	public String productCategoryCreatePage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_category_add";
 	}
 	
 	public String productCategoryEditPage(Model model) {
-		model.addAttribute("bussiness_name", business_name);
+		addAttributes(model);
 		return "pages/product/product_category_edit";
 	}
 	
@@ -115,12 +141,12 @@ public class PageController {
 	 */
 	
 	public String customerPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/customer/customer";
 	}
 	
 	public String customerEditPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/customer/customer_edit";
 	}
 	
@@ -131,11 +157,12 @@ public class PageController {
 	 */
 	
 	public String staffPage(Model model) {
-		model.addAttribute("business_name", business_name);
+		addAttributes(model);
 		return "pages/staff/staff";
 	}
 	
 	public String createAccountPage(Model model) {
+		addAttributes(model);
 		return "pages/staff/createaccount";
 	}
 	
@@ -146,7 +173,26 @@ public class PageController {
 	 */
 	
 	public String reportsPage(Model model) {
+		addAttributes(model);
 		return "pages/reports/reports";
+	}
+	
+	// Utility
+	
+	public Model addAttributes(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+		model.addAttribute("fname", user.getFname());
+		model.addAttribute("lname", user.getLname());
+		model.addAttribute("username", user.getUsername());
+		model.addAttribute("imgProfileName", user.getImgProfileName());
+		
+		logger.debug("fname: " + model.getAttribute("fname"));
+		logger.debug("lname: " + model.getAttribute("lname"));
+		logger.debug("username: " + model.getAttribute("username"));
+
+		return model;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import com.boozeandice.service.CustomerService;
 
 @Controller
 @RequestMapping(path="/customer")
+@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR"})
 public class CustomerController {
 	
 	private static final Logger logger = LogManager.getLogger(CustomerController.class);

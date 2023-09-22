@@ -62,4 +62,24 @@ spring:
       ddl-auto: create
   cache:
     type: simple
-     
+ 
+---
+spring:  
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mysql://boozeandice-test-rds.c7l9gtvaasvy.ap-southeast-1.rds.amazonaws.com:3306/boozeandice
+    username: admin
+    password: bait-micke   
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        generate-ddl: true
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: create
+    hibernate:
+      ddl-auto: create
+  cache:
+    type: simple     

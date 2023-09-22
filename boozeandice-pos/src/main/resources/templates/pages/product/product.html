@@ -72,7 +72,7 @@
 												class="btn bg-gradient-primary btn-xs">Edit</a>
 											<a th:href="${'/product/products/view/' + product.id}"
 												class="btn bg-gradient-info btn-xs">View</a>
-											<a th:if="${product.stocks <= 20}"
+											<a th:if="${product.stocks <= 5}"
 												th:href="${'/product/stocks/add?id=' + product.id}"
 												class="btn bg-gradient-warning btn-xs">Add stock</a>
 										</td>

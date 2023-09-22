@@ -23,7 +23,7 @@
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Product Stock Add</a></li>
+								<li class="breadcrumb-item"><a href="#">Product Stock Edit</a></li>
 							</ol>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -54,35 +54,41 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<h3 class="card-title">Add Stock Form</h3>
+									<h3 class="card-title">Edit Stock Form</h3>
 								</div>
 								<div class="card-body">
-									<form method="post" th:action="@{/product/stocks/add}">
+									<form method="post" th:action="@{/product/stocks/edit}">
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="form-label" for="product">Product</label>
-													<select class="form-control select2" id="product" name="product">
-														<option th:each="product : ${productList}"
-															th:value="${product.id}" th:text="${product.name}"
-															th:selected="${productId != null and product.id == productId}">
-														</option>
-													</select>
+													<input type="text" id="product" class="form-control" name="product"
+														th:value="${product.name}" disabled />
 												</div>
 											</div>
 											<div class="col-md-2">
 												<div class="form-group">
 													<label class="form-label" for="quantity">Quantity</label>
-													<input type="number" class="form-control" id="quantity"
-														name="quantity" step="0" min="0" placeholder="quantity"
-														required>
+													<input type="number" th:value="${productStock.quantity}"
+														class="form-control" id="quantity" name="quantity" step="0"
+														min="0" placeholder="quantity" disabled>
 												</div>
 											</div>
 											<div class="col-md-2">
 												<div class="form-group">
 													<label class="form-label" for="cost">Cost</label>
-													<input type="number" class="form-control" id="cost" name="cost"
-														step="0.01" min="0" placeholder="cost" required>
+													<input type="number" th:value="${productStock.cost}"
+														class="form-control" id="cost" name="cost" step="0.01" min="0"
+														placeholder="cost" required>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="purchasedate">Created Date</label>
+													<input type="text"
+														th:value="${#dates.format(productStock.createdDate, 'dd-MMM-yyy') + ' - ' + #dates.format(productStock.createdDate, 'hh:mm a')}"
+														class="form-control" name="createdDate" id="createdDate"
+														disabled />
 												</div>
 											</div>
 										</div>
@@ -90,9 +96,26 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="form-label" for="purchasedate">Purchase Date</label>
-													<input type="date" class="form-control" name="purchasedate"
-														id="purchasedate" required>
+													<input type="text"
+														th:value="${#dates.format(productStock.purchaseDate, 'dd-MMM-yyy')}"
+														class="form-control" name="purchasedate" id="purchasedate"
+														disabled />
 												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="barcodedigits">Barcode Digits</label>
+													<input type="text" th:value="${productStock.barcodeDigits}"
+														class="form-control" name="barcodedigits" id="barcodedigits"
+														disabled />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="barcodedigits">Barcode Image</label>
+												</div>
+												<img id="image" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"
+														alt="Existing Image" style="max-width:300px" />
 											</div>
 										</div>
 										<div class="row">

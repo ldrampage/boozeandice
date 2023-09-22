@@ -37,7 +37,7 @@
 				<div class="container-fluid">
 					<div class="card">
 						<div class="card-header">
-							<h3 class="card-title">All Products</h3>
+							<h3 class="card-title">All Stocks</h3>
 							<small class="float-right">
 								<a th:href="${'/product/stocks/add'}" class="btn btn-info">Add Stock</a>
 							</small>
@@ -47,13 +47,12 @@
 							<table id="product_stocks_table" class="table table-bordered table-striped">
 								<thead>
 									<tr>
-										<th scope="col">Name</th>
+										<th scope="col">Produc Name</th>
 										<th scope="col">Quantity</th>
 										<th scope="col">Purchase Date</th>
-										<th scope="col">Batch Date</th> <!-- created_date -->
-										<th scope="col">Cost</th>
-										<th scope="col">Created By</th>
-										<th scope="col">Notes</th>
+										<th scope="col">Created Date and Time</th> <!-- created_date -->
+										<th scope="col">Bardcode Digits</th>
+										<th scope="col">Barcode Image</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
@@ -62,14 +61,14 @@
 										<td th:text="${productStock.product.name}" scope="row"> <a href="#"
 												class="question_content"></a></td>
 										<td th:text="${productStock.quantity}"></td>
-										<td th:text="${productStock.purchaseDate}"></td>
-										<td th:text="${productStock.createdDate}"></td>
-										<td th:text="${'Php ' + productStock.cost}"></td>
-										<td> <span th:if="${productStock.createdBy != null}"
-												th:text="${productStock.createdBy.username}"></span></td>
-										<td th:text="${productStock.notes}"></td>
+										<td th:text="${#dates.format(productStock.purchaseDate, 'dd-MMM-yyy')}" > </td>
+										<td th:text="${#dates.format(productStock.createdDate, 'dd-MMM-yyy') + ' - ' + #dates.format(productStock.createdDate, 'hh:mm a')}"></td>
+										<td th:text="${productStock.barcodeDigits}"></td>
+										<td style="text-align: center;"><img th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"/></td>
 										<td>
-
+											 <a th:href="${'/product/stocks/edit/' + productStock.id}"
+												class="btn bg-gradient-primary btn-xs">Edit</a>
+											<button class="btn bg-gradient-danger btn-xs">Delete</button>
 										</td>
 									</tr>
 								</tbody>

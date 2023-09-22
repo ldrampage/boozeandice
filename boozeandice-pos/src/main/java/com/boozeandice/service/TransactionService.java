@@ -50,7 +50,11 @@ public class TransactionService {
 	}
 	
 	public Set<Transaction> getByTransactionDate(Date date) {
-		return transactionRepo.findByTransactionDateTimeBetween(date, date);
+		Calendar start = Calendar.getInstance();
+		start.setTime(date);
+		Calendar end = Calendar.getInstance();
+		end.setTime(date);
+		return transactionRepo.findByTransactionDateTimeBetween(start.getTime(), end.getTime());
 	}
 	
 	public Set<Transaction> getByToday() {

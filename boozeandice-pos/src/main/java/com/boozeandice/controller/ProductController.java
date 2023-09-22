@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +35,11 @@ import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
 import com.boozeandice.service.ProductStockService;
 import com.boozeandice.service.UserService;
+import com.boozeandice.utility.BarcodeGenerator;
 
 @Controller
 @RequestMapping(path = "/product")
+@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR"})
 public class ProductController {
 
 	private static final Logger logger = LogManager.getLogger(ProductController.class);
@@ -55,6 +58,9 @@ public class ProductController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BarcodeGenerator barcodeGenerator;
 
 	@Value("${upload.product.directory}")
 	private String uploadDirectory;
@@ -107,7 +113,7 @@ public class ProductController {
 
 	/**
 	 * 
-	 * Stocks
+	 * Stocks Start
 	 * 
 	 */
 
@@ -165,9 +171,16 @@ public class ProductController {
 
 			Long newStockBatch = productStock.getQuantity();
 			product.setStocks(product.getStocks() + newStockBatch);
-
-			productStockService.save(productStock);
+			productStock = productStockService.save(productStock);
 			productService.save(product);
+			
+			//Generate bardcode
+			//Generate barcode
+			Map<String, String> barcodeInfoMap = barcodeGenerator.generateUPCABarcode(productStock.getId().toString(), product.getId().toString(), product.getName(), 100, 50);
+			productStock.setBarcodeDigits(Long.valueOf(barcodeInfoMap.get("barcodeDigits")));
+			productStock.setBarcodeImageLocation(barcodeInfoMap.get("barcodeImgLocation"));
+			
+			productStockService.save(productStock);
 
 			message.put("status", "success");
 		} catch (Exception ex) {
@@ -176,11 +189,28 @@ public class ProductController {
 			ex.printStackTrace();
 		}
 
-		Set<Product> productList = productService.getAll();
+		Set<Product> productList = productService.getAll(); 
 		model.addAttribute("productList", productList);
 		model.addAttribute("message", message);
 		return pageController.productStocksAdd(model);
 	}
+	
+	@GetMapping(path = "/stocks/edit/{id}")
+	public String productStocksEdit(Model model, @PathVariable(value = "id", required = false) String productStockId) {
+		logger.debug(productStockId);
+		ProductStock productStock = productStockService.getById(Long.valueOf(productStockId));
+
+		model.addAttribute("productStock", productStock);
+		model.addAttribute("product", productStock.getProduct());
+		return pageController.productStocksEdit(model);
+	}
+	
+	/**
+	 * 
+	 * Stocks Start End
+	 * 
+	 */
+	
 
 	/**
 	 * 

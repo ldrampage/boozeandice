@@ -58,8 +58,30 @@ public class CashDrawer implements Serializable {
 	private Double totalCashSales;
 	
 	@Transient
-	private Double totalCashInDrawer;
+	private Double totalCashInDrawer = 0.0;
 	
+	@Transient 
+	private Double totalGCashPayments;
+	
+	@Transient 
+	private Double totalCreditCardPayments;
+	
+	public Double getTotalGCashPayments() {
+		return totalGCashPayments;
+	}
+
+	public void setTotalGCashPayments(Double totalGCashPayments) {
+		this.totalGCashPayments = totalGCashPayments;
+	}
+
+	public Double getTotalCreditCardPayments() {
+		return totalCreditCardPayments;
+	}
+
+	public void setTotalCreditCardPayments(Double totalCreditCardPayments) {
+		this.totalCreditCardPayments = totalCreditCardPayments;
+	}
+
 	public Double getTotalCashInDrawer() {
 		return totalCashInDrawer;
 	}

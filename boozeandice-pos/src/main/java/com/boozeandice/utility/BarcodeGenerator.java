@@ -31,17 +31,17 @@ public class BarcodeGenerator {
 	@Value("${upload.barcode.directory}")
 	private String imageDirectory;
 
-	public byte[] generateUPCABarcode(String batchStockId, String productId, String productName, int width,
+	public Map<String, String> generateUPCABarcode(String batchStockId, String productId, String productName, int width,
 			int height) throws WriterException, IOException {
 		// Combine batchStockId, productId, and productName into a single string
 		String barcodeText = generateBardcodeText(productId, batchStockId);
 		String barcodeFileName = barcodeText;
-
+		Map<String, String> result = new HashMap<>();
 		// Define barcode encoding hints
 		Map<EncodeHintType, Object> hints = new HashMap<>();
 		hints.put(EncodeHintType.MARGIN, 25);
 
-		// Generate the Code 128 barcode
+		// Generate the UPC_A barcode
 		BitMatrix bitMatrix = new MultiFormatWriter().encode(barcodeText, BarcodeFormat.UPC_A, width, height, hints);
 
 		// Create a BufferedImage from the BitMatrix
@@ -54,14 +54,16 @@ public class BarcodeGenerator {
 		// Add the number as text below the barcode with margins
 		//addTextToImage(bufferedImage, barcodeText, 0,0);
 
-		String filename = generateUniqueFilename(barcodeFileName);
-		saveImage(bufferedImage, filename);
+		barcodeFileName = generateUniqueFilename(barcodeFileName);
+		result.put("barcodeDigits", barcodeText);
+		result.put("barcodeImgLocation", barcodeFileName);
+		saveImage(bufferedImage, barcodeFileName);
 
 		// Convert the BufferedImage to a byte array (image)
 //		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 //		ImageIO.write(bufferedImage, "PNG", outputStream);
 //		return outputStream.toByteArray();
-		return filename.getBytes();
+		return result;
 	}
 
 	// Helper method to convert BitMatrix to BufferedImage

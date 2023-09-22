@@ -13,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.boozeandice.config.UserDetailsImpl;
 import com.boozeandice.entity.CashDrawer;
 import com.boozeandice.entity.Customer;
 import com.boozeandice.entity.Product;
@@ -39,7 +43,10 @@ import com.boozeandice.service.TransactionService;
 import com.boozeandice.service.UserService;
 import com.boozeandice.utility.Utilities;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
+@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR","ROLE_CASHIER"})
 public class IndexController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -84,6 +91,14 @@ public class IndexController implements Serializable {
 
 	@Value("${productSilogCategory}")
 	private String productSilogCategory;
+	
+	@Autowired
+	private HttpSession session;
+	
+	@GetMapping(path="/access_denied")
+	public String accessDenied(Model model) {
+		return pageController.accessDeniedPage(model);
+	}
 
 	@GetMapping(path = "/")
 	public String index(Model model) {
@@ -278,7 +293,9 @@ public class IndexController implements Serializable {
 			}
 
 			// setup the staff
-			User cashier = userService.getByUsername("lxbordo"); // TODO edit this once login is setup
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			User cashier = userService.getByUsername(userDetails.getUsername());
 
 			transaction.setInvoiceNumber(invoiceNumber);
 			transaction.setTransactionStatus(TransactionStatus.PENDING);

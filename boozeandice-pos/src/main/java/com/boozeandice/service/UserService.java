@@ -1,10 +1,12 @@
 package com.boozeandice.service;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.entity.User;
@@ -21,7 +23,13 @@ public class UserService implements Serializable {
 	private UserRepository userRepo;
 	
 	public User getByUsername(String username) {
-		return userRepo.findByUsername(username);
+		Optional<User> userOpt = userRepo.findByUsername(username);
+		
+		if(userOpt.isPresent()) {
+			return userOpt.get();
+		} else {
+			throw new UsernameNotFoundException(username);
+		}
 		
 	}
 	
