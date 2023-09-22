@@ -179,172 +179,172 @@ public class DataInitializer {
 						"Takes orders, serves customers, and ensures a high level of customer satisfaction in the dining area.");
 				jobPosRepo.save(jobPosition);
 
-//			// Create Product Category
-//			List<ProductCategory> productCategoryList = new ArrayList<>();
-//			ProductCategory category = null;
-//			User user1 = userRepo.findByUsername("lxbordo");
-//			String[] drinks = { "Tequila", "Beers", "Absolute", "Whisky", "Gin", "Wine", "Liqueur"};
-//			for (int x = 0; x < drinks.length; x++) {
-//				category = new ProductCategory();
-//				category.setName(drinks[x]);
-//				category.setUser(user1);
-//
-//				productCatRepo.save(category);
-//				productCategoryList.add(category);
-//
-//			}
-//
-//			// Create Product
-//			logger.debug("Start inserting product");
-//			List<Product> productList = new ArrayList<>();
-//			Product product = null;
-//			String[] products = { "El Hombre", "Jose Cuervo", "Patron", 
-//					"Corona Extra", "Red Horse", "San Miguel Light", "San Miguel Pilsen", "Heneken", "Crazy Carabao",
-//					"Citrun", "Kurant", "Vokda",
-//					"J&B","Jack Daniel","Jameson","Jeam Beam","Johnny Walker","Markers Mark",
-//					"Tangueray","Bombay Sapphire","Gilbeys Gin", "Gilbeys Vodka",
-//					"Hardy's CabSub","Hardy's Shiraz","Yellow Tail Chardonnay","Yellow Tail Shiraz",
-//					"Tequila Rose","Malibu","Jager meister","Frangelico","Galliano","Cointreau","Camparri","Amaretto Desarono"};
-//			String[] productImages = { "El Hombre", "Jose Cuervo", "Patron", 
-//					"corona_extra.jpg", "Red Horse", "San Miguel Light", "San Miguel Pilsen", "Heneken", "Crazy Carabao",
-//					"Citrun", "Kurant", "Vokda",
-//					"J&B","jack_daniel.jpg","jameson.jpg","Jeam Beam","Johnny Walker","Markers Mark",
-//					"Tangueray","bombay_sapphire.jpg","Gilbeys Gin", "Gilbeys Vodka",
-//					"Hardy's CabSub","Hardy's Shiraz","Yellow Tail Chardonnay","Yellow Tail Shiraz",
-//					"tequila_rose.jpg","Malibu","jager_meister.jpg","frangelico.jpg","Galliano","Cointreau","Camparri","Amaretto Desarono"};
-//
-//			ProductCategory[] category1 = { productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
-//					
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
-//					
-//};
-//
-//			Double[] prices = { 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0,
-//					50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 44.0, 74.0, 44.0, 44.0 };
-//			
-//			Double[] cost = { 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 
-//					35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 22.0, 45.0, 22.0, 22.0 };
-//			
-//			Double[] packagingFee = { 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0,
-//					5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 4.0, 5.0, 4.0, 4.0 };
-//
-//			for (int x = 0; x < products.length; x++) {
-//				product = new Product();
-//				product.setName(products[x]);
-//				product.setPrice(prices[x]);
-//				product.setProductCategory(category1[x]);
-//				product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//				product.setCost(cost[x]);
-//				product.setPackagingFee(packagingFee[x]);
-//				product.setImgLocation(productImages[x]);
-//				product.setCreatedBy(user1);
-//
-//				productRepo.save(product);
-//
-//				productList.add(product);
-//
-//			}
-//			// productRepo.saveAll(productList);
-//
-//			// Create Product Stock
-//			ProductStock productStock = new ProductStock();
-//
-//			Optional<Product> product1 = productRepo.findById(Long.valueOf(1));
-//
-//			productStock.setProduct(product1.get());
-//			productStock.setCost(Double.valueOf(2745));
-//			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setCreatedBy(user);
-//			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setQuantity(Long.valueOf(100));
-//
-//			Long newStockBatch = productStock.getQuantity();
-//			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
-//
-//			productStockRepo.save(productStock);
-//			productRepo.save(product1.get());
-//
-//			productStock = new ProductStock();
-//			product1 = productRepo.findById(Long.valueOf(2));
-//			productStock.setProduct(product1.get());
-//			productStock.setCost(Double.valueOf(2000));
-//			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setCreatedBy(user);
-//			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setQuantity(Long.valueOf(80));
-//
-//			newStockBatch = productStock.getQuantity();
-//			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
-//
-//			productStockRepo.save(productStock);
-//			productRepo.save(product1.get());
-//
-//			productStock = new ProductStock();
-//			product1 = productRepo.findById(Long.valueOf(3));
-//			productStock.setProduct(product1.get());
-//			productStock.setCost(Double.valueOf(1894));
-//			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setCreatedBy(user);
-//			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setQuantity(Long.valueOf(74));
-//
-//			newStockBatch = productStock.getQuantity();
-//			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
-//
-//			productStockRepo.save(productStock);
-//			productRepo.save(product1.get());
-//
-//			productStock = new ProductStock();
-//			product1 = productRepo.findById(Long.valueOf(1));
-//			productStock.setProduct(product1.get());
-//			productStock.setCost(Double.valueOf(1894));
-//			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setCreatedBy(user);
-//			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-//			productStock.setQuantity(Long.valueOf(50));
-//
-//			newStockBatch = productStock.getQuantity();
-//			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
-//
-//			productStockRepo.save(productStock);
-//			productRepo.save(product1.get());
+			// Create Product Category
+			List<ProductCategory> productCategoryList = new ArrayList<>();
+			ProductCategory category = null;
+			Optional<User> user1Opt = userRepo.findByUsername("lxbordo");
+			String[] drinks = { "Tequila", "Beers", "Absolute", "Whisky", "Gin", "Wine", "Liqueur"};
+			for (int x = 0; x < drinks.length; x++) {
+				category = new ProductCategory();
+				category.setName(drinks[x]);
+				category.setUser(user1Opt.get());
+
+				productCatRepo.save(category);
+				productCategoryList.add(category);
+
+			}
+
+			// Create Product
+			logger.debug("Start inserting product");
+			List<Product> productList = new ArrayList<>();
+			Product product = null;
+			String[] products = { "El Hombre", "Jose Cuervo", "Patron", 
+					"Corona Extra", "Red Horse", "San Miguel Light", "San Miguel Pilsen", "Heneken", "Crazy Carabao",
+					"Citrun", "Kurant", "Vokda",
+					"J&B","Jack Daniel","Jameson","Jeam Beam","Johnny Walker","Markers Mark",
+					"Tangueray","Bombay Sapphire","Gilbeys Gin", "Gilbeys Vodka",
+					"Hardy's CabSub","Hardy's Shiraz","Yellow Tail Chardonnay","Yellow Tail Shiraz",
+					"Tequila Rose","Malibu","Jager meister","Frangelico","Galliano","Cointreau","Camparri","Amaretto Desarono"};
+			String[] productImages = { "elhombre.jpg", "josecuervo.jpg", "patron.jpg", 
+					"corona_extra.jpg", "Red Horse", "San Miguel Light", "San Miguel Pilsen", "Heneken", "Crazy Carabao",
+					"Citrun", "Kurant", "Vokda",
+					"J&B","jack_daniel.jpg","jameson.jpg","Jeam Beam","Johnny Walker","Markers Mark",
+					"Tangueray","bombay_sapphire.jpg","Gilbeys Gin", "Gilbeys Vodka",
+					"Hardy's CabSub","Hardy's Shiraz","Yellow Tail Chardonnay","Yellow Tail Shiraz",
+					"tequila_rose.jpg","Malibu","jager_meister.jpg","frangelico.jpg","Galliano","Cointreau","Camparri","Amaretto Desarono"};
+
+			ProductCategory[] category1 = { productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(1)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(2)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(3)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(4)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(5)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(6)).orElseThrow(),
+					
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					productCatRepo.findById(Long.valueOf(7)).orElseThrow(),
+					
+};
+
+			Double[] prices = { 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0,
+					50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 90.0, 50.0, 74.0, 44.0, 44.0, 74.0, 44.0, 44.0 };
+			
+			Double[] cost = { 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 
+					35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 40.0, 35.0, 45.0, 22.0, 22.0, 45.0, 22.0, 22.0 };
+			
+			Double[] packagingFee = { 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0,
+					5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 3.0, 5.0, 5.0, 4.0, 4.0, 5.0, 4.0, 4.0 };
+
+			for (int x = 0; x < products.length; x++) {
+				product = new Product();
+				product.setName(products[x]);
+				product.setPrice(prices[x]);
+				product.setProductCategory(category1[x]);
+				product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+				product.setCost(cost[x]);
+				product.setPackagingFee(packagingFee[x]);
+				product.setImgLocation(productImages[x]);
+				product.setCreatedBy(user1Opt.get());
+
+				productRepo.save(product);
+
+				productList.add(product);
+
+			}
+			// productRepo.saveAll(productList);
+
+			// Create Product Stock
+			ProductStock productStock = new ProductStock();
+
+			Optional<Product> product1 = productRepo.findById(Long.valueOf(1));
+
+			productStock.setProduct(product1.get());
+			productStock.setCost(Double.valueOf(2745));
+			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setCreatedBy(user);
+			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setQuantity(Long.valueOf(100));
+
+			Long newStockBatch = productStock.getQuantity();
+			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
+
+			productStockRepo.save(productStock);
+			productRepo.save(product1.get());
+
+			productStock = new ProductStock();
+			product1 = productRepo.findById(Long.valueOf(2));
+			productStock.setProduct(product1.get());
+			productStock.setCost(Double.valueOf(2000));
+			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setCreatedBy(user);
+			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setQuantity(Long.valueOf(80));
+
+			newStockBatch = productStock.getQuantity();
+			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
+
+			productStockRepo.save(productStock);
+			productRepo.save(product1.get());
+
+			productStock = new ProductStock();
+			product1 = productRepo.findById(Long.valueOf(3));
+			productStock.setProduct(product1.get());
+			productStock.setCost(Double.valueOf(1894));
+			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setCreatedBy(user);
+			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setQuantity(Long.valueOf(74));
+
+			newStockBatch = productStock.getQuantity();
+			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
+
+			productStockRepo.save(productStock);
+			productRepo.save(product1.get());
+
+			productStock = new ProductStock();
+			product1 = productRepo.findById(Long.valueOf(1));
+			productStock.setProduct(product1.get());
+			productStock.setCost(Double.valueOf(1894));
+			productStock.setPurchaseDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setCreatedBy(user);
+			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+			productStock.setQuantity(Long.valueOf(50));
+
+			newStockBatch = productStock.getQuantity();
+			product1.get().setStocks(product1.get().getStocks() + newStockBatch);
+
+			productStockRepo.save(productStock);
+			productRepo.save(product1.get());
 //
 //			// Transaction
 

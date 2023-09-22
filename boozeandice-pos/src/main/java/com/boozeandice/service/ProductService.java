@@ -2,7 +2,6 @@ package com.boozeandice.service;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,6 +13,9 @@ import org.springframework.stereotype.Service;
 import com.boozeandice.entity.Product;
 import com.boozeandice.entity.ProductCategory;
 import com.boozeandice.repository.ProductRepository;
+import com.boozeandice.repository.TransactionItemRepository;
+import com.boozeandice.repository.TransactionRepository;
+import com.bozeandice.vo.ProductBestSellerVO;
 
 @Service
 public class ProductService implements Serializable {
@@ -24,6 +26,9 @@ public class ProductService implements Serializable {
 	
 	@Autowired
 	private ProductRepository productRepo;
+	
+	@Autowired
+	private TransactionItemRepository transactionItemRepo;
 	
 	public Set<Product> getAll(){
 		return new HashSet<Product>(productRepo.findAll());

@@ -52,7 +52,7 @@ public class CashDrawerController implements Serializable {
 	private Utilities utility;
 	@Autowired
 	private PageController pageController;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -94,13 +94,13 @@ public class CashDrawerController implements Serializable {
 					cashDrawerToday.setTotalCashSales(cashDrawerToday.getTotalCashSales() + transaction.getTotal());
 
 					// totalcashindrawer cash payment
-					if (transaction.getPaymentMethod().equals(PaymentMethod.CASH.getDescription()))
+					if (transaction.getPaymentMethod().equals(PaymentMethod.CASH.getDescription())) {
 						if (cashDrawerToday.getTotalCashInDrawer() == null) {
 							cashDrawerToday.setTotalCashInDrawer(0.0);
-							cashDrawerToday.setTotalCashInDrawer(
-									cashDrawerToday.getTotalCashInDrawer() + transaction.getTotal());
 						}
-
+						cashDrawerToday
+								.setTotalCashInDrawer(cashDrawerToday.getTotalCashInDrawer() + transaction.getTotal());
+					}
 					// totalgcashpayment
 					if (transaction.getPaymentMethod().equals(PaymentMethod.GCASH.getDescription())) {
 						if (cashDrawerToday.getTotalGCashPayments() == null)
@@ -123,11 +123,12 @@ public class CashDrawerController implements Serializable {
 
 			} else {
 				cashDrawerToday.setTotalCashSales(0.0);
+				cashDrawerToday.setTotalCashInDrawer(0.0);
 			}
 
 			// totalCashInDrawer + totalCashAdded + startingcash - Expenses
-			Double totalCashInDrawer = cashDrawerToday.getStartingCash() + totalCashAdded
-					+ cashDrawerToday.getTotalCashInDrawer() - totalExpenses;
+			Double totalCashInDrawer = cashDrawerToday.getTotalCashInDrawer() + totalCashAdded
+					+ cashDrawerToday.getStartingCash() - totalExpenses;
 
 			cashDrawerToday.setTotalCashAdded(totalCashAdded);
 			cashDrawerToday.setTotalExpenses(totalExpenses);
@@ -150,11 +151,11 @@ public class CashDrawerController implements Serializable {
 
 	@PostMapping(path = "")
 	private String cashDrawerCreateProcess(Model model, @RequestParam Map<String, String> parameters) {
-		
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		User user = userService.getByUsername(userDetails.getUsername());
-		
+
 		if (parameters.get("createStartingCash") != null && parameters.get("starting_cash") != null) {
 			String startingCash = parameters.get("starting_cash");
 			CashDrawer cashDrawer = new CashDrawer();

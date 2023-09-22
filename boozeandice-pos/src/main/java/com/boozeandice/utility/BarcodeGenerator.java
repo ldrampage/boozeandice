@@ -2,10 +2,8 @@ package com.boozeandice.utility;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,7 +12,6 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

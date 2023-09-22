@@ -58,7 +58,7 @@ public class CashDrawer implements Serializable {
 	private Double totalCashSales;
 	
 	@Transient
-	private Double totalCashInDrawer = 0.0;
+	private Double totalCashInDrawer;
 	
 	@Transient 
 	private Double totalGCashPayments;

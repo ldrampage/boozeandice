@@ -52,8 +52,16 @@ public class TransactionService {
 	public Set<Transaction> getByTransactionDate(Date date) {
 		Calendar start = Calendar.getInstance();
 		start.setTime(date);
+		start.set(Calendar.HOUR_OF_DAY, 0);
+		start.set(Calendar.MINUTE, 0);
+		start.set(Calendar.SECOND, 0);
+		start.set(Calendar.MILLISECOND, 0);
 		Calendar end = Calendar.getInstance();
 		end.setTime(date);
+		end.set(Calendar.HOUR_OF_DAY, 23);
+		end.set(Calendar.MINUTE, 59);
+		end.set(Calendar.SECOND, 59);
+		end.set(Calendar.MILLISECOND, 999);
 		return transactionRepo.findByTransactionDateTimeBetween(start.getTime(), end.getTime());
 	}
 	

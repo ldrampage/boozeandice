@@ -31,11 +31,13 @@ import com.boozeandice.entity.Product;
 import com.boozeandice.entity.ProductCategory;
 import com.boozeandice.entity.ProductStock;
 import com.boozeandice.entity.User;
+import com.boozeandice.repository.ProductBestSellerRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
 import com.boozeandice.service.ProductStockService;
 import com.boozeandice.service.UserService;
 import com.boozeandice.utility.BarcodeGenerator;
+import com.bozeandice.vo.ProductBestSellerVO;
 
 @Controller
 @RequestMapping(path = "/product")
@@ -55,6 +57,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductStockService productStockService;
+	
+	@Autowired
+	private ProductBestSellerRepository productBestSellerRepo;
 
 	@Autowired
 	private UserService userService;
@@ -239,10 +244,11 @@ public class ProductController {
 	}
 
 	@GetMapping(path = "/products")
-	public String productPage(Model model) {
+	public String productPage(Model model) {  
 		Set<Product> productList = productService.getAll();
+		List<ProductBestSellerVO> pbsVO = productBestSellerRepo.getBestSellingProductAllTime();
 		model.addAttribute("productList", productList);
-
+		model.addAttribute("productAllTimeBestSeller", pbsVO);
 		return pageController.productPage(model);
 	}
 

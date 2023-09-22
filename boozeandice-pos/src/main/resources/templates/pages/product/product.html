@@ -36,54 +36,111 @@
 			<!-- Main content -->
 			<section class="content">
 				<div class="container-fluid">
-					<div class="card">
-						<div class="card-header">
-							<h3 class="card-title">All Products</h3>
-							<small class="float-right">
-								<a th:href="${'/product/products/add'}" class="btn btn-info">Add Product</a>
-							</small>
-						</div>
-						<!-- /.card-header -->
-						<div class="card-body">
-							<table id="products_table" class="table table-bordered table-striped">
-								<thead>
-									<tr>
-										<th scope="col">Name</th>
-										<th scope="col">Category</th>
-										<th scope="col">Supplier</th>
-										<th scope="col">Stock</th>
-										<th scope="col">Price</th>
-										<th scope="col">Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="product : ${productList}">
-										<td th:text="${product.name}" scope="row"> <a href="#"
-												class="question_content"></a></td>
-										<td><span th:if="${product.productCategory != null}"
-												th:text="${product.productCategory.name}"></span></td>
-										<td th:text="${product.supplier}"></td>
-										<td>
-											<span th:text="${product.stocks}"></span>
-										</td>
-										<td th:text="${'Php ' + product.price}"></td>
-										<td>
-											<a th:href="${'/product/products/edit/' + product.id}"
-												class="btn bg-gradient-primary btn-xs">Edit</a>
-											<a th:href="${'/product/products/view/' + product.id}"
-												class="btn bg-gradient-info btn-xs">View</a>
-											<a th:if="${product.stocks <= 5}"
-												th:href="${'/product/stocks/add?id=' + product.id}"
-												class="btn bg-gradient-warning btn-xs">Add stock</a>
-										</td>
-									</tr>
-								</tbody>
-								<!--<tfoot>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">All Products</h3>
+									<small class="float-right">
+										<a th:href="${'/product/products/add'}" class="btn btn-info">Add Product</a>
+									</small>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body">
+									<table id="products_table" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th scope="col">Name</th>
+												<th scope="col">Category</th>
+												<th scope="col">Supplier</th>
+												<th scope="col">Stock</th>
+												<th scope="col">Price</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="product : ${productList}">
+												<td th:text="${product.name}" scope="row"> <a href="#"
+														class="question_content"></a></td>
+												<td><span th:if="${product.productCategory != null}"
+														th:text="${product.productCategory.name}"></span></td>
+												<td th:text="${product.supplier}"></td>
+												<td>
+													<span th:text="${product.stocks}"></span>
+												</td>
+												<td th:text="${'Php ' + product.price}"></td>
+												<td>
+													<a th:href="${'/product/products/edit/' + product.id}"
+														class="btn bg-gradient-primary btn-xs">Edit</a>
+													<a th:href="${'/product/products/view/' + product.id}"
+														class="btn bg-gradient-info btn-xs">View</a>
+													<a th:if="${product.stocks <= 5}"
+														th:href="${'/product/stocks/add?id=' + product.id}"
+														class="btn bg-gradient-warning btn-xs">Add stock</a>
+												</td>
+											</tr>
+										</tbody>
+										<!--<tfoot>
 
 								</tfoot> -->
-							</table>
+									</table>
+								</div>
+								<!-- /.card-body -->
+							</div>
 						</div>
-						<!-- /.card-body -->
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header border-0">
+									<h3 class="card-title">All Time Best Selling Products</h3>
+									<div class="card-tools">
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-download"></i>
+										</a>
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-bars"></i>
+										</a>
+									</div>
+								</div>
+								<div class="card-body table-responsive">
+									<table id="atbsp_table" class="table table-striped table-valign-middle">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<!--<th>Price</th> -->
+												<th>Sales</th>
+												<th>Revenue</th>
+												<th>More</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="product : ${productAllTimeBestSeller}">
+												<td>
+													<img th:src="@{/images/} + ${product.imgLocation}" alt="Product 1"
+														class="img-circle img-size-32 mr-2">
+													<span th:text="${product.productName}"></span>
+												</td>
+												<!--<td>$13 USD</td> -->
+												<td>
+													<!--<small class="text-success mr-1">
+														<i class="fas fa-arrow-up"></i>
+														12%
+													</small> -->
+													<span th:text="${product.itemsSold}"></span> Sold
+												</td>
+												<td th:text="${'Php ' + product.revenue}"></td>
+												<td>
+													<a href="#" class="text-muted">
+														<i class="fas fa-search"></i>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 
 				</div><!-- /.container-fluid -->
@@ -116,6 +173,15 @@
 				"responsive": true, "lengthChange": false, "autoWidth": false,
 				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
 				"searching": true,
+				"order": []
+
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			
+			$("#atbsp_table").DataTable({
+				"responsive": true, "lengthChange": false, "autoWidth": false,
+				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+				"searching": true,
+				"order": []
 
 			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

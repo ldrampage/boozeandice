@@ -8,10 +8,7 @@
 	<div class="wrapper">
 
 		<!-- Preloader -->
-		<div class="preloader flex-column justify-content-center align-items-center">
-			<img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-		</div>
-
+		<div th:insert="~{fragments/preload :: preload}"></div>
 		<div th:insert="~{fragments/header :: header}"></div>
 		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
@@ -78,11 +75,15 @@
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
 	<script>
-		// Get the current date
-		var currentDate = new Date();
 
-		// Format the date as desired (e.g., "YYYY-MM-DD")
-		var formattedDate = currentDate.toISOString().split('T')[0];
+		var currentDate = new Date();
+		var hongKongTimezoneOffset = 8 * 60;  // 8 hours ahead of UTC
+		var hongKongDate = new Date(currentDate.getTime() + (hongKongTimezoneOffset * 60 * 1000));
+
+		// Format the date and time as desired
+		var formattedDate = hongKongDate.toISOString().split('T')[0];  // Format as "YYYY-MM-DD"
+		var formattedTime = hongKongDate.toLocaleTimeString('en-HK');
+		// Get the current date
 
 		// Update the content of the HTML element with the formatted date
 		document.getElementById("currentDate").textContent = formattedDate;
