@@ -23,7 +23,7 @@ public class ProductBestSellerRepository {
 		RowMapper<ProductBestSellerVO> rowMapper = (rs, rowNum) -> {
 			
 			ProductBestSellerVO pbsVO = new ProductBestSellerVO();
-			pbsVO.setProductId(rs.getString("product_id"));
+			pbsVO.setProductId(rs.getString("product_real_id"));
 			pbsVO.setImgLocation(rs.getString("img_location"));
 			pbsVO.setItemsSold(rs.getString("totalQuantity"));
 			pbsVO.setProductName(rs.getString("name"));
@@ -33,10 +33,10 @@ public class ProductBestSellerRepository {
 			
 		};
 		
-		return jdbcTemplate.query("select p.img_location, ti.product_id, SUM(ti.quantity) as totalQuantity, p.name, SUM(p.price * ti.quantity) as revenue from boozeandice.transaction_item ti "
-				+ "join boozeandice.product p on ti.product_id = p.id "
+		return jdbcTemplate.query("select p.img_location, ti.product_real_id, SUM(ti.quantity) as totalQuantity, p.name, SUM(ti.product_price * ti.quantity) as revenue from boozeandice.transaction_item ti "
+				+ "join boozeandice.product p on ti.product_real_id = p.id "
 				+ "where transaction_id in (select id from boozeandice.transaction where transaction_status = 'paid') "
-				+ "group by product_id order by totalQuantity DESC;", rowMapper);
+				+ "group by ti.product_real_id order by totalQuantity DESC;", rowMapper);
 	}
 
 }

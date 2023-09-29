@@ -32,6 +32,12 @@ public class PageController {
 		return "pages/index";
 	}
 	
+	public String invoicePrintPage(Model model) {
+		addAttributes(model);
+		return "pages/invoice-print";
+		
+	}
+	
 	public String checkoutPage(Model model) {
 		addAttributes(model);
 		return "pages/checkout";
@@ -44,6 +50,17 @@ public class PageController {
 	
 	public String loginPage(Model model) {
 		return "pages/login";
+	}
+	
+	/**
+	 * 
+	 * Chart
+	 * 
+	 */
+	
+	public String chartPage(Model model) {
+		addAttributes(model);
+		return "pages/chart/chart";
 	}
 	
 	/**

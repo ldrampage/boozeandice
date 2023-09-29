@@ -317,6 +317,9 @@ public class IndexController implements Serializable {
 			for (Product product : productToPurchaseList) {
 				transactionItem = new TransactionItem();
 				transactionItem.setProduct(product);
+				transactionItem.setProductId(product.getId());
+				transactionItem.setProductPriceAtTimeSold(product.getPrice());
+				transactionItem.setProductCostAtTimeSold(product.getCost());
 				transactionItem.setQuantity(product.getQtyToPurchase());
 				transactionItem.setTransaction(transaction);
 				transactionItem.setCreatedDate(new Timestamp(System.currentTimeMillis()));
@@ -358,6 +361,23 @@ public class IndexController implements Serializable {
 		Transaction transaction = transactionService.getById(Long.valueOf(transactionId));
 		model.addAttribute("transaction", transaction);
 		return pageController.checkoutPage(model);
+	}
+	
+	@GetMapping(path="/invoiceprint/")
+	public String invoicePrintPage(Model model, @RequestParam(name="id", required=true) String transactionId) {
+		
+		Transaction transaction = transactionService.getById(Long.valueOf(transactionId));
+		transaction.setVatableSales(Double.valueOf(String.format("%.2f", transaction.getVatableSales())));
+		transaction.setVatAmount(Double.valueOf(String.format("%.2f", transaction.getVatAmount())));
+		long totalItemsSold = 0;
+		for(TransactionItem tranItem : transaction.getTransactionItem()) {
+			totalItemsSold = totalItemsSold + tranItem.getQuantity();
+		}
+		
+		model.addAttribute("totalItemsSold",totalItemsSold);
+		model.addAttribute("transaction", transaction);
+		
+		return pageController.invoicePrintPage(model);
 	}
 
 	@PostMapping(path = "/invoice")
@@ -467,9 +487,9 @@ public class IndexController implements Serializable {
 		transaction = transactionService.save(transaction);
 
 		// Generate Order Slip and Open the Cash Drawer
-		String orderSlipMessage = utility.composeOrderSlip(transaction);
-		utility.openCashDrawer();
-		utility.printOrderSlip(orderSlipMessage);
+		//String orderSlipMessage = utility.composeOrderSlip(transaction);
+		//utility.openCashDrawer();
+		//utility.printOrderSlip(orderSlipMessage);
 		logger.debug("End processFinalInvoiceSteps()");
 		
 		return transaction;
@@ -477,7 +497,7 @@ public class IndexController implements Serializable {
 
 	public static String generateInvoiceNumber() {
 		// Create a timestamp-based identifier
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		String timestamp = dateFormat.format(new Date());
 
 		// Increment the invoice counter

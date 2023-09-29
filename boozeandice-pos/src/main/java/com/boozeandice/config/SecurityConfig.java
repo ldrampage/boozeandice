@@ -48,7 +48,7 @@ public class SecurityConfig {
 	// authorization
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/plugins/**", "/dist/**", "/custom/**", "/images/**", "/login").permitAll().and()
+				.requestMatchers("/plugins/**", "/dist/**", "/custom/**", "/images/**", "/chart/**", "/login").permitAll().and()
 				.authorizeHttpRequests().requestMatchers("/**").authenticated().and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/").failureHandler(customAuthenticationFailureHandler()).and().exceptionHandling()
 				.accessDeniedPage("/access_denied").and().build();

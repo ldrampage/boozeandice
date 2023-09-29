@@ -23,8 +23,10 @@ import com.boozeandice.entity.TransactionItem;
 import com.boozeandice.enums.CardBrand;
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.TransactionStatus;
+import com.boozeandice.repository.DailySalesReportRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.TransactionService;
+import com.bozeandice.vo.DailySalesReportVO;
 import com.bozeandice.vo.PayMayaPaymentBrkDown;
 import com.bozeandice.vo.PaymentDetailsVO;
 import com.bozeandice.vo.SalesTaxSummaryVO;
@@ -45,11 +47,26 @@ public class ReportsController {
 	@Autowired
 	private CategoryService productCatService;
 	
+	@Autowired
+	private DailySalesReportRepository dailySalesReportRepo;
+	
 	@GetMapping(path="/")
 	public String reportsPage(Model model, @RequestParam(name="zdate", required=false) String zdate) throws Exception {
 		logger.debug("Start reportsPage() -> zdate: " + zdate);
-		//Z Report Start
 		
+		//Report Tab Start
+		
+		// Daily Sales Report
+		List<DailySalesReportVO> dailySalesReportList = dailySalesReportRepo.getAllDailySalesReportVO();
+		
+		
+		model.addAttribute("dailySalesReportList",dailySalesReportList);
+		
+		
+		//Report Tab End
+		
+		
+		//Z Report Start
 		Set<Transaction> transactionList = null;
 		Set<Transaction> transactionListPaid  = null;
 		if(zdate != null) {

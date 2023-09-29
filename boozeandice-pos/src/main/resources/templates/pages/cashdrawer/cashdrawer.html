@@ -54,7 +54,7 @@
 																		Cash
 																	</h5>
 																	<h3 class="color_gray f_w_700"
-																		th:text="${'Php ' + cashDrawerToday.startingCash}">
+																		th:text="${'P' + cashDrawerToday.startingCash}">
 																	</h3>
 																</td>
 																<!--<form method="post" th:action="@{/cashdrawer}">
@@ -85,7 +85,7 @@
 																		Cash added
 																	</h5>
 																	<h3 class="color_gray f_w_700"
-																		th:text="${'Php ' + cashDrawerToday.totalCashAdded}">
+																		th:text="${'P' + cashDrawerToday.totalCashAdded}">
 																	</h3>
 																</td>
 																<form method="post" th:action="@{/cashdraw}">
@@ -115,7 +115,7 @@
 																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
 																		Expenses</h5>
 																	<h3 class="color_gray f_w_700 "
-																		th:text="${'Php ' + cashDrawerToday.totalExpenses}">
+																		th:text="${'P' + cashDrawerToday.totalExpenses}">
 																	</h3>
 																</td>
 															</tr>
@@ -130,11 +130,11 @@
 																		Since</h5>
 																	<h3 class="color_gray f_w_700 "
 																		th:if="${cashDrawerToday.totalCashSales > 0}"
-																		th:text="${'Php ' + cashDrawerToday.totalCashSales}">
+																		th:text="${'P' + cashDrawerToday.totalCashSales}">
 																	</h3>
 																	<h3 class="color_gray f_w_700 "
 																		th:unless="${cashDrawerToday.totalCashSales > 0}">
-																		Php 0.0</h3>
+																		P0.0</h3>
 																</td>
 															</tr>
 														</tbody>
@@ -148,11 +148,11 @@
 																		Total Cash In Drawer</h5>
 																	<h3 class="color_gray f_w_700 "
 																		th:if="${cashDrawerToday.totalCashInDrawer > 0}"
-																		th:text="${'Php ' + cashDrawerToday.totalCashInDrawer}">
+																		th:text="${'P' + cashDrawerToday.totalCashInDrawer}">
 																	</h3>
 																	<h3 class="color_gray f_w_700 "
 																		th:unless="${cashDrawerToday.totalCashInDrawer > 0}">
-																		Php 0.0</h3>
+																		P0.0</h3>
 
 																</td>
 															</tr>
@@ -167,11 +167,11 @@
 																		Total Gcash Payments</h5>
 																	<h3 class="color_gray f_w_700 "
 																		th:if="${cashDrawerToday.totalGCashPayments > 0}"
-																		th:text="${'Php ' + cashDrawerToday.totalGCashPayments}">
+																		th:text="${'P' + cashDrawerToday.totalGCashPayments}">
 																	</h3>
 																	<h3 class="color_gray f_w_700 "
 																		th:unless="${cashDrawerToday.totalGCashPayments > 0}">
-																		Php 0.0</h3>
+																		P0.0</h3>
 
 																</td>
 															</tr>
@@ -186,11 +186,11 @@
 																		Total Credit Card Payments</h5>
 																	<h3 class="color_gray f_w_700 "
 																		th:if="${cashDrawerToday.totalCreditCardPayments > 0}"
-																		th:text="${'Php ' + cashDrawerToday.totalCreditCardPayments}">
+																		th:text="${'P' + cashDrawerToday.totalCreditCardPayments}">
 																	</h3>
 																	<h3 class="color_gray f_w_700 "
 																		th:unless="${cashDrawerToday.totalCreditCardPayments > 0}">
-																		Php 0.0</h3>
+																		P0.0</h3>
 																</td>
 															</tr>
 														</tbody>
@@ -270,7 +270,7 @@
 													<tbody>
 														<tr th:each="expense : ${expenseList}">
 															<th scope="row"><span th:text="${expense.id}"></span></th>
-															<td><span th:text="${'Php ' + expense.expense}"></span></td>
+															<td><span th:text="${'P' + expense.expense}"></span></td>
 															<td><span th:text="${expense.createdDate}"></span></td>
 															<td><span th:text="${expense.note}"></span></td>
 														</tr>

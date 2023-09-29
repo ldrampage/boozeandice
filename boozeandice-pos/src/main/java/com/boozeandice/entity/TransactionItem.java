@@ -28,6 +28,15 @@ public class TransactionItem implements Serializable {
 	@JoinColumn(name="product_id" , nullable = false)
 	private Product product;
 	
+	@Column(name="product_real_id")
+	private Long productId;
+	
+	@Column(name="product_price")
+	private Double productPriceAtTimeSold;
+	
+	@Column(name="produc_cost")
+	private Double productCostAtTimeSold;
+	
 	@ManyToOne
 	@JoinColumn(name="transaction_id", nullable = false)
 	private Transaction transaction;
@@ -88,6 +97,37 @@ public class TransactionItem implements Serializable {
 	public void setBatchNumber(String batchNumber) {
 		this.batchNumber = batchNumber;
 	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public Double getProductPriceAtTimeSold() {
+		return productPriceAtTimeSold;
+	}
+
+	public void setProductPriceAtTimeSold(Double productPriceAtTimeSold) {
+		this.productPriceAtTimeSold = productPriceAtTimeSold;
+	}
+
+	public Double getProductCostAtTimeSold() {
+		return productCostAtTimeSold;
+	}
+
+	public void setProductCostAtTimeSold(Double productCostAtTimeSold) {
+		this.productCostAtTimeSold = productCostAtTimeSold;
+	}
+	
+	
+
+	
+
+	
+	
 	
 	
 	

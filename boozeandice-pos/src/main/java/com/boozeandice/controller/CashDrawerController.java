@@ -133,7 +133,19 @@ public class CashDrawerController implements Serializable {
 			cashDrawerToday.setTotalCashAdded(totalCashAdded);
 			cashDrawerToday.setTotalExpenses(totalExpenses);
 			cashDrawerToday.setTotalCashInDrawer(totalCashInDrawer);
-
+			
+			
+			//Setting the output in UI
+			cashDrawerToday.setStartingCash(Double.valueOf(String.format("%.2f", cashDrawerToday.getStartingCash())));
+			cashDrawerToday.setTotalCashAdded(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashAdded())));
+			cashDrawerToday.setTotalExpenses(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalExpenses())));
+			cashDrawerToday.setTotalCashSales(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashSales())));
+			cashDrawerToday.setTotalCashInDrawer(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashInDrawer())));
+			if(cashDrawerToday.getTotalGCashPayments() != null)
+				cashDrawerToday.setTotalGCashPayments(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalGCashPayments())));
+			if(cashDrawerToday.getTotalCreditCardPayments() != null)
+				cashDrawerToday.setTotalCreditCardPayments(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCreditCardPayments())));
+			
 			model.addAttribute("cashDrawerToday", cashDrawerToday);
 		}
 
@@ -163,7 +175,7 @@ public class CashDrawerController implements Serializable {
 			cashDrawer.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			cashDrawer.setCreatedBy(user);
 			cashDrawerService.save(cashDrawer);
-			utility.openCashDrawer();
+			//utility.openCashDrawer();
 			return "redirect:/cashdrawer";
 		}
 

@@ -75,7 +75,7 @@
 															th:text="${purchases.product.packagingFee}"></td>
 														<td th:text="${purchases.quantity}"></td>
 														<td
-															th:text="${'Php ' + purchases.quantity * purchases.product.price}">
+															th:text="${'P' + purchases.quantity * purchases.product.price}">
 														</td>
 													</tr>
 												</tbody>
@@ -88,28 +88,28 @@
 												<tbody>
 													<tr>
 														<td class="payment-title">Subtotal</td>
-														<td th:text="${'Php ' + transaction.subTotal}"></td>
+														<td th:text="${'P' + transaction.subTotal}"></td>
 													</tr>
 													<tr th:if="${transaction.packaging > 0}">
 														<td class="payment-title">Packaging</td>
-														<td th:text="${'Php ' + transaction.packaging}"></td>
+														<td th:text="${'P' + transaction.packaging}"></td>
 													</tr>
 													<tr>
 														<td class="payment-title">Discount</td>
-														<td th:text="${'Php ' + transaction.discount}"></td>
+														<td th:text="${'P' + transaction.discount}"></td>
 													</tr>
 													<tr>
 														<td class="payment-title">Total Amount Due</td>
 														<td class="text-success"><strong style="font-size: 32px;"
-																th:text="${'Php ' + transaction.total}"></strong></td>
+																th:text="${'P' + transaction.total}"></strong></td>
 													</tr>
 													<tr>
 														<td class="payment-title">VATable sales</td>
-														<td th:text="${'Php ' + transaction.vatableSales}"></td>
+														<td th:text="${'P' + transaction.vatableSales}"></td>
 													</tr>
 													<tr>
 														<td class="payment-title">VAT (12%)</td>
-														<td th:text="${'Php ' + transaction.vatAmount}"></td>
+														<td th:text="${'P' + transaction.vatAmount}"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -149,23 +149,76 @@
 												<div class="col-md-12">
 													<form id="chargeForm" method="post" th:action="@{/invoice}">
 														<div class="form-group">
-															<label class="form-label" style="font-size: 24px;"
-																for="cash_received">Cash Received</label>
-															<input id="cash_received" type="number"
-																style="font-size: 32px; font-weight:900; color:cornflowerblue; height:calc(3.50rem + 2px);"
-																step="0.0" th:min="${transaction.total}"
-																class="form-control input-lg" name="cash_received"
-																required="" placeholder="Cash Received" />
+															<div class="row">
+																<div class="col-md-6">
+																	<label class="form-label" style="font-size: 18px;"
+																		for="cash_received">Cash Received</label>
+																	<input id="cash_received" type="number"
+																		style="font-size: 28px; font-weight:900; color:cornflowerblue; height:calc(2.5rem + 2px);"
+																		step="0.1" th:min="${transaction.total}"
+																		class="form-control input-lg"
+																		name="cash_received" required=""
+																		placeholder="Cash Received" />
+																	</di>
+																</div>
+																<div class="col-md-6">
+																	<label class="form-label" style="font-size: 18px;"
+																		for="cash_received">Change</label>
+																	<input type="hidden" step="0.1" th:value="${transaction.total}"
+																		id="transactionTotal" />
+																	<input id="change" type="text"
+																		style="font-size: 28px; font-weight:900; color:coral; height:calc(2.5rem + 2px);"
+																		class="form-control input-lg" name="change"
+																		required="" placeholder="Change" disabled />
+																</div>
+															</div>
 														</div>
-														<div class="form-group">
-															<label class="form-label" style="font-size: 18px;"
-																for="cash_received">Change</label>
-															<input type="hidden" th:value="${transaction.total}"
-																id="transactionTotal" />
-															<input id="change" type="text"
-																style="font-size: 28px; font-weight:900; color:coral; height:calc(2.5rem + 2px);"
-																class="form-control input-lg" name="change" required=""
-																placeholder="Change" disabled />
+														<br />
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('20.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">P20</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('50.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-success btn-lg">P50</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('100.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-warning btn-lg">P100</button>
+															</div>
+														</div>
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('200.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-danger btn-lg">P200</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('500.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-warning btn-lg">P500</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('1000.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">P1000</button>
+															</div>
+														</div>
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('')"
+																	type="button"
+																	class="btn btn-block btn-outline-success btn-lg">Clear</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('exact_amount')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">Exact Amount</button>
+															</div>
 														</div>
 														<div class="form-group">
 															<label class="form-label">Sold
@@ -241,7 +294,9 @@
 																<input type="hidden" name="addMoreToPurchase" />
 																<input type="hidden" name="transactionId"
 																	th:value="${transaction.id}" />
-																<button type="submit" class="btn btn-block bg-gradient-secondary btn-lg">ADD / DEDUCT PURCHASE</button>
+																<button type="submit"
+																	class="btn btn-block bg-gradient-secondary btn-lg">ADD
+																	/ DEDUCT PURCHASE</button>
 															</form>
 														</td>
 													</tr>
@@ -287,7 +342,8 @@
 														</div>
 														<div class="form-group">
 															<label class="form-label">Phone no.</label>
-															<input type="text" class="form-control" name="phone_number" required>
+															<input type="text" class="form-control" name="phone_number"
+																required>
 														</div>
 														<div class="form-group">
 															<label class="form-label">Reference no.</label>
@@ -340,6 +396,28 @@
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
 	<script>
 
+
+		function setCashReceivedValue(value) {
+			//console.dir(value);
+			
+			var transactionTotal = $("#transactionTotal").val()
+			
+			if(value === 'exact_amount'){
+				$("#cash_received").val(transactionTotal);
+			} else if (value === '') {
+				$("#cash_received").val('');
+			} else {
+				$("#cash_received").val(value);
+			}
+	
+			if (value === "") {
+				$("#change").val("");
+
+			} else {
+				$("#change").val("P" + ($("#cash_received").val() - transactionTotal).toFixed(2));
+			}
+		}
+
 		$(document).ready(function () {
 			$("#cash_received").keyup(function () {
 				var inputValue = $(this).val();
@@ -348,12 +426,11 @@
 					$("#change").val("");
 
 				} else {
-					$("#change").val("Php " + (inputValue - transactionTotal).toFixed(2));
+					$("#change").val("P" + (inputValue - transactionTotal).toFixed(2));
 				}
-
 			})
-		})
 
+		})
 
 		$(document).ready(function () {
 			$("#pay_later_form").submit(function (event) {
