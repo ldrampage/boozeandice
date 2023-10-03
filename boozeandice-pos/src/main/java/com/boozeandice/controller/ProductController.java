@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.boozeandice.entity.Product;
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.entity.ProductStock;
-import com.boozeandice.entity.User;
-import com.boozeandice.repository.ProductBestSellerRepository;
+import com.boozeandice.local.entity.Product;
+import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.local.entity.ProductStock;
+import com.boozeandice.local.entity.User;
+import com.boozeandice.local.repository.ProductBestSellerRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
 import com.boozeandice.service.ProductStockService;
@@ -176,16 +176,18 @@ public class ProductController {
 
 			Long newStockBatch = productStock.getQuantity();
 			product.setStocks(product.getStocks() + newStockBatch);
-			productStock = productStockService.save(productStock);
-			productService.save(product);
 			
-			//Generate bardcode
+			productStock = productStockService.save(productStock);
+			
+			//Generate bardcode 
 			//Generate barcode
 			Map<String, String> barcodeInfoMap = barcodeGenerator.generateUPCABarcode(productStock.getId().toString(), product.getId().toString(), product.getName(), 100, 50);
 			productStock.setBarcodeDigits(Long.valueOf(barcodeInfoMap.get("barcodeDigits")));
+			productStock.setBarcodeDigitsv2(barcodeInfoMap.get("barcodeDigitsv2"));
 			productStock.setBarcodeImageLocation(barcodeInfoMap.get("barcodeImgLocation"));
 			
 			productStockService.save(productStock);
+
 
 			message.put("status", "success");
 		} catch (Exception ex) {

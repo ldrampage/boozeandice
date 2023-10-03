@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.boozeandice.entity.JobPosition;
-import com.boozeandice.entity.Role;
-import com.boozeandice.entity.User;
+import com.boozeandice.local.entity.JobPosition;
+import com.boozeandice.local.entity.Role;
+import com.boozeandice.local.entity.User;
 import com.boozeandice.service.JobPositionService;
 import com.boozeandice.service.RoleService;
 import com.boozeandice.service.StaffService;
@@ -61,6 +61,12 @@ public class StaffController {
 	public String staffPage(Model model) {
 		model.addAttribute("staffList", staffService.getAll());
 		return pageController.staffPage(model);
+	}
+	
+	@GetMapping(path="/profileview/")
+	public String profileViewPage(Model model, @RequestParam("id") String id) {
+		model.addAttribute("staff", staffService.getById(Long.valueOf(id)));
+		return pageController.profileViewPage(model);
 	}
 
 	@PostMapping(path = "/createaccount")
@@ -124,8 +130,8 @@ public class StaffController {
 		user.setRoles(newRoles);
 		user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
-		if (parameters.get("jobPositions") != null)
-			user.setJobPosition(jobPosService.getById(Long.valueOf(parameters.get("jobPositions"))));
+		if (parameters.get("jobpositions") != null)
+			user.setJobPosition(jobPosService.getById(Long.valueOf(parameters.get("jobpositions"))));
 
 		if (!file.isEmpty()) {
 			filePath = Paths.get(uploadDirectory, file.getOriginalFilename());

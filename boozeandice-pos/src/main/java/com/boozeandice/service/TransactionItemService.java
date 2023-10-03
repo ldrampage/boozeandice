@@ -7,9 +7,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.Transaction;
-import com.boozeandice.entity.TransactionItem;
-import com.boozeandice.repository.TransactionItemRepository;
+import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.local.entity.TransactionItem;
+import com.boozeandice.local.repository.TransactionItemRepository;
 
 @Service
 public class TransactionItemService {

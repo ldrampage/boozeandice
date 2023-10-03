@@ -44,7 +44,7 @@
 											<a class="nav-link active" id="custom-tabs-one-profile-tab" data-toggle="pill"
 												href="#custom-tabs-one-profile" role="tab"
 												aria-controls="custom-tabs-one-profile"
-												aria-selected="false">Profile</a>
+												aria-selected="false">Sales Report</a>
 										</li>
 										<li class="nav-item">
 											<a class="nav-link" id="custom-tabs-one-home-tab" data-toggle="pill"
@@ -106,13 +106,13 @@
 																<tbody>
 																	<tr th:each="dailySalesReport : ${dailySalesReportList}">
 																		<td><span th:text="${dailySalesReport.date}"></span></td>
-																		<td><span th:text="${dailySalesReport.total}"></span></td>
-																		<td><span th:text="${dailySalesReport.cashTransaction}"></span></td>
-																		<td><span th:text="${dailySalesReport.gcashTransaction}"></span></td>
-																		<td><span th:text="${dailySalesReport.cardTransaction}"></span></td>
-																		<td><span th:text="${dailySalesReport.cost}"></span></td>
-																		<td><span th:text="${dailySalesReport.profit}"></span></td>
-																		<td><span th:text="${dailySalesReport.taxes}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.total}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.cashTransaction}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.gcashTransaction}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.cardTransaction}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.cost}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.profit}"></span></td>
+																		<td><span th:text="${'P'+dailySalesReport.taxes}"></span></td>
 																		<td><span th:text="${dailySalesReport.noOfTransactions}"></span></td>
 																		<td><span th:text="${dailySalesReport.noOfItems}"></span></td>
 																	</tr>
@@ -432,12 +432,14 @@
 			});
 			
 			$("#daily_sales_report_table").DataTable({
-				"responsive": true, "lengthChange": false, "autoWidth": false,
-				"buttons": ["csv"], //["copy", "csv", "excel", "pdf", "print", "colvis"],
-				"searching": true,
-				"order": []
+				responsive: true, 
+				lengthChange: false, 
+				autoWidth: false,
+				buttons: ['csv'], //["copy", "csv", "excel", "pdf", "print", "colvis"],
+				searching: true,
+				order: [0,'desc']
 
-			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			})
 
 		})
 

@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.JobPosition;
-import com.boozeandice.repository.JobPositionRepository;
+import com.boozeandice.local.entity.JobPosition;
+import com.boozeandice.local.repository.JobPositionRepository;
 
 @Service
 public class JobPositionService {

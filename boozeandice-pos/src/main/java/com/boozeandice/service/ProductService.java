@@ -2,6 +2,7 @@ package com.boozeandice.service;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,11 +11,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.Product;
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.repository.ProductRepository;
-import com.boozeandice.repository.TransactionItemRepository;
-import com.boozeandice.repository.TransactionRepository;
+import com.boozeandice.local.entity.Product;
+import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.local.entity.ProductStock;
+import com.boozeandice.local.repository.ProductRepository;
+import com.boozeandice.local.repository.ProductStockRepository;
+import com.boozeandice.local.repository.TransactionItemRepository;
+import com.boozeandice.local.repository.TransactionRepository;
 import com.bozeandice.vo.ProductBestSellerVO;
 
 @Service
@@ -28,11 +31,15 @@ public class ProductService implements Serializable {
 	private ProductRepository productRepo;
 	
 	@Autowired
+	private ProductStockRepository productStockRepo;
+	
+	@Autowired
 	private TransactionItemRepository transactionItemRepo;
 	
 	public Set<Product> getAll(){
 		return new HashSet<Product>(productRepo.findAll());
 	}
+	
 	
 	public Set<Product> getAllNonZeroStock(){
 		return productRepo.findByStocksNonZero();
@@ -53,7 +60,7 @@ public class ProductService implements Serializable {
 	public Set<Product> getProductByCategory(ProductCategory category){
 		return productRepo.findByProductCategory(category);
 	}
-	
+		
 	public Set<Product> getByProductCategoryAndProductStockGreaterThan(ProductCategory category){
 		return productRepo.findByProductCategoryAndStocksGreaterThan(category, Long.valueOf(0));
 	}

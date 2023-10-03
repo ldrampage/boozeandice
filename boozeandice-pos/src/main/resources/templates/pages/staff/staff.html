@@ -51,7 +51,7 @@
 								<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column"
 									th:each="staff : ${staffList}">
 									<div class="card bg-light d-flex flex-fill">
-										<div th:text="${staff.jobPosition}"
+										<div th:text="${staff.jobPosition != null ? staff.jobPosition.name : ''}"
 											class="card-header text-muted border-bottom-0">
 										</div>
 										<div class="card-body pt-0">
@@ -86,14 +86,14 @@
 												<a href="#" class="btn btn-sm bg-teal">
 													<i class="fas fa-comments"></i>
 												</a>
-												<a href="#" class="btn btn-sm btn-primary">
+												<a th:href="@{'/staff/profileview/?id='+${staff.id}}" class="btn btn-sm btn-primary">
 													<i class="fas fa-user"></i> View Profile
 												</a>
-												<form style="display: inline;" method="post"
+												<!--<form style="display: inline;" method="post"
 													th:action="@{/staff/editaccount}">
 													<button type="submit" class="btn btn-sm btn-warning">
 														<i class="fas fa-edit"></i> Edit Profile </button>
-												</form>
+												</form> -->
 												<form style="display: inline;" method="post"
 													th:action="@{/staff/removeaccount}">
 													<button type="submit" class="btn btn-sm btn-danger">

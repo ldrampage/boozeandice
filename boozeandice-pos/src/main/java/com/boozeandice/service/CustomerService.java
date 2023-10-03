@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.Customer;
-import com.boozeandice.repository.CustomerRepository;
+import com.boozeandice.local.entity.Customer;
+import com.boozeandice.local.repository.CustomerRepository;
 
 @Service
 public class CustomerService {

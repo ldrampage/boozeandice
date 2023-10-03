@@ -12,12 +12,31 @@ spring:
       max-file-size: 2MB
       max-request-size: 2MB
       enabled: true
+  pid:
+    fail-on-write-error: true
+    file: ./logs/boozeandicepos.pid
+  sql:
+    init:
+      mode: never
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 50
+      auto-commit: true
+      pool-name: BoozeandiceHikariPool
+      connection-test-query: select 1 from dual
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000 
 
 
 #application settings
 business_name: Booze and Ice
 senior_citizen_discount: 0.20 #20 PERCENT SENIOR CITIZEN DISCOUNT
 productSilogCategory: 'silog meals'
+available_tables: 6
 
 #img upload location
 upload:
@@ -31,8 +50,10 @@ upload:
 logging:
   level:
     root: INFO
-    org.hibernate: INFO
-    com.boozeandice: DEBUG
+    org:
+      hibernate: INFO
+    com:
+      boozeandice: DEBUG
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
     file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
@@ -51,15 +72,20 @@ spring:
     username: root
     password: lxbordo
     #driver-class-name: com.mysql.cj.jdbc.Driver
+  #cloud-datasource:
+  #  url: jdbc:mysql://boozeandice-test-rds.c7l9gtvaasvy.ap-southeast-1.rds.amazonaws.com:3306/boozeandice
+  #  username: admin
+  #  password: bait-micke
+    #driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: false
     properties:
       hibernate:
         generate-ddl: true
         dialect: org.hibernate.dialect.MySQLDialect
-        ddl-auto: create
+        ddl-auto: update
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   cache:
     type: simple
  

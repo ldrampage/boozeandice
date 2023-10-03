@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boozeandice.config.UserDetailsImpl;
-import com.boozeandice.entity.CashAdded;
-import com.boozeandice.entity.CashDrawer;
-import com.boozeandice.entity.Expense;
-import com.boozeandice.entity.Transaction;
-import com.boozeandice.entity.User;
 import com.boozeandice.enums.PaymentMethod;
+import com.boozeandice.local.entity.CashAdded;
+import com.boozeandice.local.entity.CashDrawer;
+import com.boozeandice.local.entity.Expense;
+import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.local.entity.User;
 import com.boozeandice.service.CashAddedService;
 import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.ExpenseService;

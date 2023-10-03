@@ -1,5 +1,9 @@
 package com.boozeandice.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,10 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boozeandice.entity.Transaction;
+import com.boozeandice.local.entity.Address;
+import com.boozeandice.local.entity.Shipment;
+import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.local.entity.User;
+import com.boozeandice.local.repository.AddressRepository;
+import com.boozeandice.local.repository.ShipmentRepository;
 import com.boozeandice.service.TransactionService;
+import com.boozeandice.service.UserService;
 
 @Controller
 @RequestMapping(path="/transaction")
@@ -28,6 +40,15 @@ public class TransactionController {
 	@Autowired
 	private TransactionService transactionService; 
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ShipmentRepository shipmentRepo;
+	
+	@Autowired
+	private AddressRepository addressRepo;
+	
 	@GetMapping(path="")
 	public String transaction(Model model) {
 		Set<Transaction> transactionList = transactionService.getAll();
@@ -41,8 +62,37 @@ public class TransactionController {
 	@GetMapping(path="/view/{id}")
 	public String transactionViewPage(Model model, @PathVariable("id") String id) {
 		Transaction transaction = transactionService.getById(Long.valueOf(id));
+		Set<User> userList = userService.getByJobPositionId(Long.valueOf(7));
 		model.addAttribute("transaction", transaction);
+		model.addAttribute("deliveryDriver",userList);
 		return pageController.transactionViewPage(model);
+	}
+	
+	@PostMapping(path="/view/{id}")
+	public String transactionViewShipmentEdit(Model model, @PathVariable("id") String id, @RequestParam Map<String, String> parameters) throws ParseException {
+		for(Map.Entry<String, String> map : parameters.entrySet()) {
+			logger.debug(map.getKey() + ": " + map.getValue());
+		}
+		Transaction transaction = transactionService.getById(Long.valueOf(id));
+		User user = userService.getById(Long.valueOf(parameters.get("deliveryDriver")));
+		Shipment shipment = transaction.getShipment();
+		Date date = null;
+		date = new SimpleDateFormat("MM/dd/yyyy").parse(parameters.get("deliverydate"));
+		Address destinationAddress = shipment.getDestinationAddress();
+		destinationAddress.setAdditionalAddressDetails(parameters.get("address"));
+		destinationAddress.setLandmark(parameters.get("landmark"));
+		destinationAddress = addressRepo.save(destinationAddress);
+		
+		shipment.setDestinationAddress(destinationAddress);
+		shipment.setEstimatedDeliveryDate(date);
+		shipment.setDeliveryDriver(user);
+		shipment.setShipmentStatus(parameters.get("shipmentStatus"));
+		shipmentRepo.save(shipment);
+		
+		transaction.setShipment(shipment);
+		transactionService.save(transaction);
+		return this.transactionViewPage(model,id);
+		
 	}
 
 }

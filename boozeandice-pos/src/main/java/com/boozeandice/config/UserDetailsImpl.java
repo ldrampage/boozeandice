@@ -13,8 +13,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.boozeandice.entity.Role;
-import com.boozeandice.entity.User;
+import com.boozeandice.local.entity.Role;
+import com.boozeandice.local.entity.User;
 
 public class UserDetailsImpl implements UserDetails {
 	
@@ -27,17 +27,19 @@ public class UserDetailsImpl implements UserDetails {
 	private String imgProfileName;
 	private String username;
 	private String password;
+	private String[] remoteAddressess;
 	
 	private List<GrantedAuthority> authorities;
 	
 	
-	public UserDetailsImpl(User user) {
+	public UserDetailsImpl(User user, String[] remoteAddressess) {
 		
 		this.fname = user.getFname();
 		this.lname = user.getLname();
 		this.username = user.getUsername();
 		this.imgProfileName = user.getImgLocation();
 		this.password = new BCryptPasswordEncoder().encode(user.getPassword());
+		this.remoteAddressess = remoteAddressess;
 		
 		List<Role> roleList = new ArrayList<>(user.getRoles());
 		
@@ -50,6 +52,7 @@ public class UserDetailsImpl implements UserDetails {
 		logger.debug("fname: " + this.fname);
 		logger.debug("lname: " + this.lname);
 		logger.debug("username: " + this.username);
+		logger.debug("remoteAddressess: " + this.remoteAddressess); 
 		for(GrantedAuthority auth : authorities) {
 			logger.debug("Auth: " + auth.getAuthority());
 		}
@@ -108,6 +111,18 @@ public class UserDetailsImpl implements UserDetails {
 	public String getImgProfileName() {
 		return imgProfileName;
 	}
+
+	public String[] getRemoteAddressess() {
+		return remoteAddressess;
+	}
+
+	public void setRemoteAddressess(String[] remoteAddressess) {
+		this.remoteAddressess = remoteAddressess;
+	}
+
+	
+	
+	
 	
 	
 	

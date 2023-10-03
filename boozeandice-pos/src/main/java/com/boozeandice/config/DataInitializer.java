@@ -14,18 +14,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.boozeandice.entity.JobPosition;
-import com.boozeandice.entity.Product;
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.entity.ProductStock;
-import com.boozeandice.entity.Role;
-import com.boozeandice.entity.User;
-import com.boozeandice.repository.JobPositionRepository;
-import com.boozeandice.repository.ProductCategoryRepository;
-import com.boozeandice.repository.ProductRepository;
-import com.boozeandice.repository.ProductStockRepository;
-import com.boozeandice.repository.RoleRepository;
-import com.boozeandice.repository.UserRepository;
+import com.boozeandice.local.entity.JobPosition;
+import com.boozeandice.local.entity.Product;
+import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.local.entity.ProductStock;
+import com.boozeandice.local.entity.Role;
+import com.boozeandice.local.entity.User;
+import com.boozeandice.local.repository.JobPositionRepository;
+import com.boozeandice.local.repository.ProductCategoryRepository;
+import com.boozeandice.local.repository.ProductRepository;
+import com.boozeandice.local.repository.ProductStockRepository;
+import com.boozeandice.local.repository.RoleRepository;
+import com.boozeandice.local.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 

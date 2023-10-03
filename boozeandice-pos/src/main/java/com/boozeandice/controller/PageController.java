@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import com.boozeandice.config.UserDetailsImpl;
-import com.boozeandice.entity.User;
+import com.boozeandice.local.entity.User;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Component
@@ -21,6 +22,9 @@ public class PageController {
 	
 	@Value("${business_name}")
 	private String business_name;
+	
+	@Autowired
+	private HttpServletRequest servletRequest;
 	
 	public String accessDeniedPage(Model model) {
 		addAttributes(model);
@@ -38,9 +42,14 @@ public class PageController {
 		
 	}
 	
-	public String checkoutPage(Model model) {
+	public String processDeliveryPage(Model model) {
 		addAttributes(model);
-		return "pages/checkout";
+		return "pages/processdelivery";
+	}
+	
+	public String processPaymentPage(Model model) {
+		addAttributes(model);
+		return "pages/processpayment";
 	}
 	
 	public String invoicePage(Model model) {
@@ -173,6 +182,11 @@ public class PageController {
 	 * 
 	 */
 	
+	public String profileViewPage(Model model) {
+		addAttributes(model);
+		return "pages/staff/profileview";
+	}
+	
 	public String staffPage(Model model) {
 		addAttributes(model);
 		return "pages/staff/staff";
@@ -204,11 +218,22 @@ public class PageController {
 		model.addAttribute("lname", user.getLname());
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("imgProfileName", user.getImgProfileName());
+		model.addAttribute("remoteAddressess", user.getRemoteAddressess());
+		
+		boolean validTerminal = false;
+		for(String remoteAddress : user.getRemoteAddressess()) {
+			if(remoteAddress.trim().equals(servletRequest.getRemoteHost()) || remoteAddress.trim().equals(servletRequest.getRemoteAddr())) {
+				validTerminal = true;
+				break;
+			}
+		}
+		
+		model.addAttribute("validTerminal", validTerminal);
 		
 		logger.debug("fname: " + model.getAttribute("fname"));
 		logger.debug("lname: " + model.getAttribute("lname"));
 		logger.debug("username: " + model.getAttribute("username"));
-
+		logger.debug("validTerminal: " + model.getAttribute("validTerminal"));
 		return model;
 	}
 

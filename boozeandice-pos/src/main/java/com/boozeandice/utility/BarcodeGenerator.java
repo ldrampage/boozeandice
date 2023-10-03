@@ -53,6 +53,7 @@ public class BarcodeGenerator {
 
 		barcodeFileName = generateUniqueFilename(barcodeFileName);
 		result.put("barcodeDigits", barcodeText);
+		result.put("barcodeDigitsv2", productId +"-"+batchStockId);
 		result.put("barcodeImgLocation", barcodeFileName);
 		saveImage(bufferedImage, barcodeFileName);
 

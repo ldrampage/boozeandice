@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.CashDrawer;
-import com.boozeandice.entity.Expense;
-import com.boozeandice.repository.ExpenseRepository;
+import com.boozeandice.local.entity.CashDrawer;
+import com.boozeandice.local.entity.Expense;
+import com.boozeandice.local.repository.ExpenseRepository;
 
 @Service
 public class ExpenseService implements Serializable{

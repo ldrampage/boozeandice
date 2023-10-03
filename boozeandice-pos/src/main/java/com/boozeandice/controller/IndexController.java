@@ -2,11 +2,17 @@ package com.boozeandice.controller;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,20 +30,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boozeandice.config.UserDetailsImpl;
-import com.boozeandice.entity.CashDrawer;
-import com.boozeandice.entity.Customer;
-import com.boozeandice.entity.Product;
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.entity.Transaction;
-import com.boozeandice.entity.TransactionItem;
-import com.boozeandice.entity.User;
 import com.boozeandice.enums.PaymentMethod;
+import com.boozeandice.enums.ShipmentCarrier;
+import com.boozeandice.enums.ShipmentStatus;
 import com.boozeandice.enums.TransactionStatus;
 import com.boozeandice.enums.TransactionType;
+import com.boozeandice.local.entity.Address;
+import com.boozeandice.local.entity.CashDrawer;
+import com.boozeandice.local.entity.Customer;
+import com.boozeandice.local.entity.Product;
+import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.local.entity.ProductStock;
+import com.boozeandice.local.entity.Shipment;
+import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.local.entity.TransactionItem;
+import com.boozeandice.local.entity.User;
+import com.boozeandice.local.repository.AddressRepository;
+import com.boozeandice.local.repository.ShipmentRepository;
 import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.CustomerService;
 import com.boozeandice.service.ProductService;
+import com.boozeandice.service.ProductStockService;
 import com.boozeandice.service.TransactionItemService;
 import com.boozeandice.service.TransactionService;
 import com.boozeandice.service.UserService;
@@ -46,7 +60,7 @@ import com.boozeandice.utility.Utilities;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR","ROLE_CASHIER"})
+@Secured({ "ROLE_ADMIN", "ROLE_SUPERVISOR", "ROLE_CASHIER" })
 public class IndexController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -66,6 +80,9 @@ public class IndexController implements Serializable {
 	private ProductService productService;
 
 	@Autowired
+	private ProductStockService productStockService;
+
+	@Autowired
 	private CategoryService productCatService;
 
 	@Autowired
@@ -76,6 +93,12 @@ public class IndexController implements Serializable {
 
 	@Autowired
 	private TransactionItemService transactionItemServ;
+
+	@Autowired
+	private AddressRepository addressRepository;
+
+	@Autowired
+	private ShipmentRepository shipmentRepository;
 
 	@Autowired
 	private CashDrawerService cashDrawerService;
@@ -91,18 +114,21 @@ public class IndexController implements Serializable {
 
 	@Value("${productSilogCategory}")
 	private String productSilogCategory;
-	
+
+	@Value("${available_tables}")
+	private Long available_table;
+
 	@Autowired
 	private HttpSession session;
-	
-	@GetMapping(path="/access_denied")
+
+	@GetMapping(path = "/access_denied")
 	public String accessDenied(Model model) {
 		return pageController.accessDeniedPage(model);
 	}
 
 	@GetMapping(path = "/")
 	public String index(Model model) {
-
+		logger.debug("Start index()");
 		Set<Product> productList = productService.getAllNonZeroStock();
 		CashDrawer cashDrawerToday = cashDrawerService.getByToday();
 		List<Set<Product>> productsDisplay = utility.organizeProductsDisplay(productList);
@@ -132,7 +158,8 @@ public class IndexController implements Serializable {
 		List<Customer> customerList = customerService.getAll();
 
 		logger.debug(parameters.get("purchased_quantity"));
-		if (parameters.get("purchase") != null && !"".equals(parameters.get("purchased_quantity")) && Integer.valueOf(parameters.get("purchased_quantity")) > 0
+		if (parameters.get("purchase") != null && !"".equals(parameters.get("purchased_quantity"))
+				&& Integer.valueOf(parameters.get("purchased_quantity")) > 0
 				&& utility.isNumeric(parameters.get("purchased_quantity"))) {
 
 			// products to display
@@ -188,10 +215,26 @@ public class IndexController implements Serializable {
 				this.categoryFilterId = "all";
 			}
 		}
-		
-		if(parameters.get("searchByProductName") != null) {
+
+		if (parameters.get("searchByProductName") != null) {
 			productList = productService.getByNameContainingAndStocksGreaterThan(parameters.get("searchByProductName"));
 			productsDisplay = utility.organizeProductsDisplay(productList);
+		}
+
+		if (parameters.get("barcodeprocess") != null) {
+			logger.debug("In barcodeprocess() -> value: " + parameters.get("barcodeprocess"));
+			// Products in the purchase list
+			ProductStock productStock = productStockService
+					.getByBarcodeDigits(Long.valueOf(parameters.get("barcodeprocess")));
+			Product product = productStock.getProduct();
+			if (product.getStocks() > 0) {
+				product.setQtyToPurchase(Long.valueOf(1));
+				product.setBarcodeDigits(parameters.get("barcodeprocess"));
+				productToPurchaseList.add(product);
+			} else {
+				logger.debug("Out of stock for " + product.getName());
+			}
+
 		}
 
 		if (parameters.get("quantityHandler") != null) {
@@ -206,6 +249,7 @@ public class IndexController implements Serializable {
 
 		}
 
+		// Edit purchase start
 		if (parameters.get("addMoreToPurchase") != null) {
 			Transaction transaction = transactionService.getById(Long.valueOf(parameters.get("transactionId")));
 			Set<TransactionItem> transactionItems = transactionItemServ.getByTransaction(transaction);
@@ -221,7 +265,20 @@ public class IndexController implements Serializable {
 
 			transactionItemServ.deleteAll(transactionItems);
 			transactionService.delete(transaction);
+			if (transaction.getShipment() != null) {
+				shipmentRepository.delete(transaction.getShipment());
+
+				Optional<Address> destinationAddress = addressRepository
+						.findById(transaction.getShipment().getDestinationAddress().getId());
+				if (destinationAddress.isPresent()) {
+					logger.debug("delete destination address");
+					addressRepository.delete(destinationAddress.get());
+				}
+
+			}
+
 		}
+		// Edit purchase end
 
 		model.addAttribute("customerList", customerList);
 		model.addAttribute("seniorCitizenDiscount", seniorCitizenDiscount);
@@ -229,14 +286,15 @@ public class IndexController implements Serializable {
 		model.addAttribute("productToPurchaseList", productToPurchaseList);
 		model.addAttribute("cashDrawerToday", cashDrawerToday);
 		model.addAttribute("productsDisplay", productsDisplay);
+
 		return pageController.index(model);
 	}
 
-	@PostMapping(path = "/checkout")
-	public String checkoutProcess(Model model, @RequestParam Map<String, String> parameters) {
-		logger.debug("Start checkoutProcess()");
-		if (parameters.get("checkoutCreateTransaction") != null) {
-			logger.debug("Entered checkoutCreateTransaction");
+	@PostMapping(path = "/processpayment")
+	public String processPayment(Model model, @RequestParam Map<String, String> parameters) {
+		logger.debug("Start processPayment()");
+		if (parameters.get("processPaymentCreateTransaction") != null) {
+			logger.debug("Entered processPaymentCreateTransaction");
 			String invoiceNumber = generateInvoiceNumber();
 			Double shipping = 0.0;
 			Double packaging = 0.0;
@@ -269,13 +327,17 @@ public class IndexController implements Serializable {
 				transaction.setTakeOut(true);
 			}
 
+			if (parameters.get("isDelivery") != null && parameters.get("isDelivery").equalsIgnoreCase("on")) {
+				transaction.setIsDelivery(true);
+			}
+
 			// apply discount
 			if (parameters.get("discount") != null && parameters.get("discount").length() > 0) {
 				logger.debug("Discount: " + parameters.get("discount"));
 				discount = subTotal * Double.valueOf(parameters.get("discount"));
 				subTotal = subTotal - discount;
 			}
-			
+
 			// consolidate the total and vat
 			total = (subTotal + shipping + packaging);
 
@@ -323,18 +385,28 @@ public class IndexController implements Serializable {
 				transactionItem.setQuantity(product.getQtyToPurchase());
 				transactionItem.setTransaction(transaction);
 				transactionItem.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+				if (product.getBarcodeDigits() != null)
+					transactionItem.setBarcodeDigits(product.getBarcodeDigits());
 				transactionItemList.add(transactionItem);
 				transactionItemServ.save(transactionItem);
 			}
 
 			transaction.setTransactionItem(transactionItemList);
 			model.addAttribute("transaction", transaction);
+
+			// Delivery Start
+			if (parameters.get("processdelivery") != null) {
+				return pageController.processDeliveryPage(model);
+			}
+			// Delivery End
+
 		}
 
 //		for (Map.Entry<String, String> map : parameters.entrySet()) {
 //			logger.debug(map.getKey() + ", " + map.getValue());
 //		}
 
+		// Pay later BTN start
 		if (parameters.get("pay_later_btn") != null) {
 			logger.debug("Entered pay_later_btn");
 			logger.debug(parameters.get("tableno"));
@@ -352,31 +424,83 @@ public class IndexController implements Serializable {
 			transactionService.save(transaction);
 			return "redirect:/transaction";
 		}
+		// Pay later BTN end
 
-		return pageController.checkoutPage(model);
-	}
+		// Save shipment address start
+		if (parameters.get("shipment_address") != null) {
+			logger.debug("Shipment address start -> transactionId: " + parameters.get("transactionId")
+					+ " deliverydate: " + parameters.get("deliverydate"));
+			if (parameters.get("transactionId") != null && parameters.get("shipmentId").isEmpty()) {
+				Transaction transaction = transactionService.getById(Long.valueOf(parameters.get("transactionId")));
+				Address address = new Address();
+				address.setAdditionalAddressDetails(parameters.get("address"));
+				address.setLandmark(parameters.get("landmark"));
 
-	@GetMapping(path = "/checkout/{transactionId}")
-	public String checkoutProcess(Model model, @PathVariable("transactionId") String transactionId) {
-		Transaction transaction = transactionService.getById(Long.valueOf(transactionId));
-		model.addAttribute("transaction", transaction);
-		return pageController.checkoutPage(model);
-	}
-	
-	@GetMapping(path="/invoiceprint/")
-	public String invoicePrintPage(Model model, @RequestParam(name="id", required=true) String transactionId) {
+				address = addressRepository.save(address);
+
+				Shipment shipment = new Shipment();
+
+				Date deliveryDate = null;
+				try {
+					deliveryDate = new SimpleDateFormat("MM/dd/yyyy").parse(parameters.get("deliverydate").trim());
+					shipment.setEstimatedDeliveryDate(deliveryDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				shipment.setCarrier(ShipmentCarrier.OWN.getDescription());
+				shipment.setDestinationAddress(address);
+				shipment.setShipmentStatus(ShipmentStatus.PENDING.getDescription());
+				shipment = shipmentRepository.save(shipment);
+				transaction.setShipment(shipment);
+				transaction = transactionService.save(transaction);
+
+				model.addAttribute("transaction", transaction);
+
+			}
+
+			if (parameters.get("transactionId") != null && !parameters.get("shipmentId").isEmpty()) {
+			}
+
+		}
+		// Save shipment address end
 		
+		List<String> tableNoList = new ArrayList<>();
+		for (int x = 1; x <= available_table; x++) {
+			tableNoList.add(x + "");
+		}
+		model.addAttribute("tableNoList", tableNoList);
+		
+		return pageController.processPaymentPage(model);
+	}
+
+	@GetMapping(path = "/processpayment/{transactionId}")
+	public String processPayment(Model model, @PathVariable("transactionId") String transactionId) {
+		Transaction transaction = transactionService.getById(Long.valueOf(transactionId));
+		List<String> tableNoList = new ArrayList<>();
+		for (int x = 1; x <= available_table; x++) {
+			tableNoList.add(x + "");
+		}
+
+		model.addAttribute("tableNoList", tableNoList);
+		model.addAttribute("transaction", transaction);
+		return pageController.processPaymentPage(model);
+	}
+
+	@GetMapping(path = "/invoiceprint/")
+	public String invoicePrintPage(Model model, @RequestParam(name = "id", required = true) String transactionId) {
+
 		Transaction transaction = transactionService.getById(Long.valueOf(transactionId));
 		transaction.setVatableSales(Double.valueOf(String.format("%.2f", transaction.getVatableSales())));
 		transaction.setVatAmount(Double.valueOf(String.format("%.2f", transaction.getVatAmount())));
 		long totalItemsSold = 0;
-		for(TransactionItem tranItem : transaction.getTransactionItem()) {
+		for (TransactionItem tranItem : transaction.getTransactionItem()) {
 			totalItemsSold = totalItemsSold + tranItem.getQuantity();
 		}
-		
-		model.addAttribute("totalItemsSold",totalItemsSold);
+
+		model.addAttribute("totalItemsSold", totalItemsSold);
 		model.addAttribute("transaction", transaction);
-		
+
 		return pageController.invoicePrintPage(model);
 	}
 
@@ -439,11 +563,42 @@ public class IndexController implements Serializable {
 					transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
 				}
 			}
-			
+
 			transaction = this.processFinalInvoiceSteps(transaction, parameters);
 
 			// Set the UI Display
 			model.addAttribute("transaction", transaction);
+		}
+
+		if (parameters.get("paymaya_payment") != null
+				&& transaction.getTransactionStatus().equalsIgnoreCase(TransactionStatus.PENDING.getDescription())) {
+			transaction.setTransactionStatus(TransactionStatus.PAID.getDescription());
+			transaction.setPaymentMethod(PaymentMethod.PAYMAYA.getDescription());
+			transaction.setCashReceived(Double.valueOf(parameters.get("cash_received")));
+			transaction.setTransactionType(TransactionType.SALE.getDescription());
+			transaction.setPaymentReference(parameters.get("reference_number"));
+			transaction.setCardBrand(parameters.get("cardBrand"));
+
+			// set the buyer info
+			if (parameters.get("soldTo") != null && parameters.get("soldTo").trim().length() > 0) {
+				transaction.setSoldTo(parameters.get("soldTo"));
+			} else {
+				transaction.setSoldTo("null");
+			}
+
+			if (parameters.get("registeredCustomer") != null) {
+				if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
+					Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
+					transaction.setCustomer(customer);
+					transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
+				}
+			}
+
+			transaction = this.processFinalInvoiceSteps(transaction, parameters);
+
+			// Set the UI Display
+			model.addAttribute("transaction", transaction);
+
 		}
 
 		return pageController.invoicePage(model);
@@ -462,6 +617,7 @@ public class IndexController implements Serializable {
 			for (TransactionItem transactionItem : transaction.getTransactionItem()) {
 				Product product = transactionItem.getProduct();
 				Long quantity = transactionItem.getQuantity();
+
 				Long newQuantity = product.getStocks() - quantity;
 				product.setStocks(newQuantity);
 				productService.save(product);
@@ -487,11 +643,11 @@ public class IndexController implements Serializable {
 		transaction = transactionService.save(transaction);
 
 		// Generate Order Slip and Open the Cash Drawer
-		//String orderSlipMessage = utility.composeOrderSlip(transaction);
-		//utility.openCashDrawer();
-		//utility.printOrderSlip(orderSlipMessage);
+		// String orderSlipMessage = utility.composeOrderSlip(transaction);
+		// utility.openCashDrawer();
+		// utility.printOrderSlip(orderSlipMessage);
 		logger.debug("End processFinalInvoiceSteps()");
-		
+
 		return transaction;
 	}
 

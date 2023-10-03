@@ -64,11 +64,13 @@
 										<td th:text="${#dates.format(productStock.purchaseDate, 'dd-MMM-yyy')}" > </td>
 										<td th:text="${#dates.format(productStock.createdDate, 'dd-MMM-yyy') + ' - ' + #dates.format(productStock.createdDate, 'hh:mm a')}"></td>
 										<td th:text="${productStock.barcodeDigits}"></td>
-										<td style="text-align: center;"><img th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"/></td>
+										<td style="text-align: center;">
+											<img th:if="${productStock.barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"/>
+										</td>
 										<td>
 											 <a th:href="${'/product/stocks/edit/' + productStock.id}"
 												class="btn bg-gradient-primary btn-xs">Edit</a>
-											<button class="btn bg-gradient-danger btn-xs">Delete</button>
+											<!--<button class="btn bg-gradient-danger btn-xs">Delete</button> -->
 										</td>
 									</tr>
 								</tbody>
@@ -109,9 +111,9 @@
 				"responsive": true, "lengthChange": false, "autoWidth": false,
 				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
 				"searching": true,
+				"order": [3,"desc"]
 
-			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
+			})
 		});
 	</script>
 </body>

@@ -2,6 +2,7 @@ package com.boozeandice.service;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.entity.User;
-import com.boozeandice.repository.UserRepository;
+import com.boozeandice.local.entity.User;
+import com.boozeandice.local.repository.UserRepository;
 
 @Service
 public class UserService implements Serializable {
@@ -31,6 +32,22 @@ public class UserService implements Serializable {
 			throw new UsernameNotFoundException(username);
 		}
 		
+	}
+	
+	public User getById(Long id) {
+		Optional<User> userOpt = userRepo.findById(id);
+		if(userOpt.isPresent()) {
+			return userOpt.get();
+		}
+		return null;
+	}
+	
+	public Set<User> getByJobPositionId(Long id){
+		logger.debug("In getByJobPositionName() -> id: " + id);
+		Set<User> userList = userRepo.findByJobPositionId(id);
+		logger.debug("userList size: " + userList.size());
+		return userList;
+
 	}
 	
 	public User save(User user) {

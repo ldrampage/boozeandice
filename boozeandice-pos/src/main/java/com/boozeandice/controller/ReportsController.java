@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.entity.Transaction;
-import com.boozeandice.entity.TransactionItem;
 import com.boozeandice.enums.CardBrand;
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.TransactionStatus;
-import com.boozeandice.repository.DailySalesReportRepository;
+import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.local.entity.TransactionItem;
+import com.boozeandice.local.repository.DailySalesReportRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.TransactionService;
 import com.bozeandice.vo.DailySalesReportVO;

@@ -110,11 +110,11 @@
 														disabled />
 												</div>
 											</div>
-											<div class="col-md-4">
+											<div  class="col-md-4">
 												<div class="form-group">
 													<label class="form-label" for="barcodedigits">Barcode Image</label>
 												</div>
-												<img id="image" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"
+												<img id="image" th:if="${productStock.barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"
 														alt="Existing Image" style="max-width:300px" />
 											</div>
 										</div>

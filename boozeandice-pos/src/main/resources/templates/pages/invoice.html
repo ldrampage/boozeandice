@@ -111,9 +111,10 @@
 														<strong>Packaging</strong>
 													</td>
 													<td class="right">
+														<span th:if="${transaction.packaging > 0}" th:text="${transaction.packaging + ' '}"></span>
 														<span th:if="${transaction.packaging > 0}"
 															class="badge badge-warning"
-															th:text="${transaction.packaging + '        .....Take out....'}"></span>
+															th:text="${'Take out'}"></span>
 														<span th:unless="${transaction.packaging > 0}">Php 0.0</span>
 													</td>
 												</tr>
@@ -182,11 +183,13 @@
 								<div class="row no-print">
 									<div class="col-12">
 										<a th:href="${'/invoiceprint/?id=' + transaction.id } " rel="noopener"
-											target="_blank" class="btn btn-default"><i class="fas fa-print"></i>
+											target="_blank" class="btn btn-warning"><i class="fas fa-print"></i>
 											Print</a>
 
-										<a th:href="${'/'} " rel="noopener" class="btn btn-primary float-right"><i class="fas fa-terminal"></i>
+										<a th:href="${'/'} " rel="noopener" style="margin-left: 5px; margin-right: 5px;" class="btn btn-primary float-right"><i class="fas fa-terminal"></i>
 											Back to POS</a>
+										<a th:href="${'/transaction'} " rel="noopener" class="btn btn-primary float-right"><i class="fas fa-exchange-alt"></i>
+											Go to Transactions</a>
 										<!--
 										<button type="button" class="btn btn-success float-right"><i
 												class="far fa-credit-card"></i> Submit

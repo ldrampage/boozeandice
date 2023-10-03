@@ -192,12 +192,11 @@
 											<div class="main-title2 ">
 												<div class="row">
 													<div class="col-md-6">
-														<h6 class="card-subtitle mb-2">By Category</h6>
 														<form id="category_form" method="post" th:action="@{/}">
 															<div class="input-group">
 																<input type="hidden" name="fetchByCategory" />
 																<select onchange="submitCategory()"
-																	class="form-control select2bs4" name="categoryId">
+																	class="form-control select2bs4" name="categoryId" placeholder="Category">
 																	<option value="all">All...</option>
 																	<option th:each="category : ${productCategoryList}"
 																		th:value="${category.id}"
@@ -209,10 +208,23 @@
 														</form>
 													</div>
 													<div class="col-md-6">
-														<h6 class="card-subtitle mb-2">Search</h6>
 														<form id="search_product_form" method="post" th:action="@{/}">
 															<div class="input-group">
-																<input type="text" id="search_input" name="searchByProductName" class="form-control" placeholder="Product name"/>
+																<input type="text" id="search_input"
+																	name="searchByProductName" class="form-control"
+																	placeholder="Search by product name" />
+															</div>
+														</form>
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col-md-12">
+														<form id="barcodeprocess_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="text" id="barcode_input"
+																	name="barcodeprocess" class="form-control"
+																	placeholder="Barcode" />
 															</div>
 														</form>
 													</div>
@@ -266,7 +278,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-lg-6">
 									<div class="card">
 										<div class="card-body">
 											<div class="row">
@@ -318,7 +330,8 @@
 
 													<form
 														th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
-														id="checkoutForm" method="post" th:action="@{/checkout}">
+														id="processPaymentForm" method="post"
+														th:action="@{/processpayment}">
 														<div class="card">
 															<div class="card-body">
 																<div class="row">
@@ -331,6 +344,15 @@
 																				style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
 																				class="form-check-label"
 																				for="takeout">Take away</label>
+																		</div>
+																		<div class="form-check">
+																			<input style="width: 2em; height:2em;"
+																				type="checkbox" class="form-check-input"
+																				id="isDelivery" name="isDelivery">
+																			<label
+																				style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
+																				class="form-check-label"
+																				for="isDelivery">For Delivery</label>
 																		</div>
 																		<div class="form-group">
 																			<label for="discount">Discount</label>
@@ -347,7 +369,7 @@
 																		<div class="form-group">
 																			<label for="customer">Customer</label>
 																			<input type="hidden"
-																				name="checkoutCreateTransaction" />
+																				name="processPaymentCreateTransaction" />
 																			<select class="form-control select2bs4"
 																				id="customer" name="customerId">
 																				<option value=""
@@ -371,10 +393,10 @@
 																								class="far fa-times-circle font_s_18"></i>
 																							Cancel</a></td>
 																					<td style="text-align: center;">
-																						<button id="checkoutButton"
-																							class="btn btn-block bg-gradient-success btn-lg"><i
+																						<button id="processpayment"
+																							class="btn btn-block bg-gradient-primary btn-lg"><i
 																								class="fas fa-shopping-bag font_s_18"></i>
-																							Checkout</button>
+																							Process Payment</button>
 																					</td>
 																				</tr>
 																			</tbody>
@@ -551,7 +573,7 @@
 											data-dismiss="modal">Close</button>
 									</div>
 								</div>
-								
+
 
 							</div>
 						</div>
@@ -584,13 +606,13 @@
 
 		$(document).ready(function () {
 
-			$(document).on("click", "#checkoutButton", function () {
-				var checkoutForm = $("#checkoutForm");
+			$(document).on("click", "#processpayment", function () {
+				var processPaymentForm = $("#processPaymentForm");
 				var inputFields = $("._product");
 				inputFields.each(function (index, element) {
 					//console.dir(element.value);
 					//console.dir(element.name);
-					checkoutForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
+					processPaymentForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
 				})
 
 				//var formFields = checkoutForm.find("input, select, textarea");
@@ -600,7 +622,27 @@
 				//});
 
 				//
-				checkoutForm.submit();
+				processPaymentForm.submit();
+
+			})
+
+			$(document).on("click", "#processdelivery", function () {
+				var processPaymentForm = $("#processPaymentForm");
+				var inputFields = $("._product");
+				inputFields.each(function (index, element) {
+					//console.dir(element.value);
+					//console.dir(element.name);
+					processPaymentForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
+				})
+				processPaymentForm.append('<input type="hidden" name="processdelivery"/>')
+				//var formFields = checkoutForm.find("input, select, textarea");
+
+				//formFields.each(function (index, element) {
+				//	console.dir(element);
+				//});
+
+				//
+				processPaymentForm.submit();
 
 			})
 		})
@@ -671,15 +713,24 @@
 			//console.dir(inputElement.value);
 			$("#" + inputElement.value).submit();
 		}
+
+		$(document).ready(function () {
+			$("#search_input").on("keydown", function (event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					$("#search_product_form").submit();
+				}
+			});
+		});
 		
-		$(document).ready(function() {
-            $("#search_input").on("keydown", function(event) {
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    $("#search_product_form").submit();
-                }
-            });
-        });
+		$(document).ready(function () {
+			$("#barcode_input").on("keydown", function (event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					$("#barcodeprocess_form").submit();
+				}
+			});
+		});
 
 	</script>
 </body>
