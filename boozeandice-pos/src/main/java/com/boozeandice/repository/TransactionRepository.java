@@ -6,8 +6,8 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.boozeandice.local.entity.CashDrawer;
-import com.boozeandice.local.entity.Transaction;
+import com.boozeandice.entity.CashDrawer;
+import com.boozeandice.entity.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {

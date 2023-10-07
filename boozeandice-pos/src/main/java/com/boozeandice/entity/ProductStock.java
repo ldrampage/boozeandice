@@ -1,4 +1,4 @@
-package com.boozeandice.local.entity;
+package com.boozeandice.entity;
 
 import java.io.Serializable;
 import java.util.Date;

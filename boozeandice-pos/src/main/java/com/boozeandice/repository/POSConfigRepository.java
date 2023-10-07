@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.boozeandice.local.entity.POSConfig;
+import com.boozeandice.entity.POSConfig;
 
 @Repository
 public interface POSConfigRepository extends JpaRepository<POSConfig, Long>{

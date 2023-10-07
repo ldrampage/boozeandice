@@ -1,5 +1,6 @@
-package com.boozeandice.local.entity;
+package com.boozeandice.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -12,25 +13,24 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cash_added")
-public class CashAdded {
+@Table(name="time_record")
+public class TimeRecord implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
 	
-	@Column(name="cash")
-	private Double cash;
+	@Column(name="time_in")
+	private Date timeIn;
+	
+	@Column(name="time_out")
+	private Date timeOut;
 	
 	@ManyToOne
-	@JoinColumn(name="cash_drawer_id")
-	private CashDrawer cashdrawer;
-	
-	@Column(name="created_date")
-	private Date createdDate;
-	
-	@ManyToOne
-	@JoinColumn(name="created_by")
+	@JoinColumn(name="staff_id")
 	private User user;
 
 	public Long getId() {
@@ -41,28 +41,20 @@ public class CashAdded {
 		this.id = id;
 	}
 
-	public Double getCash() {
-		return cash;
+	public Date getTimeIn() {
+		return timeIn;
 	}
 
-	public void setCash(Double cash) {
-		this.cash = cash;
+	public void setTimeIn(Date timeIn) {
+		this.timeIn = timeIn;
 	}
 
-	public CashDrawer getCashdrawer() {
-		return cashdrawer;
+	public Date getTimeOut() {
+		return timeOut;
 	}
 
-	public void setCashdrawer(CashDrawer cashdrawer) {
-		this.cashdrawer = cashdrawer;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	public void setTimeOut(Date timeOut) {
+		this.timeOut = timeOut;
 	}
 
 	public User getUser() {
@@ -74,4 +66,5 @@ public class CashAdded {
 	}
 	
 	
+
 }

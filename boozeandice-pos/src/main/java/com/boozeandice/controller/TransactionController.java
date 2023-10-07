@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boozeandice.local.entity.Address;
-import com.boozeandice.local.entity.Shipment;
-import com.boozeandice.local.entity.Transaction;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.Address;
+import com.boozeandice.entity.Shipment;
+import com.boozeandice.entity.Transaction;
+import com.boozeandice.entity.User;
 import com.boozeandice.repository.AddressRepository;
 import com.boozeandice.repository.ShipmentRepository;
 import com.boozeandice.service.TransactionService;

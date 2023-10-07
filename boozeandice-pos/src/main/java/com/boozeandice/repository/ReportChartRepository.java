@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,9 @@ public class ReportChartRepository {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Value("${schema_name}")
+	private String schema;
 	
 	public List<DailySalesReportVO> getAllDailySalesReportVO(){
 		RowMapper<DailySalesReportVO> rowMapper = (rs, rowNum) -> {
@@ -47,7 +51,7 @@ public class ReportChartRepository {
 				+ "SUM(DISTINCT trans.vat_amount) as vat_amount, "
 				+ "count(DISTINCT trans.id) as no_of_transactions, "
 				+ "SUM(transItem.quantity) as no_of_items "
-				+ "from boozeandice.transaction trans join boozeandice.transaction_item transItem ON trans.id = transItem.transaction_id "
+				+ "from "+ schema +".transaction trans join "+schema+".transaction_item transItem ON trans.id = transItem.transaction_id "
 				+ "group by date(trans.transaction_date_time) "
 				+ "order by date(trans.transaction_date_time);", rowMapper);
 	}
@@ -68,8 +72,8 @@ public class ReportChartRepository {
 				+ "SUM(transaction.total) as revenue, "
 				+ "SUM(transItem.produc_cost * transItem.quantity) as cost, "
 				+ "SUM(transaction.total) - SUM(transItem.produc_cost * transItem.quantity) as profit "
-				+ "from boozeandice.transaction transaction "
-				+ "join boozeandice.transaction_item transItem "
+				+ "from "+schema+".transaction transaction "
+				+ "join "+schema+".transaction_item transItem "
 				+ "on transaction.id  = transItem.transaction_id "
 				+ "where "
 				+ "extract(year from transaction.transaction_date_time) = " + year + " "

@@ -35,6 +35,10 @@ public class ChartController {
 		
 		List<MonthlyRecapChartVO> monthlyRecapChartVoList = reportChartRepo.getMonthlyRecapChartByYear("2023");
 		
+		Double totalRevenue = 0.0;
+		Double totalCost = 0.0;
+		Double totalProfit = 0.0;
+		
 		for(MonthlyRecapChartVO mrcVO : monthlyRecapChartVoList) {
 			if(mrcVO.getMonth() == 1) 
 				model.addAttribute("monthlyRecapJanuary", mrcVO);
@@ -60,6 +64,14 @@ public class ChartController {
 				model.addAttribute("monthlyRecapNovember", mrcVO);
 			else if (mrcVO.getMonth() == 12)
 				model.addAttribute("monthlyRecapDecember", mrcVO);
+			
+			totalRevenue = totalRevenue + Double.valueOf(mrcVO.getRevenue());
+			totalCost = totalCost + Double.valueOf(mrcVO.getCost());
+			totalProfit = totalProfit + Double.valueOf(mrcVO.getProfit());
+			
+			model.addAttribute("totalRevenue", String.format("%.2f", totalRevenue));
+			model.addAttribute("totalCost", String.format("%.2f", totalCost));
+			model.addAttribute("totalProfit", String.format("%.2f", totalProfit) );
 			
 			logger.debug("month: " + mrcVO.getMonth());
 			logger.debug("revenue: " + mrcVO.getRevenue());

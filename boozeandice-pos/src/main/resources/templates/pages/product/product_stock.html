@@ -68,8 +68,9 @@
 											<img th:if="${productStock.barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"/>
 										</td>
 										<td>
-											 <a th:href="${'/product/stocks/edit/' + productStock.id}"
+											<a th:href="${'/product/stocks/edit/' + productStock.id}" 
 												class="btn bg-gradient-primary btn-xs">Edit</a>
+											 <a target="_blank" th:if="${productStock.barcodeDigits != null}" class="btn bg-gradient-warning btn-xs" th:href="${'/product/stocks/printbarcode/' + productStock.id}">Print barcode</a>
 											<!--<button class="btn bg-gradient-danger btn-xs">Delete</button> -->
 										</td>
 									</tr>

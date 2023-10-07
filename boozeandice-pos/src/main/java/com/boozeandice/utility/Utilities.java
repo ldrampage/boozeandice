@@ -21,9 +21,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.boozeandice.local.entity.Product;
-import com.boozeandice.local.entity.Transaction;
-import com.boozeandice.local.entity.TransactionItem;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.Transaction;
+import com.boozeandice.entity.TransactionItem;
 
 @Component
 public class Utilities {

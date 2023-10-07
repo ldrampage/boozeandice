@@ -1,4 +1,4 @@
-package com.boozeandice.local.entity;
+package com.boozeandice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

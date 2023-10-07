@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.boozeandice.local.entity.POSConfig;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.POSConfig;
+import com.boozeandice.entity.User;
 import com.boozeandice.repository.POSConfigRepository;
 import com.boozeandice.service.UserService;
 

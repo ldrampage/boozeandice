@@ -3,7 +3,7 @@ package com.boozeandice.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.boozeandice.local.entity.UserActivityLog;
+import com.boozeandice.entity.UserActivityLog;
 
 @Repository
 public interface UserActivityLogRepository extends JpaRepository<UserActivityLog, Long> {

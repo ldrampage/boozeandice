@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.local.entity.CashDrawer;
+import com.boozeandice.entity.CashDrawer;
 import com.boozeandice.repository.CashDrawerRepository;
 
 @Service

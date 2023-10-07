@@ -13,8 +13,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.boozeandice.local.entity.Role;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.Role;
+import com.boozeandice.entity.User;
 
 public class UserDetailsImpl implements UserDetails {
 	

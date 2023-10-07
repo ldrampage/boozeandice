@@ -5,10 +5,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,21 +27,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boozeandice.config.UserDetailsImpl;
+import com.boozeandice.entity.Address;
+import com.boozeandice.entity.CashDrawer;
+import com.boozeandice.entity.Customer;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
+import com.boozeandice.entity.ProductStock;
+import com.boozeandice.entity.Shipment;
+import com.boozeandice.entity.Transaction;
+import com.boozeandice.entity.TransactionItem;
+import com.boozeandice.entity.User;
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.ShipmentCarrier;
 import com.boozeandice.enums.ShipmentStatus;
 import com.boozeandice.enums.TransactionStatus;
 import com.boozeandice.enums.TransactionType;
-import com.boozeandice.local.entity.Address;
-import com.boozeandice.local.entity.CashDrawer;
-import com.boozeandice.local.entity.Customer;
-import com.boozeandice.local.entity.Product;
-import com.boozeandice.local.entity.ProductCategory;
-import com.boozeandice.local.entity.ProductStock;
-import com.boozeandice.local.entity.Shipment;
-import com.boozeandice.local.entity.Transaction;
-import com.boozeandice.local.entity.TransactionItem;
-import com.boozeandice.local.entity.User;
 import com.boozeandice.repository.AddressRepository;
 import com.boozeandice.repository.ShipmentRepository;
 import com.boozeandice.service.CashDrawerService;
@@ -56,8 +53,6 @@ import com.boozeandice.service.TransactionItemService;
 import com.boozeandice.service.TransactionService;
 import com.boozeandice.service.UserService;
 import com.boozeandice.utility.Utilities;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @Secured({ "ROLE_ADMIN", "ROLE_SUPERVISOR", "ROLE_CASHIER" })
@@ -112,14 +107,14 @@ public class IndexController implements Serializable {
 	@Value("${senior_citizen_discount}")
 	private Double seniorCitizenDiscount;
 
-	@Value("${productSilogCategory}")
-	private String productSilogCategory;
-
 	@Value("${available_tables}")
 	private Long available_table;
-
-	@Autowired
-	private HttpSession session;
+	
+	@Value("${business_name}")
+	private String businessName;
+	
+	@Value("${business_address}")
+	private String businessAddress;
 
 	@GetMapping(path = "/access_denied")
 	public String accessDenied(Model model) {
@@ -412,7 +407,7 @@ public class IndexController implements Serializable {
 			logger.debug(parameters.get("tableno"));
 			Transaction transaction = transactionService.getById(Long.valueOf(parameters.get("transactionId")));
 			if (parameters.get("soldTo") != null && !parameters.get("soldTo").isEmpty())
-				transaction.setSoldTo(parameters.get("soldTo"));
+				transaction.setSoldTo(parameters.get("soldTo").toLowerCase());
 
 			if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
 				Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
@@ -523,6 +518,8 @@ public class IndexController implements Serializable {
 			totalItemsSold = totalItemsSold + tranItem.getQuantity();
 		}
 
+		model.addAttribute("business_name", businessName);
+		model.addAttribute("business_address", businessAddress);
 		model.addAttribute("totalItemsSold", totalItemsSold);
 		model.addAttribute("transaction", transaction);
 
@@ -545,7 +542,7 @@ public class IndexController implements Serializable {
 
 			// set the buyer info
 			if (parameters.get("soldTo") != null && parameters.get("soldTo").trim().length() > 0) {
-				transaction.setSoldTo(parameters.get("soldTo"));
+				transaction.setSoldTo(parameters.get("soldTo").toLowerCase());
 			} else {
 				transaction.setSoldTo("null");
 			}
@@ -576,7 +573,7 @@ public class IndexController implements Serializable {
 
 			// set the buyer info
 			if (parameters.get("soldTo") != null && parameters.get("soldTo").trim().length() > 0) {
-				transaction.setSoldTo(parameters.get("soldTo"));
+				transaction.setSoldTo(parameters.get("soldTo").toLowerCase());
 			} else {
 				transaction.setSoldTo("null");
 			}
@@ -606,7 +603,7 @@ public class IndexController implements Serializable {
 
 			// set the buyer info
 			if (parameters.get("soldTo") != null && parameters.get("soldTo").trim().length() > 0) {
-				transaction.setSoldTo(parameters.get("soldTo"));
+				transaction.setSoldTo(parameters.get("soldTo").toLowerCase());
 			} else {
 				transaction.setSoldTo("null");
 			}

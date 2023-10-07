@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import com.boozeandice.config.UserDetailsImpl;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.User;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -38,7 +38,7 @@ public class PageController {
 	
 	public String invoicePrintPage(Model model) {
 		addAttributes(model);
-		return "pages/invoice-print";
+		return "pages/order-slip-print";
 		
 	}
 	
@@ -138,6 +138,11 @@ public class PageController {
 	public String productStocksEdit(Model model) {
 		addAttributes(model);
 		return "pages/product/product_stock_edit";
+	}
+	
+	public String productStockPrintBarcodePage(Model model) {
+		addAttributes(model);
+		return "pages/product/product_barcode_print.html";
 	}
 	
 	public String productView(Model model) {

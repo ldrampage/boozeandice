@@ -11,9 +11,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.local.entity.Product;
-import com.boozeandice.local.entity.ProductCategory;
-import com.boozeandice.local.entity.ProductStock;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
+import com.boozeandice.entity.ProductStock;
 import com.boozeandice.repository.ProductRepository;
 import com.boozeandice.repository.ProductStockRepository;
 import com.boozeandice.repository.TransactionItemRepository;

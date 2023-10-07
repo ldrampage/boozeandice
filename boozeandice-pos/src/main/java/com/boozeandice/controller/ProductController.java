@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.boozeandice.local.entity.Product;
-import com.boozeandice.local.entity.ProductCategory;
-import com.boozeandice.local.entity.ProductStock;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
+import com.boozeandice.entity.ProductStock;
+import com.boozeandice.entity.User;
 import com.boozeandice.repository.ProductBestSellerRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
@@ -213,6 +213,15 @@ public class ProductController {
 		model.addAttribute("productStock", productStock);
 		model.addAttribute("product", productStock.getProduct());
 		return pageController.productStocksEdit(model);
+	}
+	
+	@GetMapping(path="/stocks/printbarcode/{id}")
+	public String productStockPrintBarcode(Model model, @PathVariable(value="id", required=false) String productStockId) {
+		logger.debug("In productStockPrintBarcode() -> productStockId=" + productStockId);
+		ProductStock productStock = productStockService.getById(Long.valueOf(productStockId));
+		model.addAttribute("productName", productStock.getProduct().getName());
+		model.addAttribute("barcodeImageLocation", productStock.getBarcodeImageLocation());
+		return pageController.productStockPrintBarcodePage(model);
 	}
 	
 	/**

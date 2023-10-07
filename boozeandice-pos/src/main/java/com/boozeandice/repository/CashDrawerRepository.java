@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.boozeandice.local.entity.CashDrawer;
+import com.boozeandice.entity.CashDrawer;
 
 @Repository
 public interface CashDrawerRepository extends JpaRepository<CashDrawer, Long> {

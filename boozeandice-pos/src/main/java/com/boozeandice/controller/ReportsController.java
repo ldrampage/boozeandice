@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.boozeandice.entity.ProductCategory;
+import com.boozeandice.entity.Transaction;
+import com.boozeandice.entity.TransactionItem;
 import com.boozeandice.enums.CardBrand;
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.TransactionStatus;
-import com.boozeandice.local.entity.ProductCategory;
-import com.boozeandice.local.entity.Transaction;
-import com.boozeandice.local.entity.TransactionItem;
 import com.boozeandice.repository.ReportChartRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.TransactionService;
@@ -54,17 +54,11 @@ public class ReportsController {
 	public String reportsPage(Model model, @RequestParam(name="zdate", required=false) String zdate) throws Exception {
 		logger.debug("Start reportsPage() -> zdate: " + zdate);
 		
-		//Report Tab Start
-		
+		//Sales Report Tab Start
 		// Daily Sales Report
 		List<DailySalesReportVO> dailySalesReportList = reportChartRepo.getAllDailySalesReportVO();
-		
-		
 		model.addAttribute("dailySalesReportList",dailySalesReportList);
-		
-		
-		//Report Tab End
-		
+		//Sales Report Tab End
 		
 		//Z Report Start
 		Set<Transaction> transactionList = null;
@@ -74,6 +68,7 @@ public class ReportsController {
 			transactionList = transactionService.getByTransactionDate(zdateformat);
 			transactionListPaid = this.filterPaidTransaction(transactionList);
 			model.addAttribute("zdate", zdate);
+			model.addAttribute("lastaction","zreporttab");
 		} else {
 			transactionList = transactionService.getByToday();
 			transactionListPaid = this.filterPaidTransaction(transactionList);

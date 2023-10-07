@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.boozeandice.local.entity.Product;
-import com.boozeandice.local.entity.ProductCategory;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {

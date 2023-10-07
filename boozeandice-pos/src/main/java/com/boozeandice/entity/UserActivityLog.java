@@ -1,4 +1,4 @@
-package com.boozeandice.local.entity;
+package com.boozeandice.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,56 +13,48 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="time_record")
-public class TimeRecord implements Serializable {
-
+@Table(name="user_activity_log")
+public class UserActivityLog implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false, unique = true)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id", nullable = false, unique=true)
 	private Long id;
 	
-	@Column(name="time_in")
-	private Date timeIn;
-	
-	@Column(name="time_out")
-	private Date timeOut;
+	@Column(name="created_date")
+	private Date createdDate;
 	
 	@ManyToOne
-	@JoinColumn(name="staff_id")
+	@JoinColumn(name="user_id")
 	private User user;
-
+	
+	private String actionMade;
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Date getTimeIn() {
-		return timeIn;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
-
-	public void setTimeIn(Date timeIn) {
-		this.timeIn = timeIn;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
-
-	public Date getTimeOut() {
-		return timeOut;
-	}
-
-	public void setTimeOut(Date timeOut) {
-		this.timeOut = timeOut;
-	}
-
 	public User getUser() {
 		return user;
 	}
-
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public String getActionMade() {
+		return actionMade;
+	}
+	public void setActionMade(String actionMade) {
+		this.actionMade = actionMade;
 	}
 	
 	

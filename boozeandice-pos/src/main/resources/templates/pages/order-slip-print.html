@@ -44,14 +44,10 @@
 			<!-- Main content -->
 			<div class="content-wrapper ">
 			<section class="invoice col-md-2 col-sm-4">
-				<b style="padding-left: 55px;" th:text="${business_name}"></b>
-				<p style="padding-left: 25px; margin-bottom:0px;">VAT REG TIN 000-000-000-000</p>
-				<p style="padding-left: 10px;">PUERTO GALLERA ORIENTAL MINDORO</p>
-				<p style="margin-bottom:0px;">Name:_____________________________</p>
-				<p style="margin-bottom:0px;">TIN:______________________________</p>
-				<p style="margin-bottom:0px;">ID No:____________________________</p>
-				<p style="margin-bottom:0px;">Address:__________________________</p>
-				<p>Signature:________________________</p>
+				<b style="padding-left: 50px;" th:text="${business_name}"></b>
+				<p style="padding-left: 10px; margin-bottom: 0rem;" th:text="${business_address}"></p>
+				<p style="padding-left: 75px; margin-bottom: .5rem;">ORDER SLIP</p>
+				<p style="margin-bottom:0px;">***********************************</p>
 				<div th:each="transactionItem : ${transaction.transactionItem}">
 					<p style="margin-bottom:0px;"
 						th:text="${transactionItem.product.name + ' - ' + transactionItem.product.productCategory.name}">
@@ -66,16 +62,9 @@
 				<p style="margin-bottom:0px; font-size:15px; font-weight:900;"
 					th:text="${'TOTAL --------- P' + transaction.total + ' ' }"></p>
 				<p style="margin-bottom:0px; font-size:15px; font-weight:900;"
-					th:text="${'CASH ---------- P' + transaction.cashReceived + ' '}"></p>
+					th:text="${'TENDERED ------ P' + transaction.cashReceived + ' '}"></p>
 				<p style="margin-bottom:0px; font-size:12px; font-weight:900;"
 					th:text="${'Change ------------ P' + (transaction.cashReceived - transaction.total ) + ' '}"></p>
-				<p style="margin-bottom:0px;">***********************************</p>
-				<p style="margin-bottom:0px;" th:text="${'Vatable --------------- ' + transaction.vatableSales}"></p>
-				<p style="margin-bottom:0px;" th:text="${'VAT Exempt Sales ------ 0.00' }"></p>
-				<p style="margin-bottom:0px;" th:text="${'Zero Rated Sales ------ 0.00' }"></p>
-				<p style="margin-bottom:0px;" th:text="${'VAT  ------------------- ' + transaction.vatAmount }"></p>
-				<p style="margin-bottom:0px; font-weight:900;"
-					th:text="${'Total  ----------------- ' + (transaction.total - transaction.vatAmount) }"></p>
 				<p style="margin-bottom:0px;">***********************************</p>
 				<p style="margin-bottom:0px;" th:text="${'Total items : ' + totalItemsSold}"></p>
 				<p style="margin-bottom:0px;"
@@ -84,7 +73,7 @@
 				<p style="margin-bottom:0px;" th:text="${'Date: ' + #dates.format(transaction.transactionDateTime, 'dd/MMM/yyyy') + ' Time: ' 
 				+ #dates.format(transaction.transactionDateTime, 'hh:mm a')}"></p>
 				<p style="margin-bottom:0px;" th:text="${'Trmnl no: 001 -- Trans ID: ' + transaction.id}"></p>
-				<p style="margin-bottom:0px;" th:text="${'This serves as your sales invoice'}"></p>
+				<p style="margin-bottom:0px;" th:text="${'This serves as your order slip'}"></p>
 				<p style="margin-bottom:0px;" th:text="${'SI No: ' + transaction.invoiceNumber}"></p>
 				<p style="margin-bottom:0px;">***********************************</p>
 				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px;">
@@ -96,9 +85,10 @@
 					allowed within 7 days from date of purchase.
 				</p>
 				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px; ">
-					Please present your Tape Receipt.
+					Please present your Order Slip.
 				</p>
-				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom:5px;">***********************************</p>
+				<p style="margin-bottom:5px;">***********************************</p>
 				<!-- TODO IT COMPANY SECTION -->
 			</section>
 			<!-- /.content -->

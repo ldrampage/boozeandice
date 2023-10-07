@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.boozeandice.local.entity.JobPosition;
-import com.boozeandice.local.entity.Role;
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.JobPosition;
+import com.boozeandice.entity.Role;
+import com.boozeandice.entity.User;
 import com.boozeandice.service.JobPositionService;
 import com.boozeandice.service.RoleService;
 import com.boozeandice.service.StaffService;

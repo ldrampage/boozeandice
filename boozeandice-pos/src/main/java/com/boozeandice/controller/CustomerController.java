@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boozeandice.local.entity.Customer;
+import com.boozeandice.entity.Customer;
 import com.boozeandice.service.CustomerService;
 
 

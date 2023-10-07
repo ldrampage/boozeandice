@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.boozeandice.local.entity.User;
+import com.boozeandice.entity.User;
 import com.boozeandice.repository.UserRepository;
 
 @Service
