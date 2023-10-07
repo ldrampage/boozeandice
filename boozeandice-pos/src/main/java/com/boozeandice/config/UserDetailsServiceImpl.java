@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.boozeandice.local.entity.POSConfig;
 import com.boozeandice.local.entity.User;
-import com.boozeandice.local.repository.POSConfigRepository;
+import com.boozeandice.repository.POSConfigRepository;
 import com.boozeandice.service.UserService;
 
 @Component

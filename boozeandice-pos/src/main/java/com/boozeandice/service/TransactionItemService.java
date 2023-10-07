@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.Transaction;
 import com.boozeandice.local.entity.TransactionItem;
-import com.boozeandice.local.repository.TransactionItemRepository;
+import com.boozeandice.repository.TransactionItemRepository;
 
 @Service
 public class TransactionItemService {

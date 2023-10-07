@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.Product;
 import com.boozeandice.local.entity.ProductStock;
-import com.boozeandice.local.repository.ProductStockRepository;
+import com.boozeandice.repository.ProductStockRepository;
 
 @Service
 public class ProductStockService implements Serializable {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.CashDrawer;
 import com.boozeandice.local.entity.Transaction;
-import com.boozeandice.local.repository.TransactionRepository;
+import com.boozeandice.repository.TransactionRepository;
 
 @Service
 public class TransactionService {

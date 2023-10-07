@@ -1,4 +1,4 @@
-package com.boozeandice.local.repository;
+package com.boozeandice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

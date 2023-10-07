@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.Role;
-import com.boozeandice.local.repository.RoleRepository;
+import com.boozeandice.repository.RoleRepository;
 
 @Service
 public class RoleService {

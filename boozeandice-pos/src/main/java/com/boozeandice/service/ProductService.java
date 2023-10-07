@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 import com.boozeandice.local.entity.Product;
 import com.boozeandice.local.entity.ProductCategory;
 import com.boozeandice.local.entity.ProductStock;
-import com.boozeandice.local.repository.ProductRepository;
-import com.boozeandice.local.repository.ProductStockRepository;
-import com.boozeandice.local.repository.TransactionItemRepository;
-import com.boozeandice.local.repository.TransactionRepository;
+import com.boozeandice.repository.ProductRepository;
+import com.boozeandice.repository.ProductStockRepository;
+import com.boozeandice.repository.TransactionItemRepository;
+import com.boozeandice.repository.TransactionRepository;
 import com.bozeandice.vo.ProductBestSellerVO;
 
 @Service

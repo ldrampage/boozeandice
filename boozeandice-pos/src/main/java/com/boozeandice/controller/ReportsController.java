@@ -23,7 +23,7 @@ import com.boozeandice.enums.TransactionStatus;
 import com.boozeandice.local.entity.ProductCategory;
 import com.boozeandice.local.entity.Transaction;
 import com.boozeandice.local.entity.TransactionItem;
-import com.boozeandice.local.repository.DailySalesReportRepository;
+import com.boozeandice.repository.ReportChartRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.TransactionService;
 import com.bozeandice.vo.DailySalesReportVO;
@@ -48,7 +48,7 @@ public class ReportsController {
 	private CategoryService productCatService;
 	
 	@Autowired
-	private DailySalesReportRepository dailySalesReportRepo;
+	private ReportChartRepository reportChartRepo;
 	
 	@GetMapping(path="/")
 	public String reportsPage(Model model, @RequestParam(name="zdate", required=false) String zdate) throws Exception {
@@ -57,7 +57,7 @@ public class ReportsController {
 		//Report Tab Start
 		
 		// Daily Sales Report
-		List<DailySalesReportVO> dailySalesReportList = dailySalesReportRepo.getAllDailySalesReportVO();
+		List<DailySalesReportVO> dailySalesReportList = reportChartRepo.getAllDailySalesReportVO();
 		
 		
 		model.addAttribute("dailySalesReportList",dailySalesReportList);
@@ -198,10 +198,9 @@ public class ReportsController {
 		model.addAttribute("totalPackaging", totalPackaging);
 		model.addAttribute("totalDiscounts", totalDiscounts);
 		model.addAttribute("pmpbd", pmpbd);
-		//Paymaya Payment Breakdown, Total Discount Packaging end
+		//PAYMAYA Payment Breakdown, Total Discount Packaging end
 		
 		// Total discounts start
-		
 		
 		
 		// Total discounts end

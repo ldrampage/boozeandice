@@ -1,4 +1,4 @@
-package com.boozeandice.local.repository;
+package com.boozeandice.repository;
 
 import java.util.Date;
 

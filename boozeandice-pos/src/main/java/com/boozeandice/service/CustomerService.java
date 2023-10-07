@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.Customer;
-import com.boozeandice.local.repository.CustomerRepository;
+import com.boozeandice.repository.CustomerRepository;
 
 @Service
 public class CustomerService {

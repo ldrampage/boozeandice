@@ -31,7 +31,7 @@ import com.boozeandice.local.entity.Product;
 import com.boozeandice.local.entity.ProductCategory;
 import com.boozeandice.local.entity.ProductStock;
 import com.boozeandice.local.entity.User;
-import com.boozeandice.local.repository.ProductBestSellerRepository;
+import com.boozeandice.repository.ProductBestSellerRepository;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
 import com.boozeandice.service.ProductStockService;
@@ -179,12 +179,15 @@ public class ProductController {
 			
 			productStock = productStockService.save(productStock);
 			
-			//Generate bardcode 
-			//Generate barcode
-			Map<String, String> barcodeInfoMap = barcodeGenerator.generateUPCABarcode(productStock.getId().toString(), product.getId().toString(), product.getName(), 100, 50);
-			productStock.setBarcodeDigits(Long.valueOf(barcodeInfoMap.get("barcodeDigits")));
-			productStock.setBarcodeDigitsv2(barcodeInfoMap.get("barcodeDigitsv2"));
-			productStock.setBarcodeImageLocation(barcodeInfoMap.get("barcodeImgLocation"));
+			//Generate barcode start
+			logger.debug("generatebarcode: " + parameters.get("generatebarcode"));
+			if(parameters.get("generatebarcode") != null && parameters.get("generatebarcode").equals("on")) {
+				Map<String, String> barcodeInfoMap = barcodeGenerator.generateUPCABarcode(productStock.getId().toString(), product.getId().toString(), product.getName(), 100, 50);
+				productStock.setBarcodeDigits(Long.valueOf(barcodeInfoMap.get("barcodeDigits")));
+				productStock.setBarcodeDigitsv2(barcodeInfoMap.get("barcodeDigitsv2"));
+				productStock.setBarcodeImageLocation(barcodeInfoMap.get("barcodeImgLocation"));
+			}
+			//Generate barcode end
 			
 			productStockService.save(productStock);
 

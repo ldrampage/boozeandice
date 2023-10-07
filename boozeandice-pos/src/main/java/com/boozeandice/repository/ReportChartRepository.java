@@ -1,4 +1,4 @@
-package com.boozeandice.local.repository;
+package com.boozeandice.repository;
 
 import java.util.List;
 
@@ -10,11 +10,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.bozeandice.vo.DailySalesReportVO;
+import com.bozeandice.vo.MonthlyRecapChartVO;
 
 @Repository
-public class DailySalesReportRepository {
+public class ReportChartRepository {
 	
-	private static final Logger logger = LogManager.getLogger(DailySalesReportRepository.class);
+	private static final Logger logger = LogManager.getLogger(ReportChartRepository.class);
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -34,10 +35,10 @@ public class DailySalesReportRepository {
 			dsrVO.setNoOfTransactions(rs.getLong("no_of_transactions"));
 			dsrVO.setNoOfItems(rs.getLong("no_of_items"));
 			return dsrVO;
-			
+			 
 		};
 		
-		return jdbcTemplate.query("select date(trans.transaction_date_time) as date, SUM(DISTINCT trans.total) as total_sales, "
+		return jdbcTemplate.query("select date(trans.transaction_date_time) as date, SUM(trans.total) as total_sales, "
 				+ "SUM(CASE WHEN trans.payment_method = 'CASH' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_cash_transactions, "
 				+ "SUM(CASE WHEN trans.payment_method = 'GCASH' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_gcash_transactions, "
 				+ "SUM(CASE WHEN trans.payment_method = 'PAYMAYA' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_paymaya_transactions, "
@@ -49,6 +50,32 @@ public class DailySalesReportRepository {
 				+ "from boozeandice.transaction trans join boozeandice.transaction_item transItem ON trans.id = transItem.transaction_id "
 				+ "group by date(trans.transaction_date_time) "
 				+ "order by date(trans.transaction_date_time);", rowMapper);
+	}
+	
+	public List<MonthlyRecapChartVO> getMonthlyRecapChartByYear(String year) {
+		
+		RowMapper<MonthlyRecapChartVO> rowMapper = (rs, rowNum) -> {
+			
+			MonthlyRecapChartVO mrcVO = new MonthlyRecapChartVO();
+			mrcVO.setMonth(rs.getInt("month"));
+			mrcVO.setRevenue(rs.getString("revenue"));
+			mrcVO.setCost(rs.getString("cost"));
+			mrcVO.setProfit(rs.getString("profit"));
+			return mrcVO;
+		};
+		
+		return jdbcTemplate.query("select EXTRACT(month from transaction.transaction_date_time) as month, "
+				+ "SUM(transaction.total) as revenue, "
+				+ "SUM(transItem.produc_cost * transItem.quantity) as cost, "
+				+ "SUM(transaction.total) - SUM(transItem.produc_cost * transItem.quantity) as profit "
+				+ "from boozeandice.transaction transaction "
+				+ "join boozeandice.transaction_item transItem "
+				+ "on transaction.id  = transItem.transaction_id "
+				+ "where "
+				+ "extract(year from transaction.transaction_date_time) = " + year + " "
+				+ "and transaction.transaction_status = 'PAID' " 
+				+ "group by EXTRACT(month from transaction.transaction_date_time);", rowMapper);
+		
 	}
 
 }

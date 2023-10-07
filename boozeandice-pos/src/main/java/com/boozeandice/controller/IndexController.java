@@ -45,8 +45,8 @@ import com.boozeandice.local.entity.Shipment;
 import com.boozeandice.local.entity.Transaction;
 import com.boozeandice.local.entity.TransactionItem;
 import com.boozeandice.local.entity.User;
-import com.boozeandice.local.repository.AddressRepository;
-import com.boozeandice.local.repository.ShipmentRepository;
+import com.boozeandice.repository.AddressRepository;
+import com.boozeandice.repository.ShipmentRepository;
 import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.CustomerService;
@@ -459,8 +459,33 @@ public class IndexController implements Serializable {
 
 			}
 
+			//Update shipment start
 			if (parameters.get("transactionId") != null && !parameters.get("shipmentId").isEmpty()) {
+				logger.debug("Update shipment start -> transactionId: " + parameters.get("transactionId") + " shipmentId: " + parameters.get("shipmentId"));
+				Transaction transaction = transactionService.getById(Long.valueOf(parameters.get("transactionId")));
+				Shipment shipment = transaction.getShipment();
+				Address destinationAddress = shipment.getDestinationAddress();
+				logger.debug("destinationAddress: " +  destinationAddress.getAdditionalAddressDetails() 
+					+ " landmark: " + destinationAddress.getLandmark() + " estimatedDeliveryDate: " + shipment.getEstimatedDeliveryDate());
+				
+				destinationAddress.setAdditionalAddressDetails(parameters.get("address"));
+				destinationAddress.setLandmark(parameters.get("landmark"));
+				destinationAddress = addressRepository.save(destinationAddress);
+				
+				Date deliveryDate = null;
+				try {
+					deliveryDate = new SimpleDateFormat("MM/dd/yyyy").parse(parameters.get("deliverydate").trim());
+					shipment.setEstimatedDeliveryDate(deliveryDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				shipment = shipmentRepository.save(shipment);
+				
+				model.addAttribute("transaction", transaction);
+				
 			}
+			//Update shipment end
 
 		}
 		// Save shipment address end

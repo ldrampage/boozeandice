@@ -1,6 +1,5 @@
 server:
   port: 8080
-  address: lyndon
 
 spring:
   profiles:
@@ -71,12 +70,10 @@ spring:
     url: jdbc:mysql://localhost:3306/boozeandice
     username: root
     password: lxbordo
-    #driver-class-name: com.mysql.cj.jdbc.Driver
   #cloud-datasource:
-  #  url: jdbc:mysql://boozeandice-test-rds.c7l9gtvaasvy.ap-southeast-1.rds.amazonaws.com:3306/boozeandice
-  #  username: admin
-  #  password: bait-micke
-    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://boozeandice-test-rds.c7l9gtvaasvy.ap-southeast-1.rds.amazonaws.com:3306/boozeandice
+    #username: admin
+    #password: bait-micke
   jpa:
     show-sql: false
     properties:

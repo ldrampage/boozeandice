@@ -37,15 +37,6 @@ public class User implements Serializable {
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	
-	@OneToMany(mappedBy = "cashier")
-	private List<Transaction> transaction;
-
-	@OneToMany(mappedBy = "user")
-	private List<UserActivityLog> userActivityLog;
-	
-	@OneToMany(mappedBy="deliveryDriver")
-	private List<Shipment> shipment;
 
 	@Column(name = "fname", nullable = false)
 	private String fname;
@@ -79,6 +70,15 @@ public class User implements Serializable {
 	
 	@Column(name="img_location")
 	private String imgLocation;
+	
+	@OneToMany(mappedBy = "cashier")
+	private List<Transaction> transaction;
+
+	@OneToMany(mappedBy = "user")
+	private List<UserActivityLog> userActivityLog;
+	
+	@OneToMany(mappedBy="deliveryDriver")
+	private List<Shipment> shipment;
 
 	public List<Transaction> getTransaction() {
 		return transaction;

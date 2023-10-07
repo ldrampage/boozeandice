@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.ProductCategory;
-import com.boozeandice.local.repository.ProductCategoryRepository;
+import com.boozeandice.repository.ProductCategoryRepository;
 
 @Service
 public class CategoryService implements Serializable{

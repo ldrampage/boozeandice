@@ -69,7 +69,7 @@ public class PageController {
 	
 	public String chartPage(Model model) {
 		addAttributes(model);
-		return "pages/chart/chart";
+		return "pages/chartreport/chart";
 	}
 	
 	/**

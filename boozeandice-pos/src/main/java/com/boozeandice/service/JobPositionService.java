@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.JobPosition;
-import com.boozeandice.local.repository.JobPositionRepository;
+import com.boozeandice.repository.JobPositionRepository;
 
 @Service
 public class JobPositionService {

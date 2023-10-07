@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.CashDrawer;
-import com.boozeandice.local.repository.CashDrawerRepository;
+import com.boozeandice.repository.CashDrawerRepository;
 
 @Service
 public class CashDrawerService implements Serializable {

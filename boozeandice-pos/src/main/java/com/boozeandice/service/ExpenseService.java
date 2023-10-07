@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.CashDrawer;
 import com.boozeandice.local.entity.Expense;
-import com.boozeandice.local.repository.ExpenseRepository;
+import com.boozeandice.repository.ExpenseRepository;
 
 @Service
 public class ExpenseService implements Serializable{

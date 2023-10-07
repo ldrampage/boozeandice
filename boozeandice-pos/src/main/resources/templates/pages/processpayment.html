@@ -42,7 +42,6 @@
 								<div class="card-header">
 									<h3 class="card-title">Payment Summary</h3>
 									<div class="float-right">
-
 										<b class="badge badge-success"
 											th:if="${transaction.takeOut == false and transaction.isDelivery == false}">Dine
 											In</b>
@@ -564,9 +563,12 @@
 				$('#pay_later_form')[0].submit();
 			})
 
+			var yesterday = new Date();
+			yesterday.setDate(yesterday.getDate() - 1);
 			//Date picker
 			$('#deliverydate').datetimepicker({
-				format: 'L'
+				format: 'L',
+				minDate: yesterday
 			});
 
 		})

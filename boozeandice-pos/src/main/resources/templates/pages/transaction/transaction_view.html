@@ -67,6 +67,11 @@
 												th:text="${transaction.totalItems}"></a>
 										</li>
 
+										<li class="list-group-item">
+											<b>Cashier: </b> <a class="float-right"
+												th:text="${transaction.cashier.fname + ' ' + transaction.cashier.lname}"></a>
+										</li>
+
 
 										<li th:if="${transaction.shipment == null}" class="list-group-item">
 											<b>Take out: </b>
@@ -112,8 +117,7 @@
 
 										<li th:if="${transaction.transactionType != ''}" class="list-group-item">
 											<b>Transaction Type: </b>
-											<span class="badge badge-danger float-right"
-												th:if="${transaction.transactionType != 'REFUND' 
+											<span class="badge badge-danger float-right" th:if="${transaction.transactionType != 'REFUND' 
 												and transaction.transactionType != 'CANCELLED' 
 												and transaction.transactionType != 'PURCHASE' 
 												and transaction.transactionType != 'SALE'}">PENDING PAYMENT</span>
@@ -133,9 +137,9 @@
 
 										<li th:if="${transaction.paymentMethod != ''}" class="list-group-item">
 											<b>Payment Method: </b>
-											<span class="badge badge-danger float-right"
-												th:if="${transaction.paymentMethod != 'CASH' 
-												and transaction.paymentMethod != 'GCASH' and transaction.paymentMethod != 'PAYMAYA'}">PENDING PAYMENT</span>
+											<span class="badge badge-danger float-right" th:if="${transaction.paymentMethod != 'CASH' 
+												and transaction.paymentMethod != 'GCASH' and transaction.paymentMethod != 'PAYMAYA'}">PENDING
+												PAYMENT</span>
 											<span class="badge badge-success float-right"
 												th:if="${transaction.paymentMethod == 'CASH'}"
 												th:text="${transaction.paymentMethod}"></span>
@@ -307,32 +311,39 @@
 																data-target="#deliverydate" required />
 															<div class="input-group-append" data-target="#deliverydate"
 																data-toggle="datetimepicker">
-																<div class="input-group-text"><i class="fa fa-calendar"></i>
+																<div class="input-group-text"><i
+																		class="fa fa-calendar"></i>
 																</div>
 															</div>
 														</div>
 													</div>
 													<div class="form-group col-md-6">
 														<label>Shipment Status</label>
-														<select class="form-control select2bs4" name="shipmentStatus" >
+														<select class="form-control select2bs4" name="shipmentStatus">
 															<option value="PENDING" th:selected="${transaction.shipment != null 
 																? transaction.shipment.shipmentStatus == 'PENDING' : ''}">PENDING</option>
 															<option value="OUT_FOR_DELIVERY" th:selected="${transaction.shipment != null 
 																? transaction.shipment.shipmentStatus == 'OUT_FOR_DELIVERY' : ''}">OUT FOR DELIVERY</option>
-															<option value="DELIVERED" th:selected="${transaction.shipment != null ? transaction.shipment.shipmentStatus == 'DELIVERED' : ''}">DELIVERED</option>
+															<option value="DELIVERED"
+																th:selected="${transaction.shipment != null ? transaction.shipment.shipmentStatus == 'DELIVERED' : ''}">
+																DELIVERED</option>
 														</select>
 													</div>
 													<div class="form-group col-md-6">
 														<label>Delivery Driver</label>
 														<select class="form-control select2bs4" name="deliveryDriver">
-															<option th:each="driver:${deliveryDriver}" th:value="${driver.id}" th:text="${driver.fname + ' ' + driver.lname}"></option>
+															<option th:each="driver:${deliveryDriver}"
+																th:value="${driver.id}"
+																th:text="${driver.fname + ' ' + driver.lname}"></option>
 														</select>
 													</div>
 													<div class='form-group col-lg-12'>
 														<input type="submit" name="shipment_address" value="Save"
 															class="btn btn-success float-right">
-														<input type="hidden" name="transactionId" th:value="${transaction.id}" />
-														<input type="hidden" name="shipmentId" th:attr="value=${transaction.shipment != null ? transaction.shipment.id : ''}">
+														<input type="hidden" name="transactionId"
+															th:value="${transaction.id}" />
+														<input type="hidden" name="shipmentId"
+															th:attr="value=${transaction.shipment != null ? transaction.shipment.id : ''}">
 													</div>
 												</div>
 											</form>
@@ -357,6 +368,14 @@
 		$('.select2bs4').select2({
 			theme: 'bootstrap4'
 		})
+
+		var yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		//Date picker
+		$('#deliverydate').datetimepicker({
+			format: 'L',
+			minDate: yesterday
+		});
 	</script>
 </body>
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boozeandice.local.entity.User;
-import com.boozeandice.local.repository.UserRepository;
+import com.boozeandice.repository.UserRepository;
 
 @Service
 public class StaffService {

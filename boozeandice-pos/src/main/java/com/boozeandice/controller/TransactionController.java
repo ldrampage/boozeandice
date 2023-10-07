@@ -22,14 +22,14 @@ import com.boozeandice.local.entity.Address;
 import com.boozeandice.local.entity.Shipment;
 import com.boozeandice.local.entity.Transaction;
 import com.boozeandice.local.entity.User;
-import com.boozeandice.local.repository.AddressRepository;
-import com.boozeandice.local.repository.ShipmentRepository;
+import com.boozeandice.repository.AddressRepository;
+import com.boozeandice.repository.ShipmentRepository;
 import com.boozeandice.service.TransactionService;
 import com.boozeandice.service.UserService;
 
 @Controller
 @RequestMapping(path="/transaction")
-@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR"})
+@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR", "ROLE_CASHIER"})
 public class TransactionController {
 	
 	private static final Logger logger = LogManager.getLogger(TransactionController.class);

@@ -214,6 +214,11 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
 </body>
 
 </html>
