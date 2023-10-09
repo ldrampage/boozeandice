@@ -69,9 +69,9 @@ public class ChartController {
 			totalCost = totalCost + Double.valueOf(mrcVO.getCost());
 			totalProfit = totalProfit + Double.valueOf(mrcVO.getProfit());
 			
-			model.addAttribute("totalRevenue", String.format("%.2f", totalRevenue));
-			model.addAttribute("totalCost", String.format("%.2f", totalCost));
-			model.addAttribute("totalProfit", String.format("%.2f", totalProfit) );
+			model.addAttribute("totalRevenue", String.format("%,.2f", totalRevenue));
+			model.addAttribute("totalCost", String.format("%,.2f", totalCost));
+			model.addAttribute("totalProfit", String.format("%,.2f", totalProfit) );
 			
 			logger.debug("month: " + mrcVO.getMonth());
 			logger.debug("revenue: " + mrcVO.getRevenue());

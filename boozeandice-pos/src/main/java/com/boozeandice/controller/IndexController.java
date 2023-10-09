@@ -62,8 +62,6 @@ public class IndexController implements Serializable {
 
 	private static final Logger logger = LogManager.getLogger(IndexController.class);
 
-	private static int invoiceCounter = 0;
-
 	private Set<Product> productToPurchaseList = new HashSet<>();
 
 	private String categoryFilterId = "all";
@@ -326,17 +324,26 @@ public class IndexController implements Serializable {
 				transaction.setIsDelivery(true);
 			}
 
-			// apply discount
+			// apply discount start
 			if (parameters.get("discount") != null && parameters.get("discount").length() > 0) {
 				logger.debug("Discount: " + parameters.get("discount"));
 				discount = subTotal * Double.valueOf(parameters.get("discount"));
-				subTotal = subTotal - discount;
 			}
+			
+			if(parameters.get("custom_discount") != null && parameters.get("custom_discount").length() > 0) {
+				logger.debug("Custom discount: " + parameters.get("custom_discount"));
+				discount = discount + Double.valueOf(parameters.get("custom_discount"));
+			}
+			subTotal = (subTotal - discount);
+			// apply discount end
 
-			// consolidate the total and vat
+			// consolidate the shipping + packaging fees
 			total = (subTotal + shipping + packaging);
 
+			//calculate vat amount
 			vatAmount = subTotal * vat;
+			
+			//calculate the vatableSales
 			vatableSales = subTotal - vatAmount;
 
 			logger.debug("subTotal: " + subTotal);
@@ -365,7 +372,7 @@ public class IndexController implements Serializable {
 			transaction.setVatAmount(vatAmount);
 			transaction.setTransactionDateTime(new Timestamp(System.currentTimeMillis()));
 			transaction.setCashier(cashier);
-
+			
 			transaction = transactionService.save(transaction);
 
 			// Map the productToPurchaseList to TransactionItem
@@ -386,14 +393,19 @@ public class IndexController implements Serializable {
 				transactionItemServ.save(transactionItem);
 			}
 
+			// Set up the transaction costing by product cost and quantity per item
 			transaction.setTransactionItem(transactionItemList);
-			model.addAttribute("transaction", transaction);
-
-			// Delivery Start
-			if (parameters.get("processdelivery") != null) {
-				return pageController.processDeliveryPage(model);
+			Double transactionCost = 0.0;
+			for(TransactionItem transItem : transactionItemList) {
+				transactionCost = transactionCost + (transItem.getProductCostAtTimeSold() * transItem.getQuantity());
 			}
-			// Delivery End
+			
+			transaction.setCost(transactionCost);
+			transaction.setProfit(total - transactionCost);
+			
+			transaction = transactionService.save(transaction);
+			
+			model.addAttribute("transaction", transaction);
 
 		}
 
@@ -412,7 +424,7 @@ public class IndexController implements Serializable {
 			if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
 				Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
 				transaction.setCustomer(customer);
-				transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
+				transaction.setSoldTo(customer.getName());
 			}
 
 			transaction.setTableNo(parameters.get("tableno"));
@@ -551,7 +563,7 @@ public class IndexController implements Serializable {
 				if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
 					Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
 					transaction.setCustomer(customer);
-					transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
+					transaction.setSoldTo(customer.getName());
 				}
 			}
 
@@ -582,7 +594,7 @@ public class IndexController implements Serializable {
 				if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
 					Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
 					transaction.setCustomer(customer);
-					transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
+					transaction.setSoldTo(customer.getName());
 				}
 			}
 
@@ -612,7 +624,7 @@ public class IndexController implements Serializable {
 				if (parameters.get("registeredCustomer") != null && !parameters.get("registeredCustomer").isEmpty()) {
 					Customer customer = customerService.getById(Long.valueOf(parameters.get("registeredCustomer")));
 					transaction.setCustomer(customer);
-					transaction.setSoldTo(customer.getFname() + " " + customer.getLname());
+					transaction.setSoldTo(customer.getName());
 				}
 			}
 
@@ -659,6 +671,7 @@ public class IndexController implements Serializable {
 		// save the state
 		logger.debug("transactionList size: " + transactionList.size());
 		cashDrawer.setTransactions(transactionList);
+		transaction.setTransactionDateTime(new Timestamp(System.currentTimeMillis()));
 		transaction.setCashdrawer(cashDrawer);
 		transaction.setTableNo(parameters.get("tableno"));
 		cashDrawerService.save(cashDrawer);
@@ -673,16 +686,19 @@ public class IndexController implements Serializable {
 		return transaction;
 	}
 
-	public static String generateInvoiceNumber() {
+	public String generateInvoiceNumber() {
 		// Create a timestamp-based identifier
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		String timestamp = dateFormat.format(new Date());
+		
+		CashDrawer cashDrawer = cashDrawerService.getByToday();
 
-		// Increment the invoice counter
-		invoiceCounter++;
+		// increment transaction
+		int transactionCount = cashDrawer.getTransactions().size();
+		transactionCount = transactionCount + 1;
 
 		// Combine the prefix, timestamp, and counter
-		String invoiceNumber = "INV" + timestamp + String.format("%04d", invoiceCounter);
+		String invoiceNumber = "INV" + timestamp + String.format("%04d", transactionCount);
 
 		return invoiceNumber;
 	}

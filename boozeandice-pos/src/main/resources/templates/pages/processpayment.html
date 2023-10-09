@@ -280,7 +280,7 @@
 																To</label>
 															<div th:if="${transaction.customer != null}">
 																<input class="form-control" type="text"
-																	th:value="${transaction.customer.fname}" disabled />
+																	th:value="${transaction.customer.name}" disabled />
 																<input type="hidden"
 																	th:value="${transaction.customer.id}"
 																	id="registeredCustomer" name="registeredCustomer" />
@@ -369,7 +369,7 @@
 																To</label>
 															<div th:if="${transaction.customer != null}">
 																<input class="form-control" type="text"
-																	th:value="${transaction.customer.fname}" disabled />
+																	th:value="${transaction.customer.name}" disabled />
 																<input type="hidden"
 																	th:value="${transaction.customer.id}"
 																	id="registeredCustomer" name="registeredCustomer" />
@@ -437,7 +437,7 @@
 																To</label>
 															<div th:if="${transaction.customer != null}">
 																<input class="form-control" type="text"
-																	th:value="${transaction.customer.fname}" disabled />
+																	th:value="${transaction.customer.name}" disabled />
 																<input type="hidden"
 																	th:value="${transaction.customer.id}"
 																	id="registeredCustomer" name="registeredCustomer" />

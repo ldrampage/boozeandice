@@ -32,10 +32,12 @@ spring:
 
 
 #application settings
-business_name: Booze and Ice
+business_name: Booze and Ice Store
+business_address: PUERTO GALLERA ORIENTAL MINDORO
 senior_citizen_discount: 0.20 #20 PERCENT SENIOR CITIZEN DISCOUNT
-productSilogCategory: 'silog meals'
 available_tables: 6
+schema_name: boozeandice
+export_import_script: file:C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\resources\export_import_script.bat
 
 #img upload location
 upload:

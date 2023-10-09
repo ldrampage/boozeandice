@@ -1,19 +1,20 @@
 package com.boozeandice.controller;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import com.boozeandice.config.UserDetailsImpl;
-import com.boozeandice.entity.User;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Component
 public class PageController {
@@ -23,9 +24,6 @@ public class PageController {
 	@Value("${business_name}")
 	private String business_name;
 	
-	@Autowired
-	private HttpServletRequest servletRequest;
-	
 	public String accessDeniedPage(Model model) {
 		addAttributes(model);
 		return "pages/accessDenied";
@@ -33,7 +31,11 @@ public class PageController {
 	
 	public String index(Model model) {
 		addAttributes(model);
-		return "pages/index";
+		if(model.getAttribute("validTerminal").toString() == "true") {
+			return "pages/index";
+		} else {
+			return "pages/notValidTerminal";
+		}
 	}
 	
 	public String invoicePrintPage(Model model) {
@@ -80,12 +82,18 @@ public class PageController {
 	
 	public String cashdrawerPage(Model model) {
 		addAttributes(model);
-		return "pages/cashdrawer/cashdrawer";
+		if(model.getAttribute("validTerminal").toString() == "true")
+			return "pages/cashdrawer/cashdrawer";
+		else 
+			return "pages/notValidTerminal";
 	}
 	
 	public String cashDrawerCreate(Model model) {
 		addAttributes(model);
-		return "pages/cashdrawer/cashdrawer_create";
+		if(model.getAttribute("validTerminal").toString() == "true")
+			return "pages/cashdrawer/cashdrawer_create";
+		else 
+			return "pages/notValidTerminal";
 	}
 	
 	/**
@@ -96,12 +104,18 @@ public class PageController {
 	
 	public String transactionPage(Model model) {
 		addAttributes(model);
-		return "pages/transaction/transaction";
+		if(model.getAttribute("validTerminal").toString() == "true")
+			return "pages/transaction/transaction";
+		else 
+			return "pages/notValidTerminal";
 	}
 	
 	public String transactionViewPage(Model model) {
 		addAttributes(model);
-		return "pages/transaction/transaction_view";
+		if(model.getAttribute("validTerminal").toString() == "true")
+			return "pages/transaction/transaction_view";
+		else 
+			return "pages/notValidTerminal";
 	}
 	
 	/**
@@ -181,6 +195,11 @@ public class PageController {
 		return "pages/customer/customer_edit";
 	}
 	
+	public String customerAddPage(Model model) {
+		addAttributes(model);
+		return "pages/customer/customer_add";
+	}
+	
 	/**
 	 * 
 	 * Staff
@@ -219,15 +238,31 @@ public class PageController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+		
+		List<String> userRoles = new ArrayList<>();
+		
 		model.addAttribute("fname", user.getFname());
 		model.addAttribute("lname", user.getLname());
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("imgProfileName", user.getImgProfileName());
+		for(GrantedAuthority ga : user.getAuthorities()) {
+			userRoles.add(ga.getAuthority());
+		}
+		model.addAttribute("userRoles",userRoles);
 		model.addAttribute("remoteAddressess", user.getRemoteAddressess());
 		
 		boolean validTerminal = false;
+		InetAddress localHostMachine = null;
+		try {
+			localHostMachine = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		logger.debug("localHostMachine: " + localHostMachine.getHostName());
 		for(String remoteAddress : user.getRemoteAddressess()) {
-			if(remoteAddress.trim().equals(servletRequest.getRemoteHost()) || remoteAddress.trim().equals(servletRequest.getRemoteAddr())) {
+			if(remoteAddress.trim().equals(localHostMachine.getHostName()) || remoteAddress.trim().equals(localHostMachine.getHostName())){
 				validTerminal = true;
 				break;
 			}

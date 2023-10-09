@@ -1,6 +1,5 @@
 package com.boozeandice.controller;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -30,34 +29,33 @@ import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.ExpenseService;
 import com.boozeandice.service.TransactionService;
 import com.boozeandice.service.UserService;
-import com.boozeandice.utility.Utilities;
 
 @Controller
 @RequestMapping(path = "/cashdrawer")
-public class CashDrawerController implements Serializable {
-
-	private static final long serialVersionUID = 4336157396799732229L;
+@Secured({"ROLE_ADMIN","ROLE_SUPERVISOR","ROLE_CASHIER"})
+public class CashDrawerController {
 
 	private static final Logger logger = LogManager.getLogger(CashDrawerController.class);
 
-	@Autowired
-	private CashDrawerService cashDrawerService;
-	@Autowired
-	private TransactionService transactionService;
-	@Autowired
-	private ExpenseService expenseService;
-	@Autowired
-	private CashAddedService cashAddedService;
-	@Autowired
-	private Utilities utility;
-	@Autowired
-	private PageController pageController;
-
-	@Autowired
-	private UserService userService;
+	private final CashDrawerService cashDrawerService;
+	private final TransactionService transactionService;
+	private final ExpenseService expenseService;
+	private final CashAddedService cashAddedService;
+	private final PageController pageController;
+	private final UserService userService;
+	
+	public CashDrawerController(CashDrawerService cashDrawerService, TransactionService transactionService, ExpenseService expenseService,
+			CashAddedService cashAddedService, PageController pageController, UserService userService) {
+		this.cashDrawerService = cashDrawerService;
+		this.transactionService = transactionService;
+		this.expenseService = expenseService;
+		this.cashAddedService = cashAddedService;
+		this.pageController = pageController;
+		this.userService = userService;
+	}
 
 	@GetMapping(path = "")
-	private String cashdrawerPage(Model model) {
+	public String cashdrawerPage(Model model) {
 		CashDrawer cashDrawerToday = cashDrawerService.getByToday();
 		Set<Transaction> transactionList = transactionService.getByCashDrawer(cashDrawerToday);
 
@@ -157,12 +155,12 @@ public class CashDrawerController implements Serializable {
 	}
 
 	@GetMapping(path = "/create")
-	private String cashDrawerCreatePage(Model model) {
+	public String cashDrawerCreatePage(Model model) {
 		return this.pageController.cashDrawerCreate(model);
 	}
 
 	@PostMapping(path = "")
-	private String cashDrawerCreateProcess(Model model, @RequestParam Map<String, String> parameters) {
+	public String cashDrawerCreateProcess(Model model, @RequestParam Map<String, String> parameters) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -186,7 +184,7 @@ public class CashDrawerController implements Serializable {
 
 			Expense expense = new Expense();
 			expense.setCashdrawer(cashDrawerService.getByToday());
-			expense.setCreatedBy(null); // TODO when login functionality is setup
+			expense.setCreatedBy(user); 
 			expense.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			expense.setExpense(expenseAmount);
 			expense.setNote(expenseReason);

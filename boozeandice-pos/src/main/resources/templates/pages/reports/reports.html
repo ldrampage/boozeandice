@@ -96,10 +96,11 @@
 																		<th scope="col">Total</th>
 																		<th scope="col">Cash</th>
 																		<th scope="col">Gcash</th>
-																		<th scope="col">Card</th>
+																		<th scope="col">Paymaya</th>
 																		<th scope="col">Cost</th>
 																		<th scope="col">Profit</th>
 																		<th scope="col">Taxes</th>
+																		<th scope="col">Expenses</th>
 																		<th scope="col">No. of Transactions</th>
 																		<th scope="col">No. of Items</th>
 																	</tr>
@@ -114,6 +115,10 @@
 																		<td><span th:text="${'P'+dailySalesReport.cost}"></span></td>
 																		<td><span th:text="${'P'+dailySalesReport.profit}"></span></td>
 																		<td><span th:text="${'P'+dailySalesReport.taxes}"></span></td>
+																		<td>
+																			<span th:if="${dailySalesReport.expenses != null}" th:text="${'P'+dailySalesReport.expenses}"></span>
+																			<span th:unless="${dailySalesReport.expenses != null}">P0.00</span>
+																		</td>
 																		<td><span th:text="${dailySalesReport.noOfTransactions}"></span></td>
 																		<td><span th:text="${dailySalesReport.noOfItems}"></span></td>
 																	</tr>
@@ -315,7 +320,7 @@
 																			<td style="text-align: left;"><b>Total
 																					Packaging</b></td>
 																			<td style="text-align: left;"
-																				th:text="${totalDiscounts}"></td>
+																				th:text="${totalPackaging}"></td>
 																		</tr>
 																	</tbody>
 																</table>

@@ -4,117 +4,132 @@
 
 <head th:insert="~{fragments/head :: head}"></head>
 
-<body class="crm_body_bg">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
 
-	<!-- main content part here -->
-
-	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
-
-	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/preload :: preload}"></div>
 		<div th:insert="~{fragments/header :: header}"></div>
-		<div class="main_content_iner overly_inner">
-			<div class="container-fluid p-0 ">
-				<!-- page title  -->
-				<div class="row">
-					<div class="col-12">
-						<div class="page_title_box d-flex align-items-center justify-content-between">
-							<div class="page_title_left">
-								<h3 class="f_s_30 f_w_700 text_white">Customer</h3>
-								<ol class="breadcrumb page_bradcam mb-0">
-									<li class="breadcrumb-item"><a th:href="${'/'}">Booze and Ice </a></li>
-									<li class="breadcrumb-item"><a th:href="${'/customer'}">Customer</a></li>
-									<li class="breadcrumb-item active">Customer Edit</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="col-lg-12" th:if="${message != null and message['status'] == 'success'}">
-                    <div class="white_box mb_30">
-                        <div class="box_header ">
-                            <div class="main-title">
-                                <h3 class="mb-0" >Additional Notifications</h3>
-                            </div>
-                        </div>
-                        <div class="alert alert-success" role="alert">
-                            <h4 class="alert-heading">Well done!</h4>
-                            <p>Aww yeah, you successfully edited the information.</p>
-                          </div>
-                    </div>
-                </div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
 
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="white_card card_height_100 mb_30">
-							<div class="white_card_header">
-								<div class="box_header m-0">
-									<div class="main-title">
-										<h3 class="m-0">Customer Information</h3>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Customer</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Customer Edit</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<div th:if="${message != null and message['status'] == 'success'}"
+						class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully edited customer. Click <a th:href="${'/customer'}">here</a> to see
+							it.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}"
+						class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-primary">
+								<div class="card-header">
+									<h3 class="card-title">Edit customer details</h3>
+
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse"
+											title="Collapse">
+											<i class="fas fa-minus"></i>
+										</button>
 									</div>
 								</div>
-							</div>
-							<div class="white_card_body">
 								<div class="card-body">
-									<form method="post" th:action="@{/customer/edit/} + ${customer.id}" enctype="multipart/form-data">
-										<div class="row mb-3">
-											<div class="col-md-6">
-												<label class="form-label" for="first_name">First Name</label>
-												<input type="text" class="form-control" id="first_name" name="first_name"
-													th:value="${customer.fname}" placeholder="First name" required>
-											</div>
-											<div class="col-md-6">
-												<label class="form-label" for="last_name">Last Name</label>
-												<input type="text" class="form-control" id="last_name" name="last_name"
-													th:value="${customer.lname}" placeholder="Last name">
+									<form method="post" th:action="@{/customer/edit}"
+										enctype="multipart/form-data">
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="name">Name</label>
+													<input type="text" th:value="${customer.name}" id="name" name="name" class="form-control"
+														required>
+												</div>
 											</div>
 										</div>
-										
-										<div class="row mb-3">
-											<div class=" col-md-12">
-												<label class="form-label" for="email_address">Email address</label>
-												<input type="email" class="form-control" id="email_address" name="email_address"
-													th:value="${customer.emailAddress}"
-													placeholder="Email address"></input>
+
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="mobile_number">Mobile Number</label>
+													<input type="text" th:value="${customer.phoneNumber}" id="mobile_number" name="mobile_number"
+														class="form-control">
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="mobile_number">Email address</label>
+													<input type="email" th:value="${customer.emailAddress}" id="email_address" name="email_address"
+														class="form-control">
+												</div>
+											</div>
+											<!--<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="name">Profile picture</label>
+													<div class="custom-file">
+														<input type="file" class="custom-file-input" id="file"
+															name="file" />
+														<label class="custom-file-label" for="file">Image
+															File</label>
+													</div>
+												</div>
+											</div> -->
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<input type="submit" value="Edit" name="edit_customer_btn"
+														class="btn btn-block btn-success">
+												</div>
 											</div>
 										</div>
-										<!--
-										<div class="row mb-3">
-											<div class=" col-md-6">
-												<label class="form-label" for="file">Image File</label>
-												<input type="file" class="form-control" id="file" name="file"/>
-											</div>
-											<div th:if="${product.imgLocation}" class=" col-md-6">
-												<label for="image">Current Image</label>
-												<img id="image" th:src="@{/images/} + ${customer.imgLocation}" alt="Existing Image" style="max-width:300px"/>
-											</div>
-										</div> -->
-										<input type="hidden" th:value="${customer.id}" name="customerId" />
-										<button type="submit" class="btn btn-primary">Submit</button>
 									</form>
 								</div>
+								<!-- /.card-body -->
 							</div>
+							<!-- /.card -->
 						</div>
 					</div>
-					<div class="col-12">
 
-					</div>
-				</div>
-			</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+
 		</div>
-
-		<!-- footer part -->
-		<div th:insert="~{fragments/footer :: footer}"></div>
-	</section>
-	<!-- main content part end -->
-
-	<div id="back-top" style="display: none;">
-		<a title="Go to Top" href="#">
-			<i class="ti-angle-up"></i>
-		</a>
+		<!-- /.content-wrapper -->
 	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+
 </body>
 
 </html>

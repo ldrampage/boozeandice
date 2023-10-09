@@ -29,31 +29,33 @@ public class ReportChartRepository {
 			
 			DailySalesReportVO dsrVO = new DailySalesReportVO();
 			dsrVO.setDate(rs.getDate("date"));
-			dsrVO.setTotal(rs.getDouble("total_sales"));
-			dsrVO.setCashTransaction(rs.getDouble("total_cash_transactions"));
-			dsrVO.setGcashTransaction(rs.getDouble("total_gcash_transactions"));
-			dsrVO.setCardTransaction(rs.getDouble("total_paymaya_transactions"));
-			dsrVO.setCost(rs.getDouble("total_cost"));
-			dsrVO.setProfit(rs.getDouble("total_profit"));
-			dsrVO.setTaxes(rs.getDouble("vat_amount"));
+			dsrVO.setTotal(rs.getString("total_sales"));
+			dsrVO.setCashTransaction(rs.getString("total_cash_transactions"));
+			dsrVO.setGcashTransaction(rs.getString("total_gcash_transactions"));
+			dsrVO.setCardTransaction(rs.getString("total_paymaya_transactions"));
+			dsrVO.setCost(rs.getString("total_cost"));
+			dsrVO.setProfit(rs.getString("total_profit"));
+			dsrVO.setTaxes(rs.getString("vat_amount"));
+			dsrVO.setExpenses(rs.getString("total_expense"));
 			dsrVO.setNoOfTransactions(rs.getLong("no_of_transactions"));
 			dsrVO.setNoOfItems(rs.getLong("no_of_items"));
 			return dsrVO;
 			 
 		};
 		
-		return jdbcTemplate.query("select date(trans.transaction_date_time) as date, SUM(trans.total) as total_sales, "
-				+ "SUM(CASE WHEN trans.payment_method = 'CASH' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_cash_transactions, "
-				+ "SUM(CASE WHEN trans.payment_method = 'GCASH' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_gcash_transactions, "
-				+ "SUM(CASE WHEN trans.payment_method = 'PAYMAYA' THEN (transItem.product_price * transItem.quantity) ELSE 0 END) as total_paymaya_transactions, "
-				+ "SUM(CASE WHEN trans.id = transItem.transaction_id THEN (transItem.produc_cost * transItem.quantity) ELSE 0 END) as total_cost, "
-				+ "SUM(CASE WHEN trans.id = transItem.transaction_id THEN (transItem.product_price * transItem.quantity - transItem.produc_cost * transItem.quantity) ELSE 0 END) as total_profit, "
-				+ "SUM(DISTINCT trans.vat_amount) as vat_amount, "
-				+ "count(DISTINCT trans.id) as no_of_transactions, "
-				+ "SUM(transItem.quantity) as no_of_items "
-				+ "from "+ schema +".transaction trans join "+schema+".transaction_item transItem ON trans.id = transItem.transaction_id "
-				+ "group by date(trans.transaction_date_time) "
-				+ "order by date(trans.transaction_date_time);", rowMapper);
+		return jdbcTemplate.query("select trans.id, date(trans.transaction_date_time) as date, "
+				+ "sum(trans.total) as total_sales, "
+				+ "sum(case when trans.payment_method = 'CASH' THEN trans.total ELSE 0 END) as total_cash_transactions, "
+				+ "sum(case when trans.payment_method = 'GCASH' then trans.total else 0 end) as total_gcash_transactions, "
+				+ "sum(case when trans.payment_method = 'PAYMAYA' then trans.total else 0 end) as total_paymaya_transactions, "
+				+ "sum(trans.cost) as total_cost, "
+				+ "sum(trans.profit) as total_profit, "
+				+ "sum(trans.vat_amount) as vat_amount, "
+				+ "count(trans.id) as no_of_transactions, "
+				+ "sum((select sum(quantity) from "+schema+".transaction_item transItem where trans.id = transItem.transaction_id)) as no_of_items, "
+				+ "(select sum(expense) from "+schema+".expenses ex where ex.cash_drawer_id = trans.cashdrawer_id) as total_expense "
+				+ "from "+schema+".transaction trans where trans.transaction_status='PAID' "
+				+ "group by date(trans.transaction_date_time);", rowMapper);
 	}
 	
 	public List<MonthlyRecapChartVO> getMonthlyRecapChartByYear(String year) {
@@ -68,18 +70,15 @@ public class ReportChartRepository {
 			return mrcVO;
 		};
 		
-		return jdbcTemplate.query("select EXTRACT(month from transaction.transaction_date_time) as month, "
-				+ "SUM(transaction.total) as revenue, "
-				+ "SUM(transItem.produc_cost * transItem.quantity) as cost, "
-				+ "SUM(transaction.total) - SUM(transItem.produc_cost * transItem.quantity) as profit "
-				+ "from "+schema+".transaction transaction "
-				+ "join "+schema+".transaction_item transItem "
-				+ "on transaction.id  = transItem.transaction_id "
-				+ "where "
-				+ "extract(year from transaction.transaction_date_time) = " + year + " "
-				+ "and transaction.transaction_status = 'PAID' " 
-				+ "group by EXTRACT(month from transaction.transaction_date_time);", rowMapper);
+		return jdbcTemplate.query("select EXTRACT(month from trans.transaction_date_time) as month, "
+				+ "sum(trans.total) as revenue, "
+				+ "sum(trans.cost) as cost, "
+				+ "sum(trans.profit) as profit "
+				+ "from "+schema+".transaction trans where trans.transaction_status='PAID' "
+				+ "group by EXTRACT(month from trans.transaction_date_time);", rowMapper);
 		
 	}
+	
+	
 
 }

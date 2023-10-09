@@ -71,7 +71,7 @@
 										</td>
 										<td>
 											<span th:if="${transaction.customer != null}"
-												th:text="${transaction.customer.fname + ' ' + transaction.customer.lname}"></span>
+												th:text="${transaction.customer.name}"></span>
 											<span th:unless="${transaction.customer != null}"
 												th:text="${transaction.soldTo}"></span>
 										</td>
@@ -132,7 +132,7 @@
 										</td>
 										<td>
 											<span th:if="${transaction.customer != null}"
-												th:text="${transaction.customer.fname}"></span>
+												th:text="${transaction.customer.name}"></span>
 											<span th:unless="${transaction.customer != null}"
 												th:text="${transaction.soldTo}"></span>
 										</td>
@@ -186,7 +186,7 @@
 				"responsive": true, "lengthChange": false, "autoWidth": false,
 				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
 				"searching": true,
-				"order" : [1,'desc']
+				"order" : [0,'desc']
 
 			})
 
@@ -194,7 +194,7 @@
 				"responsive": true, "lengthChange": false, "autoWidth": false,
 				//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
 				"searching": true,
-				"order" : [1,'desc']
+				"order" : [0,'desc']
 
 			})
 

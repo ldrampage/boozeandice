@@ -23,7 +23,8 @@ public class Expense {
 	@Column(name="created_date")
 	private Date createdDate;
 	
-	@Column(name="created_by")
+	@ManyToOne
+	@JoinColumn(name="created_by")
 	private User createdBy;
 	
 	@Column(name="expense")

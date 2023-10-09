@@ -40,6 +40,9 @@ public class TransactionItem implements Serializable {
 	@Column(name="produc_cost")
 	private Double productCostAtTimeSold;
 	
+	@Column(name="packaging_fee")
+	private Double packagingFee;
+	
 	@Column(name="barcode_digits")
 	private String barcodeDigits;
 	

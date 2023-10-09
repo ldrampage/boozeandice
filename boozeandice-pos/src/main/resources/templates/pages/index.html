@@ -36,155 +36,6 @@
 				<div class="container-fluid">
 					<div th:if="${cashDrawerToday != null}" class="row">
 						<div class="col-12">
-							<!--<div class="card">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-12">
-											<table class="table table-hover text-nowrap">
-												<thead>
-													<tr>
-														<th>Product</th>
-														<th>Price</th>
-														<th>Quantity</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr th:each="product : ${productToPurchaseList}">
-														<td><img th:src="@{/images/} + ${product.imgLocation} "
-																alt="N/A" style="height:50px; width:50px;">
-															<p class="d-inline-block align-middle mb-0"><a href=""
-																	class="d-inline-block align-middle mb-0 f_w_600 color_theme2"
-																	th:text="${product.name}"></a></p>
-														</td>
-														<td th:text="${'Php ' + product.price}"></td>
-														<td style="width:15%">
-															<input th:onChange="quantityHandler(this)"
-																th:class="${'form-control ' + '_product'}" type="number"
-																inputmode="numeric" min="1" th:max="${product.stocks}"
-																step="0"
-																th:value="${product.qtyToPurchase == 0 ? 1 : product.qtyToPurchase}"
-																th:name="${'product_' + product.id}">
-														</td>
-														<form method="post" th:action="@{/}">
-															<td>
-																<input type="hidden" th:value="${product.id}"
-																	name="productId" />
-																<button name="removePurchase" type="submit"
-																	class="btn btn-sm btn-outline-dark">
-																	Remove
-																</button>
-															</td>
-														</form>
-													</tr>
-												</tbody>
-											</table>
-											<div th:if="${productToPurchaseList == null or productToPurchaseList.size <= 0}"
-												style="text-align: center;">
-												<h5>No data available in table</h5>
-											</div>
-
-											<form
-												th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
-												id="checkoutForm" method="post" th:action="@{/checkout}">
-												<div class="card">
-													<div class="card-body">
-														<div class="row">
-															<div class="col-md-12">
-																<div class="form-check">
-																	<input style="width: 2em; height:2em;"
-																		type="checkbox" class="form-check-input"
-																		id="takeout" name="takeout">
-																	<label
-																		style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
-																		class="form-check-label" for="takeout">Take
-																		away</label>
-																</div>
-																<div class="form-group">
-																	<label for="discount">Discount</label>
-																	<select class="form-control select2bs4"
-																		id="discount" name="discount">
-																		<option value="" selected>None</option>
-																		<option th:value="${seniorCitizenDiscount}">
-																			Senior
-																			Citizen and PWD
-																		</option>
-																	</select>
-																</div>
-																<div class="form-group">
-																	<label for="customer">Customer</label>
-																	<input type="hidden"
-																		name="checkoutCreateTransaction" />
-																	<select class="form-control select2bs4"
-																		id="customer" name="customerId">
-																		<option value=""
-																			th:selected="${customerFilterValue == null}">
-																			None</option>
-																		<option th:each="customer : ${customerList}"
-																			th:value="${customer.id}"
-																			th:selected="${customerFilterValue == customer.id}"
-																			th:text="${customer.emailAddress}">
-																		</option>
-																	</select>
-																</div>
-
-																<table class="table">
-																	<tbody>
-																		<tr>
-																			<td style="text-align: center;"><a
-																					th:href="@{/}"
-																					class="btn btn-block bg-gradient-secondary btn-lg"><i
-																						class="far fa-times-circle font_s_18"></i>
-																					Cancel</a></td>
-																			<td style="text-align: center;">
-																				<button id="checkoutButton"
-																					class="btn btn-block bg-gradient-success btn-lg"><i
-																						class="fas fa-shopping-bag font_s_18"></i>
-																					Checkout</button>
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-											</form>
-											<div class="card"
-												th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}">
-												<div class="card-body">
-													<div class="row">
-														<div class="col-md-12">
-															<div class="total-payment">
-																<table class="table">
-																	<tbody>
-																		<tr>
-																			<td style="text-align: center;"><a
-																					th:href="@{/}"
-																					class="btn btn-block bg-gradient-secondary btn-lg"><i
-																						class="far fa-times-circle font_s_18"></i>
-																					Cancel</a></td>
-																			<td style="text-align: center;">
-																				<button id="checkoutButton"
-																					class="btn btn-block bg-gradient-success btn-lg"><i
-																						class="fas fa-shopping-bag font_s_18"></i>
-																					Checkout</button>
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div> 
-										</div> 
-									</div>/.card-body 
-								</div> -->
-							<!-- /.card 
-
-							</div> -->
-							<!-- /.row -->
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="card">
@@ -345,6 +196,7 @@
 																				class="form-check-label"
 																				for="takeout">Take away</label>
 																		</div>
+																		
 																		<div class="form-check">
 																			<input style="width: 2em; height:2em;"
 																				type="checkbox" class="form-check-input"
@@ -353,18 +205,6 @@
 																				style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
 																				class="form-check-label"
 																				for="isDelivery">For Delivery</label>
-																		</div>
-																		<div class="form-group">
-																			<label for="discount">Discount</label>
-																			<select class="form-control select2bs4"
-																				id="discount" name="discount">
-																				<option value="" selected>None</option>
-																				<option
-																					th:value="${seniorCitizenDiscount}">
-																					Senior
-																					Citizen and PWD
-																				</option>
-																			</select>
 																		</div>
 																		<div class="form-group">
 																			<label for="customer">Customer</label>
@@ -383,7 +223,24 @@
 																				</option>
 																			</select>
 																		</div>
-
+																		<div class="form-group">
+																			<label for="discount">Discount</label>
+																			<select class="form-control select2bs4"
+																				id="discount" name="discount">
+																				<option value="" selected>None</option>
+																				<option
+																					th:value="${seniorCitizenDiscount}">
+																					Senior
+																					Citizen and PWD
+																				</option>
+																			</select>
+																		</div>
+																		
+																		<!--<div class="form-group">
+																			<label for="custom_discount">Desired Discount</label>
+																			<input class="form-control" type="number" min="0" step="0.01" placeholder="Enter discount amount" id="custom_discount" name="custom_discount">
+																		</div> -->
+																		
 																		<table class="table">
 																			<tbody>
 																				<tr>

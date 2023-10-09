@@ -40,7 +40,7 @@
 								<div class="card-header">
 									<h3 class="card-title"></h3>
 									<small class="float-right">
-										<a th:href="${'/product/products/add'}" class="btn btn-info">New Customer</a>
+										<a th:href="${'/customer/add'}" class="btn btn-info" disabled>New Customer</a>
 									</small>
 								</div>
 								<!-- /.card-header -->
@@ -49,20 +49,23 @@
 										<thead>
 											<tr>
 												<th scope="col">Name</th>
+												<th scope="col">Phone Number</th>
 												<th scope="col">Email Address</th>
 												<th scope="col">Action</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr th:each="customer : ${customerList}">
-												<td th:text="${customer.fname + ' ' + customer.middleInitial + '. ' + customer.lname }" scope="row"> <a href="#"
+												<td th:text="${customer.name}" scope="row"> <a href="#"
 														class="question_content"></a></td>
+												<td th:text="${customer.phoneNumber}" scope="row"> <a href="#"
+													class="question_content"></a></td>
 												<td><span th:text="${customer.emailAddress}"></span></td>
 												<td>
-													<a th:href="${'/product/products/edit/' }"
+													<a th:href="${'/customer/edit/' + customer.id }"
 														class="btn bg-gradient-primary btn-xs">Edit</a>
-													<a th:href="${'/product/products/view/' }"
-														class="btn bg-gradient-info btn-xs">View</a>
+													<!-- <a th:href="${'/product/products/view/' }"
+														class="btn bg-gradient-info btn-xs">View</a> -->
 												</td>
 											</tr>
 										</tbody>

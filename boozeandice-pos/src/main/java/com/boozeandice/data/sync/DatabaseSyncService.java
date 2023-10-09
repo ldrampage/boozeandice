@@ -14,7 +14,7 @@ public class DatabaseSyncService {
 	
 	private static final Logger logger = LogManager.getLogger(DatabaseSyncService.class);
 	
-	@Value("classpath:export_import_script.bat")
+	@Value("${export_import_script}")
 	private Resource scriptResource;
 	
 	public void executeScript() {

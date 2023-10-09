@@ -1,7 +1,10 @@
 package com.boozeandice.config;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.boozeandice.entity.JobPosition;
+import com.boozeandice.entity.Product;
+import com.boozeandice.entity.ProductCategory;
+import com.boozeandice.entity.ProductStock;
 import com.boozeandice.entity.Role;
 import com.boozeandice.entity.User;
 import com.boozeandice.repository.JobPositionRepository;
@@ -36,22 +42,21 @@ public class DataInitializer {
 
 	@Autowired
 	private JobPositionRepository jobPosRepo;
-
-//	@Autowired
-//	private ProductCategoryRepository productCatRepo;
-//
-//	@Autowired
-//	private ProductRepository productRepo;
-//
-//	@Autowired
-//	private ProductStockRepository productStockRepo;
-
+	
+	@Autowired
+	private ProductCategoryRepository productCatRepo;
+	
+	@Autowired
+	private ProductRepository productRepo;
+	
+	@Autowired
+	private ProductStockRepository productStockRepo;
+	
 	@Transactional
 	@Bean
 	public CommandLineRunner initializeData() {
 		if (userRepo.findByUsername("lxbordo").isEmpty()) {
 			return args -> {
-
 				// Create Roles
 				Role role = new Role();
 				role.setName("ADMIN");
@@ -72,28 +77,11 @@ public class DataInitializer {
 				User user = new User();
 				user.setFname("Lyndon");
 				user.setLname("Bordonada");
-				user.setAbout(
-						"Application Developer / Full Stack Web Developer / Food Lover / Coffee Lover / Family Guy");
+				user.setAbout("Application Developer / Full Stack Web Developer / Food Lover / Coffee Lover / Family Guy");
 				user.setMobileNumber("+639565776738");
 				user.setRoles(roleList);
 
 				user.setUsername("lxbordo");
-				user.setPassword("malcom19");
-				user.setImgLocation("lyndon.jpg");
-				user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-				userRepo.save(user);
-
-				roleInject = roleRepo.findById(Long.valueOf(3)).get();
-				roleList = new HashSet<>();
-				roleList.add(roleInject);
-				user = new User();
-				user.setFname("Malcom");
-				user.setLname("Bordonada");
-				user.setAbout("Grade 3 / Youtuber / Zelda Fanatic");
-				user.setMobileNumber("+639565776738");
-				user.setRoles(roleList);
-
-				user.setUsername("mxbordo");
 				user.setPassword("malcom19");
 				user.setImgLocation("lyndon.jpg");
 				user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
@@ -173,7 +161,7 @@ public class DataInitializer {
 						"Takes orders, serves customers, and ensures a high level of customer satisfaction in the dining area.");
 				jobPosRepo.save(jobPosition);
 //
-//			// Create Product Category
+			// Create Product Category
 //			List<ProductCategory> productCategoryList = new ArrayList<>();
 //			ProductCategory category = null;
 //			Optional<User> user1Opt = userRepo.findByUsername("lxbordo");
@@ -341,11 +329,12 @@ public class DataInitializer {
 //			productRepo.save(product1.get());
 //
 //			// Transaction
-
 			};
 		}
 		
-		return args -> {};
+		return args -> { 
+			
+		};
 
 	}
 

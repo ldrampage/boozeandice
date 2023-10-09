@@ -37,4 +37,4 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 REM Clean up the exported file
-del %EXPORT_FILE%
+REM del %EXPORT_FILE%

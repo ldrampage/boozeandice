@@ -35,7 +35,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		User user  = userService.getByUsername(username);
 		Optional<POSConfig> posConfOpt = posConfRepo.findByName("remoteAddress");
 		String[] remoteAddressess = {};
-		String remoteAddress = "";
 		if(posConfOpt.isPresent())
 			remoteAddressess = posConfOpt.get().getValue().split(",");
 		

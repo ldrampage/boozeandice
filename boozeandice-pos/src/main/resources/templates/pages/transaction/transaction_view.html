@@ -258,10 +258,21 @@
 									</div>
 									<div class="row">
 										<div class="col-md-6" th:if="${transaction.transactionStatus == 'PAID'}">
-											<form method="post" action="#">
-												<input type="submit" class="btn btn-secondary btn-danger"
-													value="Refund" />
-											</form>
+											<div class="form-group">
+												<form method="post" th:action="@{/refund}">
+													<input type="submit" class="btn btn-secondary btn-danger"
+														value="Refund" disabled />
+
+													<a th:if="${userRoles.contains('ROLE_ADMIN')}"
+														th:href="${'/invoiceprint/?id=' + transaction.id}"
+														target="_blank" class="btn btn-secondary btn-default">Print
+														order slip</a>
+													<button th:unless="${userRoles.contains('ROLE_ADMIN')}" data-toggle="tooltip" data-placement="top" title="Only for supervisor and admin." class="btn btn-secondary btn-default" disabled>Print
+														order slip</a>
+												</form>
+
+
+											</div>
 										</div>
 										<div class="col-md-6" th:if="${transaction.transactionStatus == 'PENDING'}">
 											<a th:href="${'/processpayment/' + transaction.id}"

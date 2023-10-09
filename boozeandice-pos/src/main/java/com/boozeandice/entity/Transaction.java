@@ -52,8 +52,17 @@ public class Transaction implements Serializable {
 	@OneToMany(mappedBy="transaction")
 	private Set<TransactionItem> transactionItem;
 	
-	@Column(name="subTotal")
+	@Column(name="subTotal") // before packaging, deductions, discounts
 	private Double subTotal;
+	
+	@Column(name="total") // total revenue per transaction
+	private Double total;
+	
+	@Column(name="cost") // product cost + discounts per transaction
+	private Double cost;
+	
+	@Column(name="profit") // total - cost per transaction
+	private Double profit;
 	
 	@Column(name="shipping")
 	private Double shipping;
@@ -75,9 +84,6 @@ public class Transaction implements Serializable {
 	
 	@Column(name="vat_amount")
 	private Double vatAmount;
-	
-	@Column(name="total")
-	private Double total;
 	
 	@Column(name="transaction_date_time")
 	private Date transactionDateTime;
@@ -116,7 +122,6 @@ public class Transaction implements Serializable {
 	
 	@Column(name="card_brand")
 	private String cardBrand;
-
 	
 	@Transient
 	private Long totalItems = Long.valueOf(0);
@@ -132,6 +137,23 @@ public class Transaction implements Serializable {
 		return totalItems;
 	}
 	
+	
+	public Double getCost() {
+		return cost;
+	}
+
+	public void setCost(Double cost) {
+		this.cost = cost;
+	}
+	
+	public Double getProfit() {
+		return profit;
+	}
+	
+	public void setProfit(Double profit) {
+		this.profit = profit;
+	}
+
 	public String getCardBrand() {
 		return cardBrand;
 	}
@@ -139,8 +161,6 @@ public class Transaction implements Serializable {
 	public void setCardBrand(String cardBrand) {
 		this.cardBrand = cardBrand;
 	}
-
-
 
 	public void setTotalItems(Long totalItems) {
 		this.totalItems = totalItems;
