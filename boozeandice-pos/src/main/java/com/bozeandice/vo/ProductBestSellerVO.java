@@ -7,6 +7,8 @@ public class ProductBestSellerVO {
 	private String productName;
 	private String itemsSold;
 	private String revenue;
+	private String cost;
+	private String profit;
 	
 	public String getProductId() {
 		return productId;
@@ -38,6 +40,19 @@ public class ProductBestSellerVO {
 	public void setImgLocation(String imgLocation) {
 		this.imgLocation = imgLocation;
 	}
+	public String getCost() {
+		return cost;
+	}
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+	public String getProfit() {
+		return profit;
+	}
+	public void setProfit(String profit) {
+		this.profit = profit;
+	}
+	
 	
 	
 	

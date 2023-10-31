@@ -23,7 +23,7 @@
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Product Stock Add</a></li>
+								<li class="breadcrumb-item"><a href="#">Product Stock Transfer</a></li>
 							</ol>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -39,8 +39,7 @@
 						class="alert alert-success alert-dismissible">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4 class="alert-heading">Well done!</h4>
-						<p>Aww yeah, you successfully added a new stock. Go to the <a
-								th:href="${'/product/stocks'}">product stocks</a> see it.</p>
+						<p>Aww yeah, you successfully transferred a stock.</p>
 					</div>
 
 					<div th:if="${message != null and message['status'] == 'error'}"
@@ -54,52 +53,38 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<h3 class="card-title">Add Stock Form</h3>
+									<h3 class="card-title">Transfer Stock</h3>
 								</div>
 								<div class="card-body">
-									<form method="post" th:action="@{/product/stocks/add}">
+									<form method="post" th:action="@{/product/stocks/transfer/}"
+										th:if="${setPsts.size > 0}">
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="form-label" for="product">Product</label>
-													<select class="form-control select2" id="product" name="product">
-														<option th:each="product : ${productList}"
-															th:value="${product.id}" th:text="${product.name}"
-															th:selected="${productId != null and product.id == productId}">
+													<label class="form-label" for="product">Product Stock
+														Destination</label>
+													<input type="text" class="form-control" id="pstd" name="pstd"
+														step="0" min="0" th:value="${pstd.name + ' - ' + '(' + pstd.stocks + ')'}" required disabled>
+													<input type="hidden" id="pstdid" name="pstdid"
+														th:value="${pstd.id}" />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="product">Product Stock Source</label>
+													<select class="form-control select2" id="pstsid" name="pstsid" required>
+														<option th:each="psts : ${setPsts}"
+															th:value="${psts.id}" th:text="${psts.name + ' - ' + '(' + psts.stocks + ')' }">
 														</option>
 													</select>
 												</div>
 											</div>
 											<div class="col-md-2">
 												<div class="form-group">
-													<label class="form-label" for="quantity">Quantity</label>
+													<label class="form-label" for="quantity">Quantity of stocks to transfer</label>
 													<input type="number" class="form-control" id="quantity"
 														name="quantity" step="0" min="0" placeholder="quantity"
 														required>
-												</div>
-											</div>
-											<div class="col-md-2">
-												<div class="form-group">
-													<label class="form-label" for="cost">Cost</label>
-													<input type="number" class="form-control" id="cost" name="cost"
-														step="0.01" min="0" placeholder="cost" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="form-label" for="purchasedate">Purchase Date</label>
-													<input type="date" class="form-control" name="purchasedate"
-														id="purchasedate" required>
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="form-label" for="generatebarcode">Generate
-														Barcode</label>
-														<br>
-													<input type="checkbox" class="form-control" name="generatebarcode" id="generatebarcode" data-bootstrap-switch>
 												</div>
 											</div>
 										</div>
@@ -115,12 +100,21 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<button type="submit" class="btn btn-primary">Submit</button>
-													<input type="hidden" name="username" th:value="${username}"/>
+													<button type="submit" name="processTransfer" class="btn btn-primary">Submit</button>
+													<input type="hidden" name="created_by" th:value="${username}" />
 												</div>
 											</div>
 										</div>
 									</form>
+
+									<div th:unless="${setPsts.size > 0}" class="alert alert-danger alert-dismissible">
+										<button type="button" class="close" data-dismiss="alert"
+											aria-hidden="true">&times;</button>
+										<h4 class="alert-heading">No product with a different version or all stock
+											source has zero stock. Please contact your administrator.</h4>
+										<!--<p th:text="${psts.name + ' no stock available for this stock source.'}"></p>-->
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -133,16 +127,9 @@
 	<!-- ./wrapper -->
 	<div th:insert="~{fragments/footer :: footer}"></div>
 	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
-	<!-- Bootstrap Switch -->
-	<script th:src="@{/plugins/bootstrap-switch/js/bootstrap-switch.min.js}"></script>
 	<script>
 		//Initialize Select2 Elements
 		$('.select2').select2()
-
-		$("input[data-bootstrap-switch]").each(function () {
-			$(this).bootstrapSwitch('state', $(this).prop('checked'));
-		})
-
 	</script>
 </body>
 

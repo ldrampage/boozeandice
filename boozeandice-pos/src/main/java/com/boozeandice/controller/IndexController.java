@@ -2,6 +2,7 @@ package com.boozeandice.controller;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import com.boozeandice.config.UserDetailsImpl;
 import com.boozeandice.entity.Address;
 import com.boozeandice.entity.CashDrawer;
 import com.boozeandice.entity.Customer;
+import com.boozeandice.entity.Discount;
 import com.boozeandice.entity.Product;
 import com.boozeandice.entity.ProductCategory;
 import com.boozeandice.entity.ProductStock;
@@ -37,13 +39,16 @@ import com.boozeandice.entity.Shipment;
 import com.boozeandice.entity.Transaction;
 import com.boozeandice.entity.TransactionItem;
 import com.boozeandice.entity.User;
+import com.boozeandice.entity.UserActivityLog;
 import com.boozeandice.enums.PaymentMethod;
 import com.boozeandice.enums.ShipmentCarrier;
 import com.boozeandice.enums.ShipmentStatus;
 import com.boozeandice.enums.TransactionStatus;
 import com.boozeandice.enums.TransactionType;
 import com.boozeandice.repository.AddressRepository;
+import com.boozeandice.repository.DiscountRepository;
 import com.boozeandice.repository.ShipmentRepository;
+import com.boozeandice.repository.UserActivityLogRepository;
 import com.boozeandice.service.CashDrawerService;
 import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.CustomerService;
@@ -89,9 +94,15 @@ public class IndexController implements Serializable {
 
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private DiscountRepository discountRepo;
 
 	@Autowired
 	private ShipmentRepository shipmentRepository;
+	
+	@Autowired
+	private UserActivityLogRepository userActLogRepo;
 
 	@Autowired
 	private CashDrawerService cashDrawerService;
@@ -257,6 +268,7 @@ public class IndexController implements Serializable {
 				model.addAttribute("customerFilterValue", Long.valueOf(transaction.getCustomer().getId()));
 
 			transactionItemServ.deleteAll(transactionItems);
+			discountRepo.deleteAll(transaction.getDiscount());
 			transactionService.delete(transaction);
 			if (transaction.getShipment() != null) {
 				shipmentRepository.delete(transaction.getShipment());
@@ -324,14 +336,26 @@ public class IndexController implements Serializable {
 				transaction.setIsDelivery(true);
 			}
 
+			Set<Discount> discountSet = new HashSet<>();
+			DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
 			// apply discount start
 			if (parameters.get("discount") != null && parameters.get("discount").length() > 0) {
 				logger.debug("Discount: " + parameters.get("discount"));
+				Discount dt = new Discount();
+				dt.setAmount(Double.valueOf(decimalFormat.format(subTotal * Double.valueOf(parameters.get("discount")))));
+				dt.setReason("Senior Citizen or PWD");
+				discountSet.add(dt);
 				discount = subTotal * Double.valueOf(parameters.get("discount"));
 			}
 			
 			if(parameters.get("custom_discount") != null && parameters.get("custom_discount").length() > 0) {
 				logger.debug("Custom discount: " + parameters.get("custom_discount"));
+				
+				Discount dt = new Discount();
+				dt.setAmount(Double.valueOf(parameters.get("custom_discount")));
+				dt.setReason(parameters.get("custom_discount_reason"));
+				discountSet.add(dt);
 				discount = discount + Double.valueOf(parameters.get("custom_discount"));
 			}
 			subTotal = (subTotal - discount);
@@ -360,20 +384,25 @@ public class IndexController implements Serializable {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			User cashier = userService.getByUsername(userDetails.getUsername());
-
 			transaction.setInvoiceNumber(invoiceNumber);
 			transaction.setTransactionStatus(TransactionStatus.PENDING);
-			transaction.setSubTotal(subTotal);
-			transaction.setTotal(total);
-			transaction.setShipping(shipping);
-			transaction.setPackaging(packaging);
-			transaction.setDiscount(discount);
-			transaction.setVatableSales(vatableSales);
-			transaction.setVatAmount(vatAmount);
+			transaction.setSubTotal(Double.valueOf(decimalFormat.format(subTotal)));
+			transaction.setTotal(Double.valueOf(decimalFormat.format(total)));
+			transaction.setShipping(Double.valueOf(decimalFormat.format(shipping)));
+			transaction.setPackaging(Double.valueOf(decimalFormat.format(packaging)));
+			//transaction.setDiscount(discount);
+			transaction.setVatableSales(Double.valueOf(decimalFormat.format(vatableSales)));
+			transaction.setVatAmount(Double.valueOf(decimalFormat.format(vatAmount)));
 			transaction.setTransactionDateTime(new Timestamp(System.currentTimeMillis()));
 			transaction.setCashier(cashier);
 			
 			transaction = transactionService.save(transaction);
+			for(Discount dt : discountSet) {
+				dt.setTransaction(transaction);
+				discountRepo.save(dt);
+			}
+			
+			transaction.setDiscount(discountSet);
 
 			// Map the productToPurchaseList to TransactionItem
 			Set<TransactionItem> transactionItemList = new HashSet<>();
@@ -404,6 +433,14 @@ public class IndexController implements Serializable {
 			transaction.setProfit(total - transactionCost);
 			
 			transaction = transactionService.save(transaction);
+			
+			//Set user activity start
+			UserActivityLog ual = new UserActivityLog();
+			ual.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+			ual.setUser(cashier);
+			ual.setActionMade("Processed Transaction: TransactionID: " + transaction.getId() + ", Transaction invoice: " + transaction.getInvoiceNumber());
+			userActLogRepo.save(ual);
+			//Set user activity end
 			
 			model.addAttribute("transaction", transaction);
 

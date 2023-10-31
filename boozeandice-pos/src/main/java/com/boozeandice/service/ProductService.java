@@ -30,12 +30,6 @@ public class ProductService implements Serializable {
 	@Autowired
 	private ProductRepository productRepo;
 	
-	@Autowired
-	private ProductStockRepository productStockRepo;
-	
-	@Autowired
-	private TransactionItemRepository transactionItemRepo;
-	
 	public Set<Product> getAll(){
 		return new HashSet<Product>(productRepo.findAll());
 	}
@@ -67,6 +61,11 @@ public class ProductService implements Serializable {
 	
 	public Set<Product> getByNameContainingAndStocksGreaterThan(String productName){
 		return productRepo.findByNameContainingAndStocksGreaterThan(productName, Long.valueOf(0));
+	}
+	
+	public Set<Product> getByNameLike(String productName){
+		
+		return productRepo.findByNameLike(productName);
 	}
 	
 	public Product save(Product product) {

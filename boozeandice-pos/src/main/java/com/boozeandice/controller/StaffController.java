@@ -68,6 +68,44 @@ public class StaffController {
 		model.addAttribute("staff", staffService.getById(Long.valueOf(id)));
 		return pageController.profileViewPage(model);
 	}
+	
+	@PostMapping(path="/profileview/")
+	public String profileViewProcess(Model model, @RequestParam Map<String, String> parameters) {
+		User user = null;
+		Map<String, String> message = new HashMap<String, String>();
+		if(parameters.get("edit_userinfo_btn") != null) {
+			for(Map.Entry<String, String> param : parameters.entrySet()) {
+				logger.debug(param.getKey() + ": " + param.getValue());
+			}
+			user = userService.getByUsername(parameters.get("username"));
+			user.setFname(parameters.get("fname"));
+			user.setMname(parameters.get("mname"));
+			user.setLname(parameters.get("lname"));
+			user.setUsername(parameters.get("username"));
+			user.setMobileNumber(parameters.get("mobile_number"));
+			user.setAbout(parameters.get("about"));
+			userService.save(user);
+		}
+		
+		if(parameters.get("change_password_btn") != null) {
+			for(Map.Entry<String, String> param : parameters.entrySet()) {
+				logger.debug(param.getKey() + ": " + param.getValue());
+			}
+			user = userService.getByUsername(parameters.get("username"));
+			if(parameters.get("current_password").equals(user.getPassword())) {
+				user.setPassword(parameters.get("new_password"));
+				userService.save(user);
+				message.put("status", "success");
+				message.put("message", "Congratulations. Your new password has been set!");
+			} else {
+				message.put("status", "error");
+				message.put("message", "Could not change the password. Current password is incorrect!");
+			}
+		}
+		
+		model.addAttribute("message", message);
+		return profileViewPage(model,user.getId().toString());
+	}
 
 	@PostMapping(path = "/createaccount")
 	public String createAccountPage(Model model, @RequestParam Map<String, String> parameters,

@@ -56,8 +56,10 @@
 					+ ' --------- ' 
 					+ 'P' + (transactionItem.productPriceAtTimeSold * transactionItem.quantity) + ' V'  }"></p>
 				</div>
-				<p th:if="${transaction.packaging != null && transaction.packaging > 0}" th:text="${'Packaging Fee: P' + transaction.packaging}"></p>
-				<p th:if="${transaction.discount != null && transaction.discount > 0}" th:text="${'Discount: P' + transaction.discount}"></p>
+				<p style="margin-bottom:0px;" th:if="${transaction.packaging != null && transaction.packaging > 0}" th:text="${'Packaging Fee: P' + transaction.packaging}"></p>
+				<p style="margin-bottom:0px;">Discount: </p>
+				<p style="margin-bottom:0px;" th:if="${transaction.discount != null && transaction.discount.size > 0}" th:each="discount : ${transaction.discount}"  th:text="${'P' + discount.amount + ' - ' + discount.reason}">
+				</p>
 
 				<p style="margin-bottom:0px; font-size:15px; font-weight:900;"
 					th:text="${'TOTAL --------- P' + transaction.total + ' ' }"></p>

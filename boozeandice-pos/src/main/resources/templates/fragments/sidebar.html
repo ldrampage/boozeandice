@@ -17,8 +17,8 @@
 			<!-- Sidebar user panel (optional) -->
 			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 				<div class="image">
-					<img th:src="@{/images/profile/} + ${imgProfileName}" class="img-circle elevation-2"
-						alt="User Image">
+					<img th:if="${imgProfileName != null}" th:src="@{/images/profile/} + ${imgProfileName}" class="img-circle elevation-2">
+						<img th:unless="${imgProfileName != null}" th:src="@{/img/profile_photo.png}" class="img-circle elevation-2">
 				</div>
 				<div class="info">
 					<a href="#" class="d-block"><span th:text="${fname + ' ' + lname}"></span></a>
@@ -115,9 +115,30 @@
 						<a th:href="${'/reports/'}" class="nav-link">
 							<i class="nav-icon fa fa-file-alt"></i>
 							<p>
-								Reports
+								Report
+								<i class="fas fa-angle-left right"></i>
 							</p>
 						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a th:href="${'/reports/salesreport'}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Daily Sales Report</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="${'/reports/monthlysalesreport'}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Monthly Sales Report</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="${'/reports/zreport'}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Z-Report</p>
+								</a>
+							</li>
+						</ul>
 					</li>
 					<li class="nav-item">
 						<a th:href="${'/chart/'}" class="nav-link">

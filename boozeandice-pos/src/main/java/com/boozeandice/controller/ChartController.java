@@ -1,6 +1,8 @@
 package com.boozeandice.controller;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +11,14 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.boozeandice.repository.ProductBestSellerRepository;
 import com.boozeandice.repository.ReportChartRepository;
 import com.bozeandice.vo.MonthlyRecapChartVO;
+import com.bozeandice.vo.ProductBestSellerVO;
 
 @Controller
 @RequestMapping(path="/chart")
@@ -27,13 +33,34 @@ public class ChartController {
 	@Autowired
 	private ReportChartRepository reportChartRepo;
 	
+	@Autowired
+	private ProductBestSellerRepository productBestSellerRepo;
+	
+	@PostMapping(path="/")
+	public String chartPageProcess(Model model, @RequestParam Map<String,String> parameters) {
+		if(parameters.get("mrcfty_date_submit") != null) {
+			logger.debug(parameters.get("mrcfty_date"));
+			model.addAttribute("mrcfty_date", parameters.get("mrcfty_date"));
+		}
+		if(parameters.get("mbsp_date_submit") != null) {
+			logger.debug(parameters.get("mbsp_date"));
+			model.addAttribute("mbsp_date", parameters.get("mbsp_date"));
+		}
+		return chartPage(model);
+	}
 	
 	@GetMapping(path="/")
 	public String chartPage(Model model) {
-		
 		//Monthly Recap Chart Start
-		
-		List<MonthlyRecapChartVO> monthlyRecapChartVoList = reportChartRepo.getMonthlyRecapChartByYear("2023");
+		List<MonthlyRecapChartVO> monthlyRecapChartVoList = null;
+		if(model.getAttribute("mrcfty_date") != null) {
+			monthlyRecapChartVoList = reportChartRepo.getMonthlyRecapChartByYear(model.getAttribute("mrcfty_date").toString());
+		} else {
+			Calendar calendar = Calendar.getInstance();
+			int year = calendar.get(Calendar.YEAR);
+			model.addAttribute("mrcfty_date", year);
+			monthlyRecapChartVoList = reportChartRepo.getMonthlyRecapChartByYear(String.valueOf(year));
+		}
 		
 		Double totalRevenue = 0.0;
 		Double totalCost = 0.0;
@@ -80,6 +107,27 @@ public class ChartController {
 		}
 		//Monthly Recap Chart End
 		
+		// All Time Best Selling Product Start
+		List<ProductBestSellerVO> pbsVO = productBestSellerRepo.getBestSellingProductAllTime();
+		model.addAttribute("productAllTimeBestSeller", pbsVO);
+		// All Time Best Selling Product End
+		
+		//Monthly Best Selling Product Start
+		List<ProductBestSellerVO> mbspList = null;
+		if(model.getAttribute("mbsp_date") != null) {
+			mbspList = productBestSellerRepo.monthlyBestSellingProduct(model.getAttribute("mbsp_date").toString());
+		} else {
+			Calendar calendar = Calendar.getInstance();
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH) + 1;
+			String mbsp_date = month + "-" + year;
+			logger.debug(mbsp_date);
+			mbspList = productBestSellerRepo.monthlyBestSellingProduct(mbsp_date);
+			model.addAttribute("mbsp_date", mbsp_date);
+			
+		}
+		model.addAttribute("mbspList", mbspList);
+		//Monthly Best Selling Product End
 		return pageController.chartPage(model);
 		
 	}

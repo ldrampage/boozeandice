@@ -2,9 +2,10 @@ package com.bozeandice.vo;
 
 import java.util.Date;
 
-public class DailySalesReportVO {
+public class SalesReportVO {
 	
 	private Date date;
+	private String dateString;
 	private String total;
 	private String cashTransaction;
 	private String gcashTransaction;
@@ -21,6 +22,13 @@ public class DailySalesReportVO {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	
+	public String getDateString() {
+		return dateString;
+	}
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
 	}
 	public String getTotal() {
 		if(total != null)

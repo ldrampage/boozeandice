@@ -38,6 +38,8 @@ senior_citizen_discount: 0.20 #20 PERCENT SENIOR CITIZEN DISCOUNT
 available_tables: 6
 schema_name: boozeandice
 export_import_script: file:C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\resources\export_import_script.bat
+database-sync:
+  status: 'OFF'
 
 #img upload location
 upload:
@@ -92,7 +94,7 @@ spring:
 spring:  
   config:
     activate:
-      on-profile: test
+      on-profile: prod
   datasource:
     url: jdbc:mysql://boozeandice-test-rds.c7l9gtvaasvy.ap-southeast-1.rds.amazonaws.com:3306/boozeandice
     username: admin
@@ -103,8 +105,8 @@ spring:
       hibernate:
         generate-ddl: true
         dialect: org.hibernate.dialect.MySQLDialect
-        ddl-auto: create
+        ddl-auto: update
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   cache:
     type: simple     

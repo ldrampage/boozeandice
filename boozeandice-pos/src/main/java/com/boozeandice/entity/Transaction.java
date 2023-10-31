@@ -76,8 +76,8 @@ public class Transaction implements Serializable {
 	@Column(name="packaging")
 	private Double packaging;
 	
-	@Column(name="discount")
-	private Double discount;
+	@OneToMany(mappedBy="transaction")
+	private Set<Discount> discount;
 	
 	@Column(name="vatable_sales")
 	private Double vatableSales;
@@ -347,13 +347,19 @@ public class Transaction implements Serializable {
 		this.packaging = packaging;
 	}
 
-	public Double getDiscount() {
+	
+	
+
+
+	public Set<Discount> getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(Double discount) {
+
+	public void setDiscount(Set<Discount> discount) {
 		this.discount = discount;
 	}
+
 
 	public Boolean getTakeOut() {
 		return takeOut;

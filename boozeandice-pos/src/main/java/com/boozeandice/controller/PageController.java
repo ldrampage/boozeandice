@@ -144,6 +144,11 @@ public class PageController {
 		return "pages/product/product_stock"; 
 	}
 	
+//	public String productStocksTransfer(Model model) {
+//		addAttributes(model);
+//		return "pages/product/product_stock_transfer";
+//	}
+	
 	public String productStocksAdd(Model model) {
 		addAttributes(model);
 		return "pages/product/product_stock_add";
@@ -229,7 +234,22 @@ public class PageController {
 	
 	public String reportsPage(Model model) {
 		addAttributes(model);
-		return "pages/reports/reports";
+		return "pages/reports/zreport";
+	}
+	
+	public String salesReportPage(Model model) {
+		addAttributes(model);
+		return "pages/reports/sales_report";
+	}
+	
+	public String zreportPrintPage(Model model) {
+		addAttributes(model);
+		return "pages/reports/z-report-print";
+	}
+	
+	public String monthlySalesReportPage(Model model) {
+		addAttributes(model);
+		return "pages/reports/monthlysalesreport";
 	}
 	
 	// Utility
