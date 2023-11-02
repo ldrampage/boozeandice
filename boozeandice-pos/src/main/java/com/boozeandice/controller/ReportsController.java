@@ -55,7 +55,7 @@ public class ReportsController {
 	@Autowired
 	private ReportChartRepository reportChartRepo;
 
-	@GetMapping(path = "/zreport")
+	@GetMapping(path = "/zreport/")
 	public String zReportsPage(Model model, @RequestParam(name = "zdate", required = false) String zdate)
 			throws Exception {
 		logger.debug("Start reportsPage() -> zdate: " + zdate);
@@ -349,6 +349,7 @@ public class ReportsController {
 		PayMayaPaymentBrkDown pmpbd = new PayMayaPaymentBrkDown();
 		Double totalDiscounts = 0.0;
 		Double totalPackaging = 0.0;
+		Double totalExpense = 0.0;
 		for (Transaction transaction : transactionListPaid) {
 
 			if (transaction.getCardBrand() != null
@@ -379,10 +380,19 @@ public class ReportsController {
 			if (transaction.getPackaging() != null && transaction.getPackaging() > 0) {
 				totalPackaging = totalPackaging + transaction.getPackaging();
 			}
+			
+			Set<Expense> expenseList = transaction.getCashdrawer().getExpenses();
+			
+			if(expenseList != null && expenseList.size() > 0) {
+				for(Expense expense : expenseList) {
+					totalExpense = totalExpense + expense.getExpense();
+				}
+			}
 
 		}
 		model.addAttribute("totalPackaging", totalPackaging);
 		model.addAttribute("totalDiscounts", totalDiscounts);
+		model.addAttribute("totalExpense", totalExpense);
 		model.addAttribute("pmpbd", pmpbd);
 		// PAYMAYA Payment Breakdown, Total Discount Packaging end
 

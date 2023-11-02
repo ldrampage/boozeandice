@@ -50,31 +50,53 @@
 									</div>
 									<div style="display: none;">
 										<span id="monthlyRecapJanuary"
-											th:data-revenue="${monthlyRecapJanuary != null ? monthlyRecapJanuary.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapJanuary != null ? monthlyRecapJanuary.revenue : 0}"
+											th:data-cost="${monthlyRecapJanuary != null ? monthlyRecapJanuary.cost : 0}"
+											th:data-profit="${monthlyRecapJanuary != null ? monthlyRecapJanuary.profit : 0}"></span>
 										<span id="monthlyRecapFebruary"
-											th:data-revenue="${monthlyRecapFebruary != null ? monthlyRecapFebruary.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapFebruary != null ? monthlyRecapFebruary.revenue : 0}"
+											th:data-cost="${monthlyRecapFebruary != null ? monthlyRecapFebruary.cost : 0}"
+											th:data-profit="${monthlyRecapFebruary != null ? monthlyRecapFebruary.profit : 0}"></span>
 										<span id="monthlyRecapMarch"
-											th:data-value="${monthlyRecapMarch != null ? monthlyRecapMarch.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapMarch != null ? monthlyRecapMarch.revenue : 0}"
+											th:data-cost="${monthlyRecapMarch != null ? monthlyRecapMarch.cost : 0}"
+											th:data-profit="${monthlyRecapMarch != null ? monthlyRecapMarch.profit : 0}"></span>
 										<span id="monthlyRecapApril"
-											th:data-value="${monthlyRecapApril != null ? monthlyRecapApril.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapApril != null ? monthlyRecapApril.revenue : 0}"
+											th:data-cost="${monthlyRecapApril != null ? monthlyRecapApril.cost : 0}"
+											th:data-profit="${monthlyRecapApril != null ? monthlyRecapApril.profit : 0}"></span>
 										<span id="monthlyRecapMay"
-											th:data-value="${monthlyRecapMay != null ? monthlyRecapMay.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapMay != null ? monthlyRecapMay.revenue : 0}"
+											th:data-cost="${monthlyRecapMay != null ? monthlyRecapMay.cost : 0}"
+											th:data-profit="${monthlyRecapMay != null ? monthlyRecapMay.profit : 0}"></span>
 										<span id="monthlyRecapJune"
-											th:data-value="${monthlyRecapJune != null ? monthlyRecapJune.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapJune != null ? monthlyRecapJune.revenue : 0}"
+											th:data-cost="${monthlyRecapJune != null ? monthlyRecapJune.cost : 0}"
+											th:data-profit="${monthlyRecapJune != null ? monthlyRecapJune.profit : 0}"></span>
 										<span id="monthlyRecapJuly"
-											th:data-value="${monthlyRecapJuly != null ? monthlyRecapJuly.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapJuly != null ? monthlyRecapJuly.revenue : 0}"
+											th:data-cost="${monthlyRecapJuly != null ? monthlyRecapJuly.cost : 0}"
+											th:data-profit="${monthlyRecapJuly != null ? monthlyRecapJuly.profit : 0}"></span>
 										<span id="monthlyRecapAugust"
-											th:data-value="${monthlyRecapAugust != null ? monthlyRecapAugust.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapAugust != null ? monthlyRecapAugust.revenue : 0}"
+											th:data-cost="${monthlyRecapAugust != null ? monthlyRecapAugust.cost : 0}"
+											th:data-profit="${monthlyRecapAugust != null ? monthlyRecapAugust.profit : 0}"></span>
 										<span id="monthlyRecapSeptember"
-											th:data-value="${monthlyRecapSeptember != null ? monthlyRecapSeptember.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapSeptember != null ? monthlyRecapSeptember.revenue : 0}"
+											th:data-cost="${monthlyRecapSeptember != null ? monthlyRecapSeptember.cost : 0}"
+											th:data-profit="${monthlyRecapSeptember != null ? monthlyRecapSeptember.profit : 0}"></span>
 										<span id="monthlyRecapOctober"
 											th:data-revenue="${monthlyRecapOctober != null ? monthlyRecapOctober.revenue : 0}"
 											th:data-cost="${monthlyRecapOctober != null ? monthlyRecapOctober.cost : 0}"
 											th:data-profit="${monthlyRecapOctober != null ? monthlyRecapOctober.profit : 0}"></span>
 										<span id="monthlyRecapNovember"
-											th:data-value="${monthlyRecapNovember != null ? monthlyRecapNovember.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapNovember != null ? monthlyRecapNovember.revenue : 0}"
+											th:data-cost="${monthlyRecapNovember != null ? monthlyRecapNovember.cost : 0}"
+											th:data-profit="${monthlyRecapNovember != null ? monthlyRecapNovember.profit : 0}"></span>
 										<span id="monthlyRecapDecember"
-											th:data-value="${monthlyRecapDecember != null ? monthlyRecapDecember.revenue : 0}"></span>
+											th:data-revenue="${monthlyRecapDecember != null ? monthlyRecapDecember.revenue : 0}"
+											th:data-cost="${monthlyRecapDecember != null ? monthlyRecapDecember.cost : 0}"
+											th:data-profit="${monthlyRecapDecember != null ? monthlyRecapDecember.profit : 0}"></span>
 									</div>
 								</div>
 								<div class="card-body">
@@ -366,8 +388,17 @@
 						pointHighlightFill: '#fff',
 						pointHighlightStroke: 'rgba(60,141,188,1)',
 						data: [$("#monthlyRecapJanuary").data("revenue"),
-						$("#monthlyRecapFebruary").data("revenue"), 0, 0, 0, 0, 0, 0, 0,
-						$("#monthlyRecapOctober").data("revenue"), 0, 0]
+							$("#monthlyRecapFebruary").data("revenue"), 
+							$("#monthlyRecapMarch").data("revenue"), 
+							$("#monthlyRecapApril").data("revenue"), 
+							$("#monthlyRecapMay").data("revenue"), 
+							$("#monthlyRecapJune").data("revenue"), 
+							$("#monthlyRecapJuly").data("revenue"), 
+							$("#monthlyRecapAugust").data("revenue"), 
+							$("#monthlyRecapSeptember").data("revenue"),
+							$("#monthlyRecapOctober").data("revenue"), 
+							$("#monthlyRecapNovember").data("revenue"), 
+							$("#monthlyRecapDecember").data("revenue")]
 					},
 					{
 						label: 'Cost',
@@ -378,8 +409,18 @@
 						pointStrokeColor: '#c1c7d1',
 						pointHighlightFill: '#fff',
 						pointHighlightStroke: 'rgba(220,220,220,1)',
-						data: [0, 0, 0, 0, 0, 0, 0, 0, 0,
-							$("#monthlyRecapOctober").data("cost"), 0, 0]
+						data: [$("#monthlyRecapJanuary").data("cost"),
+							$("#monthlyRecapFebruary").data("cost"), 
+							$("#monthlyRecapMarch").data("cost"), 
+							$("#monthlyRecapApril").data("cost"), 
+							$("#monthlyRecapMay").data("cost"), 
+							$("#monthlyRecapJune").data("cost"), 
+							$("#monthlyRecapJuly").data("cost"), 
+							$("#monthlyRecapAugust").data("cost"), 
+							$("#monthlyRecapSeptember").data("cost"),
+							$("#monthlyRecapOctober").data("cost"), 
+							$("#monthlyRecapNovember").data("cost"), 
+							$("#monthlyRecapDecember").data("cost")]
 					},
 					{
 						label: 'Profit',
@@ -390,8 +431,18 @@
 						pointStrokeColor: '#c1c7d1',
 						pointHighlightFill: '#fff',
 						pointHighlightStroke: 'rgba(220,220,220,1)',
-						data: [0, 0, 0, 0, 0, 0, 0, 0, 0,
-							$("#monthlyRecapOctober").data("profit"), 0, 0]
+						data: [$("#monthlyRecapJanuary").data("profit"),
+							$("#monthlyRecapFebruary").data("profit"), 
+							$("#monthlyRecapMarch").data("profit"), 
+							$("#monthlyRecapApril").data("profit"), 
+							$("#monthlyRecapMay").data("profit"), 
+							$("#monthlyRecapJune").data("profit"), 
+							$("#monthlyRecapJuly").data("profit"), 
+							$("#monthlyRecapAugust").data("profit"), 
+							$("#monthlyRecapSeptember").data("profit"),
+							$("#monthlyRecapOctober").data("profit"), 
+							$("#monthlyRecapNovember").data("profit"), 
+							$("#monthlyRecapDecember").data("profit")]
 					},
 				]
 			}

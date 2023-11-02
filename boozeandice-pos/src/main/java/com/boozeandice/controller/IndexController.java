@@ -413,9 +413,11 @@ public class IndexController implements Serializable {
 				transactionItem.setProductId(product.getId());
 				transactionItem.setProductPriceAtTimeSold(product.getPrice());
 				transactionItem.setProductCostAtTimeSold(product.getCost());
+				transactionItem.setPackagingFee(product.getPackagingFee());
 				transactionItem.setQuantity(product.getQtyToPurchase());
-				transactionItem.setTransaction(transaction);
 				transactionItem.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+				transactionItem.setStatus(TransactionStatus.PAID.getDescription());
+				transactionItem.setTransaction(transaction);
 				if (product.getBarcodeDigits() != null)
 					transactionItem.setBarcodeDigits(product.getBarcodeDigits());
 				transactionItemList.add(transactionItem);

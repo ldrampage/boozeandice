@@ -52,6 +52,8 @@ public class Transaction implements Serializable {
 	@OneToMany(mappedBy="transaction")
 	private Set<TransactionItem> transactionItem;
 	
+	//private Set<RefundedItem> refundedItem;
+	
 	@Column(name="subTotal") // before packaging, deductions, discounts
 	private Double subTotal;
 	

@@ -82,10 +82,10 @@ public class PageController {
 	
 	public String cashdrawerPage(Model model) {
 		addAttributes(model);
-		if(model.getAttribute("validTerminal").toString() == "true")
+		//if(model.getAttribute("validTerminal").toString() == "true")
 			return "pages/cashdrawer/cashdrawer";
-		else 
-			return "pages/notValidTerminal";
+		//else 
+		//	return "pages/notValidTerminal";
 	}
 	
 	public String cashDrawerCreate(Model model) {

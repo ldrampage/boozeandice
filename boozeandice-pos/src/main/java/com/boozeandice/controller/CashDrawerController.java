@@ -1,6 +1,9 @@
 package com.boozeandice.controller;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,104 +56,120 @@ public class CashDrawerController {
 		this.pageController = pageController;
 		this.userService = userService;
 	}
+	
 
 	@GetMapping(path = "")
-	public String cashdrawerPage(Model model) {
-		CashDrawer cashDrawerToday = cashDrawerService.getByToday();
-		Set<Transaction> transactionList = transactionService.getByCashDrawer(cashDrawerToday);
+	public String cashdrawerPage(Model model, String date) {
+		CashDrawer cashDrawer = cashDrawerService.getByToday();
+		boolean customDate = false;
+		if(date != null && date.length() > 0) {
+			logger.debug("CashDrawerCustomDate: " + date);
+			try {
+				Date cashDrawerDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+				cashDrawer = cashDrawerService.getByCreatedDate(cashDrawerDate);
+				customDate = true;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		Set<Transaction> transactionList = transactionService.getByCashDrawer(cashDrawer);
 
-		List<Expense> expenseList = expenseService.getByCashDrawerToday(cashDrawerToday);
+		List<Expense> expenseList = expenseService.getByCashDrawerToday(cashDrawer);
 
-		if (cashDrawerToday != null) {
-			cashDrawerToday.setTransactions(transactionList);
+		if (cashDrawer != null) {
+			cashDrawer.setTransactions(transactionList);
 
 			// Set total cash added
 			Double totalCashAdded = 0.0;
-			if (cashDrawerToday.getCashAdded() != null && cashDrawerToday.getCashAdded().size() > 0) {
-				for (CashAdded ca : cashDrawerToday.getCashAdded()) {
+			if (cashDrawer.getCashAdded() != null && cashDrawer.getCashAdded().size() > 0) {
+				for (CashAdded ca : cashDrawer.getCashAdded()) {
 					totalCashAdded = totalCashAdded + ca.getCash();
 				}
 			}
 
 			// Set total expenses
 			Double totalExpenses = 0.0;
-			if (cashDrawerToday.getExpenses() != null && cashDrawerToday.getExpenses().size() > 0) {
-				for (Expense ca : cashDrawerToday.getExpenses()) {
+			if (cashDrawer.getExpenses() != null && cashDrawer.getExpenses().size() > 0) {
+				for (Expense ca : cashDrawer.getExpenses()) {
 					totalExpenses = totalExpenses + ca.getExpense();
 				}
 			}
 
-			logger.debug("transactions: " + cashDrawerToday.getTransactions().size());
+			logger.debug("transactions: " + cashDrawer.getTransactions().size());
 
 			// set total cash sales and total cash in drawer
-			if (cashDrawerToday.getTransactions() != null && cashDrawerToday.getTransactions().size() > 0) {
-				for (Transaction transaction : cashDrawerToday.getTransactions()) {
+			if (cashDrawer.getTransactions() != null && cashDrawer.getTransactions().size() > 0) {
+				for (Transaction transaction : cashDrawer.getTransactions()) {
 
 					// totalsales
-					if (cashDrawerToday.getTotalCashSales() == null)
-						cashDrawerToday.setTotalCashSales(0.0);
-					cashDrawerToday.setTotalCashSales(cashDrawerToday.getTotalCashSales() + transaction.getTotal());
+					if (cashDrawer.getTotalCashSales() == null)
+						cashDrawer.setTotalCashSales(0.0);
+					cashDrawer.setTotalCashSales(cashDrawer.getTotalCashSales() + transaction.getTotal());
 
 					// totalcashindrawer cash payment
 					if (transaction.getPaymentMethod().equals(PaymentMethod.CASH.getDescription())) {
-						if (cashDrawerToday.getTotalCashInDrawer() == null) {
-							cashDrawerToday.setTotalCashInDrawer(0.0);
+						if (cashDrawer.getTotalCashInDrawer() == null) {
+							cashDrawer.setTotalCashInDrawer(0.0);
 						}
-						cashDrawerToday
-								.setTotalCashInDrawer(cashDrawerToday.getTotalCashInDrawer() + transaction.getTotal());
+						cashDrawer
+								.setTotalCashInDrawer(cashDrawer.getTotalCashInDrawer() + transaction.getTotal());
 					}
 					// totalgcashpayment
 					if (transaction.getPaymentMethod().equals(PaymentMethod.GCASH.getDescription())) {
-						if (cashDrawerToday.getTotalGCashPayments() == null)
-							cashDrawerToday.setTotalGCashPayments(0.0);
-						cashDrawerToday.setTotalGCashPayments(
-								cashDrawerToday.getTotalGCashPayments() + transaction.getTotal());
+						if (cashDrawer.getTotalGCashPayments() == null)
+							cashDrawer.setTotalGCashPayments(0.0);
+						cashDrawer.setTotalGCashPayments(
+								cashDrawer.getTotalGCashPayments() + transaction.getTotal());
 					}
 
 					// total credit card payments
 					if (transaction.getPaymentMethod().equals(PaymentMethod.PAYMAYA.getDescription())) {
-						if (cashDrawerToday.getTotalCreditCardPayments() == null)
-							cashDrawerToday.setTotalCreditCardPayments(0.0);
-						cashDrawerToday.setTotalCreditCardPayments(
-								cashDrawerToday.getTotalCreditCardPayments() + transaction.getTotal());
+						if (cashDrawer.getTotalCreditCardPayments() == null)
+							cashDrawer.setTotalCreditCardPayments(0.0);
+						cashDrawer.setTotalCreditCardPayments(
+								cashDrawer.getTotalCreditCardPayments() + transaction.getTotal());
 					}
 
 				}
-				logger.debug("totalCashSales: " + cashDrawerToday.getTotalCashSales());
-				logger.debug("totalCashSales: " + cashDrawerToday.getTotalCashInDrawer());
+				logger.debug("totalCashSales: " + cashDrawer.getTotalCashSales());
+				logger.debug("totalCashSales: " + cashDrawer.getTotalCashInDrawer());
 
 			} else {
-				cashDrawerToday.setTotalCashSales(0.0);
-				cashDrawerToday.setTotalCashInDrawer(0.0);
+				cashDrawer.setTotalCashSales(0.0);
+				cashDrawer.setTotalCashInDrawer(0.0);
 			}
 
 			// totalCashInDrawer + totalCashAdded + startingcash - Expenses
-			Double totalCashInDrawer = cashDrawerToday.getTotalCashInDrawer() + totalCashAdded
-					+ cashDrawerToday.getStartingCash() - totalExpenses;
+			Double totalCashInDrawer = cashDrawer.getTotalCashInDrawer() + totalCashAdded
+					+ cashDrawer.getStartingCash() - totalExpenses;
 
-			cashDrawerToday.setTotalCashAdded(totalCashAdded);
-			cashDrawerToday.setTotalExpenses(totalExpenses);
-			cashDrawerToday.setTotalCashInDrawer(totalCashInDrawer);
+			cashDrawer.setTotalCashAdded(totalCashAdded);
+			cashDrawer.setTotalExpenses(totalExpenses);
+			cashDrawer.setTotalCashInDrawer(totalCashInDrawer);
 			
 			
 			//Setting the output in UI
-			cashDrawerToday.setStartingCash(Double.valueOf(String.format("%.2f", cashDrawerToday.getStartingCash())));
-			cashDrawerToday.setTotalCashAdded(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashAdded())));
-			cashDrawerToday.setTotalExpenses(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalExpenses())));
-			cashDrawerToday.setTotalCashSales(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashSales())));
-			cashDrawerToday.setTotalCashInDrawer(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCashInDrawer())));
-			if(cashDrawerToday.getTotalGCashPayments() != null)
-				cashDrawerToday.setTotalGCashPayments(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalGCashPayments())));
-			if(cashDrawerToday.getTotalCreditCardPayments() != null)
-				cashDrawerToday.setTotalCreditCardPayments(Double.valueOf(String.format("%.2f", cashDrawerToday.getTotalCreditCardPayments())));
+			cashDrawer.setStartingCash(Double.valueOf(String.format("%.2f", cashDrawer.getStartingCash())));
+			cashDrawer.setTotalCashAdded(Double.valueOf(String.format("%.2f", cashDrawer.getTotalCashAdded())));
+			cashDrawer.setTotalExpenses(Double.valueOf(String.format("%.2f", cashDrawer.getTotalExpenses())));
+			cashDrawer.setTotalCashSales(Double.valueOf(String.format("%.2f", cashDrawer.getTotalCashSales())));
+			cashDrawer.setTotalCashInDrawer(Double.valueOf(String.format("%.2f", cashDrawer.getTotalCashInDrawer())));
+			if(cashDrawer.getTotalGCashPayments() != null)
+				cashDrawer.setTotalGCashPayments(Double.valueOf(String.format("%.2f", cashDrawer.getTotalGCashPayments())));
+			if(cashDrawer.getTotalCreditCardPayments() != null)
+				cashDrawer.setTotalCreditCardPayments(Double.valueOf(String.format("%.2f", cashDrawer.getTotalCreditCardPayments())));
 			
-			model.addAttribute("cashDrawerToday", cashDrawerToday);
+			model.addAttribute("cashDrawerToday", cashDrawer);
 		}
 
 		if (expenseList != null && expenseList.size() > 0) {
 			model.addAttribute("expenseList", expenseList);
 		}
-
+		model.addAttribute("cashDrawerDate", date);
+		model.addAttribute("customDate", customDate);
 		return this.pageController.cashdrawerPage(model);
 	}
 
@@ -203,6 +222,10 @@ public class CashDrawerController {
 			cashAddedService.save(cashAdded);
 			return "redirect:/cashdrawer";
 		}
+		
+		if(parameters.get("cashdrawerdate_date_submit") != null) {
+			return cashdrawerPage(model, parameters.get("cashdrawer_date"));
+		} 
 
 		return pageController.cashdrawerPage(model);
 	}

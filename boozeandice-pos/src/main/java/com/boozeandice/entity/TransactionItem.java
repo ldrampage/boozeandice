@@ -51,6 +51,9 @@ public class TransactionItem implements Serializable {
 	
 	@Column(name="created_date")
 	private Date createdDate;
+	
+	@Column(name="status")
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -123,6 +126,24 @@ public class TransactionItem implements Serializable {
 	public void setProductCostAtTimeSold(Double productCostAtTimeSold) {
 		this.productCostAtTimeSold = productCostAtTimeSold;
 	}
+
+	public Double getPackagingFee() {
+		return packagingFee;
+	}
+
+	public void setPackagingFee(Double packagingFee) {
+		this.packagingFee = packagingFee;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 	
 	
 

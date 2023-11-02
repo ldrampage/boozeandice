@@ -142,16 +142,19 @@
 		$(document).ready(function () {
 			
 			$("#daily_sales_report_table").DataTable({
+				dom: 'Bfrtip',
 				responsive: true, 
 				lengthChange: false, 
 				autoWidth: false,
-				buttons: ['csv'], //["copy", "csv", "excel", "pdf", "print", "colvis"],
+				buttons: [
+						{extend: 'csv',text: 'Export CSV',filename: 'daily_sales_report'}
+					], //["copy", "csv", "excel", "pdf", "print", "colvis"],
 				searching: true,
 				order: [0,'desc']
 
 			})
 
-		})
+		})	
 
 
 	</script>
