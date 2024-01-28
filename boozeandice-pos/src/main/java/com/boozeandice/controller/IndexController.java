@@ -94,13 +94,13 @@ public class IndexController implements Serializable {
 
 	@Autowired
 	private AddressRepository addressRepository;
-	
+
 	@Autowired
 	private DiscountRepository discountRepo;
 
 	@Autowired
 	private ShipmentRepository shipmentRepository;
-	
+
 	@Autowired
 	private UserActivityLogRepository userActLogRepo;
 
@@ -118,10 +118,10 @@ public class IndexController implements Serializable {
 
 	@Value("${available_tables}")
 	private Long available_table;
-	
+
 	@Value("${business_name}")
 	private String businessName;
-	
+
 	@Value("${business_address}")
 	private String businessAddress;
 
@@ -133,7 +133,8 @@ public class IndexController implements Serializable {
 	@GetMapping(path = "/")
 	public String index(Model model) {
 		logger.debug("Start index()");
-		Set<Product> productList = productService.getAllNonZeroStock();
+		// Set<Product> productList = productService.getAllNonZeroStock();
+		Set<Product> productList = productService.getAll();
 		CashDrawer cashDrawerToday = cashDrawerService.getByToday();
 		List<Set<Product>> productsDisplay = utility.organizeProductsDisplay(productList);
 
@@ -154,7 +155,8 @@ public class IndexController implements Serializable {
 	@PostMapping(path = "/")
 	public String posProcesses(Model model, @RequestParam Map<String, String> parameters) {
 		logger.debug("Start posProcesses()");
-		Set<Product> productList = productService.getAllNonZeroStock();
+		// Set<Product> productList = productService.getAllNonZeroStock();
+		Set<Product> productList = productService.getAll();
 		CashDrawer cashDrawerToday = cashDrawerService.getByToday();
 
 		List<Set<Product>> productsDisplay = utility.organizeProductsDisplay(productList);
@@ -169,7 +171,9 @@ public class IndexController implements Serializable {
 			// products to display
 			if (!"all".equalsIgnoreCase(this.categoryFilterId)) {
 				ProductCategory productCategory = productCatService.getById(Long.valueOf(this.categoryFilterId));
-				productList = productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				// productList =
+				// productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				productList = productService.getProductByCategory(productCategory);
 				productsDisplay = utility.organizeProductsDisplay(productList);
 				model.addAttribute("categoryFilterValue", Long.valueOf(this.categoryFilterId));
 			} else {
@@ -196,7 +200,9 @@ public class IndexController implements Serializable {
 			// products to display
 			if (!"all".equalsIgnoreCase(this.categoryFilterId)) {
 				ProductCategory productCategory = productCatService.getById(Long.valueOf(this.categoryFilterId));
-				productList = productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				// productList =
+				// productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				productList = productService.getProductByCategory(productCategory);
 				productsDisplay = utility.organizeProductsDisplay(productList);
 				model.addAttribute("categoryFilterValue", Long.valueOf(this.categoryFilterId));
 			} else {
@@ -212,7 +218,9 @@ public class IndexController implements Serializable {
 			if (!parameters.get("categoryId").equalsIgnoreCase("all")) {
 				ProductCategory productCategory = productCatService.getById(Long.valueOf(parameters.get("categoryId")));
 				this.categoryFilterId = parameters.get("categoryId");
-				productList = productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				// productList =
+				// productService.getByProductCategoryAndProductStockGreaterThan(productCategory);
+				productList = productService.getProductByCategory(productCategory);
 				productsDisplay = utility.organizeProductsDisplay(productList);
 				model.addAttribute("categoryFilterValue", Long.valueOf(parameters.get("categoryId")));
 			} else {
@@ -221,7 +229,8 @@ public class IndexController implements Serializable {
 		}
 
 		if (parameters.get("searchByProductName") != null) {
-			productList = productService.getByNameContainingAndStocksGreaterThan(parameters.get("searchByProductName"));
+			//productList = productService.getByNameContainingAndStocksGreaterThan(parameters.get("searchByProductName"));
+			productList = productService.getByNameContaining(parameters.get("searchByProductName"));
 			productsDisplay = utility.organizeProductsDisplay(productList);
 		}
 
@@ -230,15 +239,21 @@ public class IndexController implements Serializable {
 			// Products in the purchase list
 			ProductStock productStock = productStockService
 					.getByBarcodeDigits(Long.valueOf(parameters.get("barcodeprocess")));
-			Product product = productStock.getProduct();
-			if (product.getStocks() > 0) {
-				product.setQtyToPurchase(Long.valueOf(1));
-				product.setBarcodeDigits(parameters.get("barcodeprocess"));
-				productToPurchaseList.add(product);
-			} else {
-				logger.debug("Out of stock for " + product.getName());
-			}
+			Product product = null;
+			if (productStock != null)
+				product = productStock.getProduct();
 
+			if (product != null) {
+				if (product.getStocks() > 0) {
+					product.setQtyToPurchase(Long.valueOf(1));
+					product.setBarcodeDigits(parameters.get("barcodeprocess"));
+					productToPurchaseList.add(product);
+				} else {
+					logger.debug("Out of stock for " + product);
+				}
+			} else {
+				logger.debug("Not able to find product with bardcode: " + parameters.get("barcodeprocess"));
+			}
 		}
 
 		if (parameters.get("quantityHandler") != null) {
@@ -343,15 +358,16 @@ public class IndexController implements Serializable {
 			if (parameters.get("discount") != null && parameters.get("discount").length() > 0) {
 				logger.debug("Discount: " + parameters.get("discount"));
 				Discount dt = new Discount();
-				dt.setAmount(Double.valueOf(decimalFormat.format(subTotal * Double.valueOf(parameters.get("discount")))));
+				dt.setAmount(
+						Double.valueOf(decimalFormat.format(subTotal * Double.valueOf(parameters.get("discount")))));
 				dt.setReason("Senior Citizen or PWD");
 				discountSet.add(dt);
 				discount = subTotal * Double.valueOf(parameters.get("discount"));
 			}
-			
-			if(parameters.get("custom_discount") != null && parameters.get("custom_discount").length() > 0) {
+
+			if (parameters.get("custom_discount") != null && parameters.get("custom_discount").length() > 0) {
 				logger.debug("Custom discount: " + parameters.get("custom_discount"));
-				
+
 				Discount dt = new Discount();
 				dt.setAmount(Double.valueOf(parameters.get("custom_discount")));
 				dt.setReason(parameters.get("custom_discount_reason"));
@@ -364,10 +380,10 @@ public class IndexController implements Serializable {
 			// consolidate the shipping + packaging fees
 			total = (subTotal + shipping + packaging);
 
-			//calculate vat amount
+			// calculate vat amount
 			vatAmount = subTotal * vat;
-			
-			//calculate the vatableSales
+
+			// calculate the vatableSales
 			vatableSales = subTotal - vatAmount;
 
 			logger.debug("subTotal: " + subTotal);
@@ -390,18 +406,18 @@ public class IndexController implements Serializable {
 			transaction.setTotal(Double.valueOf(decimalFormat.format(total)));
 			transaction.setShipping(Double.valueOf(decimalFormat.format(shipping)));
 			transaction.setPackaging(Double.valueOf(decimalFormat.format(packaging)));
-			//transaction.setDiscount(discount);
+			// transaction.setDiscount(discount);
 			transaction.setVatableSales(Double.valueOf(decimalFormat.format(vatableSales)));
 			transaction.setVatAmount(Double.valueOf(decimalFormat.format(vatAmount)));
 			transaction.setTransactionDateTime(new Timestamp(System.currentTimeMillis()));
 			transaction.setCashier(cashier);
-			
+
 			transaction = transactionService.save(transaction);
-			for(Discount dt : discountSet) {
+			for (Discount dt : discountSet) {
 				dt.setTransaction(transaction);
 				discountRepo.save(dt);
 			}
-			
+
 			transaction.setDiscount(discountSet);
 
 			// Map the productToPurchaseList to TransactionItem
@@ -427,23 +443,24 @@ public class IndexController implements Serializable {
 			// Set up the transaction costing by product cost and quantity per item
 			transaction.setTransactionItem(transactionItemList);
 			Double transactionCost = 0.0;
-			for(TransactionItem transItem : transactionItemList) {
+			for (TransactionItem transItem : transactionItemList) {
 				transactionCost = transactionCost + (transItem.getProductCostAtTimeSold() * transItem.getQuantity());
 			}
-			
+
 			transaction.setCost(transactionCost);
 			transaction.setProfit(total - transactionCost);
-			
+
 			transaction = transactionService.save(transaction);
-			
-			//Set user activity start
+
+			// Set user activity start
 			UserActivityLog ual = new UserActivityLog();
 			ual.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 			ual.setUser(cashier);
-			ual.setActionMade("Processed Transaction: TransactionID: " + transaction.getId() + ", Transaction invoice: " + transaction.getInvoiceNumber());
+			ual.setActionMade("Processed Transaction: TransactionID: " + transaction.getId() + ", Transaction invoice: "
+					+ transaction.getInvoiceNumber());
 			userActLogRepo.save(ual);
-			//Set user activity end
-			
+			// Set user activity end
+
 			model.addAttribute("transaction", transaction);
 
 		}
@@ -505,19 +522,21 @@ public class IndexController implements Serializable {
 
 			}
 
-			//Update shipment start
+			// Update shipment start
 			if (parameters.get("transactionId") != null && !parameters.get("shipmentId").isEmpty()) {
-				logger.debug("Update shipment start -> transactionId: " + parameters.get("transactionId") + " shipmentId: " + parameters.get("shipmentId"));
+				logger.debug("Update shipment start -> transactionId: " + parameters.get("transactionId")
+						+ " shipmentId: " + parameters.get("shipmentId"));
 				Transaction transaction = transactionService.getById(Long.valueOf(parameters.get("transactionId")));
 				Shipment shipment = transaction.getShipment();
 				Address destinationAddress = shipment.getDestinationAddress();
-				logger.debug("destinationAddress: " +  destinationAddress.getAdditionalAddressDetails() 
-					+ " landmark: " + destinationAddress.getLandmark() + " estimatedDeliveryDate: " + shipment.getEstimatedDeliveryDate());
-				
+				logger.debug("destinationAddress: " + destinationAddress.getAdditionalAddressDetails() + " landmark: "
+						+ destinationAddress.getLandmark() + " estimatedDeliveryDate: "
+						+ shipment.getEstimatedDeliveryDate());
+
 				destinationAddress.setAdditionalAddressDetails(parameters.get("address"));
 				destinationAddress.setLandmark(parameters.get("landmark"));
 				destinationAddress = addressRepository.save(destinationAddress);
-				
+
 				Date deliveryDate = null;
 				try {
 					deliveryDate = new SimpleDateFormat("MM/dd/yyyy").parse(parameters.get("deliverydate").trim());
@@ -527,21 +546,21 @@ public class IndexController implements Serializable {
 					e.printStackTrace();
 				}
 				shipment = shipmentRepository.save(shipment);
-				
+
 				model.addAttribute("transaction", transaction);
-				
+
 			}
-			//Update shipment end
+			// Update shipment end
 
 		}
 		// Save shipment address end
-		
+
 		List<String> tableNoList = new ArrayList<>();
 		for (int x = 1; x <= available_table; x++) {
 			tableNoList.add(x + "");
 		}
 		model.addAttribute("tableNoList", tableNoList);
-		
+
 		return pageController.processPaymentPage(model);
 	}
 
@@ -729,7 +748,7 @@ public class IndexController implements Serializable {
 		// Create a timestamp-based identifier
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		String timestamp = dateFormat.format(new Date());
-		
+
 		CashDrawer cashDrawer = cashDrawerService.getByToday();
 
 		// increment transaction

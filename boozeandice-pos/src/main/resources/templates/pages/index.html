@@ -89,42 +89,56 @@
 											<!-- <div class="horrizontal_width" style="width: 1800px;"> -->
 											<div class="row my-4" th:each="entry : ${productsDisplay}">
 												<div class="col-md-4 text-center" th:each="product: ${entry}">
-													<form th:id="${'form_' + product.id}" method="post"
-														th:action="@{/}">
-														<input type="hidden" th:value="${product.id}"
-															name="productId" />
-														<input class="quantityclass" type="hidden"
-															name="purchased_quantity" />
-														<input type="hidden" name="purchase" />
-														<button type="button"
-															onclick="injectToModalSubmitTheFormId(this)"
-															data-target="#modal-default" data-toggle="modal"
-															class="btn btn-block btn-default btn-lg" name="purchase">
-															<img th:src="@{/images/} + ${product.imgLocation}"
-																alt="No Image Available" class="d-block mx-auto my-4"
-																style="width:50%;">
-															<div class="row my-2">
-																<div class="col"><span class="badge_btn_3 mb-1"
-																		style="font-size:14px;"
-																		th:if="${product.productCategory != null}"
-																		th:text="${product.productCategory.name}"></span>
-																	<a href="#"
-																		class="f_w_900 color_text_5 f_s_21 d-block"
-																		th:text="${product.name}"></a>
-																</div>
+													<div class="position-relative">
+														<div class="ribbon-wrapper ribbon-lg">
+															<div th:if="${product.stocks > 0}" class="ribbon bg-success">
+																In-stock
 															</div>
-															<div class="row my-2">
-																<div class="col">
-																	<h4 class="mt-0 badge badge-success"
-																		style="font-size: 90%;"
-																		th:text="${'Php ' + product.price}">
+															<div th:unless="${product.stocks > 0}" class="ribbon bg-danger">
+																Out-of-stock
+															</div>
+														</div>
+														<!--Ribbon Default <br />
+														<small>.ribbon-wrapper.ribbon-lg .ribbon</small> -->
+														<form th:id="${'form_' + product.id}" method="post"
+															th:action="@{/}">
+															<input type="hidden" th:value="${product.id}"
+																name="productId" />
+															<input class="quantityclass" type="hidden"
+																name="purchased_quantity" />
+															<input type="hidden" name="purchase" />
+															<button th:disabled="${product.stocks <= 0}" type="button"
+																onclick="injectToModalSubmitTheFormId(this)"
+																data-target="#modal-default" data-toggle="modal"
+																class="btn btn-block btn-default btn-lg"
+																name="purchase">
+																<img th:src="@{/images/} + ${product.imgLocation}"
+																	alt="No Image Available"
+																	class="d-block mx-auto my-4" style="width:50%;">
+																<div class="row my-2">
+																	<div class="col"><span class="badge_btn_3 mb-1"
+																			style="font-size:14px;"
+																			th:if="${product.productCategory != null}"
+																			th:text="${product.productCategory.name}"></span>
+																		<a href="#"
+																			class="f_w_900 color_text_5 f_s_21 d-block"
+																			th:text="${product.name}"></a>
+																	</div>
+																</div>
+																<div class="row my-2">
+																	<div class="col">
+																		<h4 class="mt-0 badge badge-success"
+																			style="font-size: 90%;"
+																			th:text="${'Php ' + product.price}">
 
-																		<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
-																	</h4>
+																			<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
+																		</h4>
+																	</div>
 																</div>
-															</div>
-														</button>
-													</form>
+															</button>
+														</form>
+														</div>
+
 												</div>
 											</div>
 										</div>
@@ -254,9 +268,9 @@
 																				<label
 																					for="custom_discount">Reason</label>
 																				<select class="form-control select2bs4"
-																					id="custom_discount_reason" name="custom_discount_reason">
-																					<option
-																						th:value="wholesale">
+																					id="custom_discount_reason"
+																					name="custom_discount_reason">
+																					<option th:value="wholesale">
 																						Wholesale
 																					</option>
 																				</select>

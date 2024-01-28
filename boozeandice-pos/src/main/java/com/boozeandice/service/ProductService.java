@@ -63,9 +63,9 @@ public class ProductService implements Serializable {
 		return productRepo.findByNameContainingAndStocksGreaterThan(productName, Long.valueOf(0));
 	}
 	
-	public Set<Product> getByNameLike(String productName){
+	public Set<Product> getByNameContaining(String productName){
 		
-		return productRepo.findByNameLike(productName);
+		return productRepo.findByNameContaining(productName);
 	}
 	
 	public Product save(Product product) {

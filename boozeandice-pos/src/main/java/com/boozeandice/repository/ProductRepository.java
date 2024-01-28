@@ -22,8 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	public Set<Product> findByNameContainingAndStocksGreaterThan(String productName, Long stock);
 	
-	@Query("select product from Product product where product.name like %:productName% and product.stocks > 0")
-	public Set<Product> findByNameLike(String productName);
+	//@Query("select product from Product product where product.name like %:productName% and product.stocks > 0")
+	public Set<Product> findByNameContaining(String productName);
 
 
 }
