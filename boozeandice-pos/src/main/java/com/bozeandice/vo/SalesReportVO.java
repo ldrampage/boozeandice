@@ -80,8 +80,10 @@ public class SalesReportVO {
 		this.profit = profit;
 	}
 	public String getExpenses() {
-		if(expenses != null)
-			expenses = String.format("%,.2f", Double.valueOf(expenses));
+//		if(expenses != null) {
+//			expenses.replace(",", "");
+//			expenses = String.format("%,.2f", Double.valueOf(expenses));
+//		}
 		return expenses;
 	}
 	public void setExpenses(String expenses) {

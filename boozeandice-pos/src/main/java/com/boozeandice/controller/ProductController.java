@@ -409,7 +409,7 @@ public class ProductController {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 			User user = userService.getByUsername(userDetails.getUsername());
-			product.setCreatedBy(user); // TODO set USER
+			product.setCreatedBy(user); 
 			product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
 			product = productService.save(product);
