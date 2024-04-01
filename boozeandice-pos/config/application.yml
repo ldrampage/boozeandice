@@ -51,18 +51,19 @@ upload:
     directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\barcodes
   
 logging:
-  level:
-    root: INFO
-    org:
-      hibernate: INFO
-    com:
-      boozeandice: DEBUG
-  pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
-    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
-  file:
-    path: 'C:\workspace\loggers\boozeandice'
-    name: '${logging.file.path}/${spring.profiles.active}.${spring.application.name}-${date:yyyy-MM-dd}.log'
+  config: C:\Projects\boozeandicepos\boozeandice\boozeandice-pos\config\log4j2.xml
+  #level:
+    #root: INFO
+    #org:
+      #hibernate: INFO
+    #com:
+      #boozeandice: DEBUG
+  #pattern:
+    #console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
+    #file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%p %thread %F:%L] %msg%n'
+  #file:
+    #path: 'C:\workspace\loggers\boozeandice'
+    #name: '${logging.file.path}/${spring.profiles.active}.${spring.application.name}-${date:yyyy-MM-dd}.log'
 
 ---
  
