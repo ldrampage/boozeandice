@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+	<style>
+		@page {
+			size: 48mm 210mm;
+			margin: 0;
+		}
+
+		body {
+			margin: 0;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+		}
+
+		.invoice {
+			padding: 20px;
+			font-size: 12px;
+			font-family: monospace;
+		}
+	</style>
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="wrapper">
+			<!-- Main content -->
+			<div class="content-wrapper ">
+			<section class="invoice col-md-2 col-sm-4">
+				<p style="margin-bottom: 0rem; font-size: 16px; padding-left: 1.3rem;" th:text="${productName}"></p>
+				<img style="width:225px;" th:if="${barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${barcodeImageLocation}"/>
+				<br>
+				<p style="margin-bottom: 0rem; font-size: 16px; padding-left: 1.3rem;" th:text="${productName}"></p>
+				<img style="width:225px;" th:if="${barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${barcodeImageLocation}"/>
+				<br>
+				<p style="margin-bottom: 0rem; font-size: 16px; padding-left: 1.3rem;" th:text="${productName}"></p>
+				<img style="width:225px;" th:if="${barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${barcodeImageLocation}"/>
+				<br>
+				<p style="margin-bottom: 0rem; font-size: 16px; padding-left: 1.3rem;" th:text="${productName}"></p>
+				<img style="width:225px;" th:if="${barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${barcodeImageLocation}"/>
+				<br>
+				<p style="margin-bottom: 0rem; font-size: 16px; padding-left: 1.3rem;" th:text="${productName}"></p>
+				<img style="width:225px;" th:if="${barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${barcodeImageLocation}"/>
+				<p>-----</p>
+				<p>-----</p>
+			</section>
+			<!-- /.content -->
+			</div>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		window.addEventListener("load", window.print());
+	</script>
+</body>
+
+</html>

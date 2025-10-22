@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+								<li class="breadcrumb-item"><a href="#">Invoice</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12">
+							<!--<div class="callout callout-info">
+								<h5><i class="fas fa-info"></i> Note:</h5>
+								This page has been enhanced for printing. Click the print button at the bottom of the
+								invoice to test.
+							</div> -->
+
+
+							<!-- Main content -->
+							<div class="invoice p-3 mb-3">
+								<!-- title row -->
+								<div class="row">
+									<div class="col-12">
+										<h4>
+											Invoice: <strong th:text="${transaction.invoiceNumber}"></strong>
+											<small class="float-right"><strong>Status:</strong>&nbsp;<span
+													class="float-end badge badge-success"
+													th:text="${transaction.transactionStatus}"></span></small>
+										</h4>
+									</div>
+									<!-- /.col -->
+								</div>
+								<!-- Table row -->
+								<div class="row">
+									<div class="col-12 table-responsive">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th>Item</th>
+													<th>Description</th>
+													<th class="right">Unit Cost</th>
+													<th class="center">Qty</th>
+													<th class="right">Total</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="transactionItem : ${transaction.transactionItem}">
+													<td class="left strong" th:text="${transactionItem.product.name}">
+													</td>
+													<td class="left" th:text="${transactionItem.product.description}">
+													</td>
+
+													<td class="right"
+														th:text="${'Php ' + transactionItem.product.price}">
+													</td>
+													<td class="center" th:text="${transactionItem.quantity}"></td>
+													<td class="right"
+														th:text="${'Php ' + transactionItem.product.price * transactionItem.quantity}">
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<table class="table table-striped">
+											<tbody>
+												<tr>
+													<td class="left">
+														<strong>Transaction Date and Time</strong>
+													</td>
+													<td class="right">
+														<span
+															th:text="${#dates.format(transaction.transactionDateTime, 'dd/MMM/yyyy') + ' ' + #dates.format(transaction.transactionDateTime, 'hh:mm a')}">
+														</span>
+													</td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>Subtotal</strong>
+													</td>
+													<td class="right" th:text="${'Php  ' + transaction.subTotal}"></td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>Packaging</strong>
+													</td>
+													<td class="right">
+														<span th:if="${transaction.packaging > 0}" th:text="${transaction.packaging + ' '}"></span>
+														<span th:if="${transaction.packaging > 0}"
+															class="badge badge-warning"
+															th:text="${'Take out'}"></span>
+														<span th:unless="${transaction.packaging > 0}">Php 0.0</span>
+													</td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>Discount</strong>
+													</td>
+													<td class="right">
+														<p th:each="discount : ${transaction.discount}"
+															th:text="${'P'+discount.amount + ' --- ' + discount.reason}">
+														</p>
+													</td>
+												</tr>
+
+												<tr>
+													<td class="left">
+														<strong>Total</strong>
+													</td>
+													<td class="right">
+														<strong style="font-size: 32px;"
+															th:text="${'P'+transaction.total}"></strong>
+													</td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>Cash Received</strong>
+													</td>
+													<td class="right">
+														<strong style="font-size: 24px;"
+															th:text="${'P' + transaction.cashReceived}"></strong>
+													</td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>Change</strong>
+													</td>
+													<td class="right">
+														<strong style="font-size: 20px;"
+															th:text="${'P' + (transaction.cashReceived - transaction.total)}"></strong>
+													</td>
+												</tr>
+												<!--<tr>
+													<td class="left">
+														<strong>Shipping</strong>
+													</td>
+													<td class="right" th:text="${transaction.shipping}"></td>
+												</tr> -->
+												<tr>
+													<td class="left">
+														<strong>VATable Sales</strong>
+													</td>
+													<td class="right" th:text="${'Php ' + transaction.vatableSales}">
+													</td>
+												</tr>
+												<tr>
+													<td class="left">
+														<strong>VAT (12%)</strong>
+													</td>
+													<td class="right" th:text="${transaction.vatAmount}"></td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+									<!-- /.col -->
+								</div>
+								<!-- /.row -->
+
+								<!-- this row will not appear when printing -->
+								<div class="row no-print">
+									<div class="col-12">
+										<a th:href="${'/invoiceprint/?id=' + transaction.id } " rel="noopener"
+											target="_blank" class="btn btn-warning"><i class="fas fa-print"></i>
+											Print</a>
+
+										<a th:href="${'/'} " rel="noopener" style="margin-left: 5px; margin-right: 5px;" class="btn btn-primary float-right"><i class="fas fa-terminal"></i>
+											Back to POS</a>
+										<a th:href="${'/transaction'} " rel="noopener" class="btn btn-primary float-right"><i class="fas fa-exchange-alt"></i>
+											Go to Transactions</a>
+										<!--
+										<button type="button" class="btn btn-success float-right"><i
+												class="far fa-credit-card"></i> Submit
+											Payment
+										</button>
+										<button type="button" class="btn btn-primary float-right"
+											style="margin-right: 5px;">
+											<i class="fas fa-download"></i> Generate PDF
+										</button> -->
+									</div>
+								</div>
+							</div>
+							<!-- /.invoice -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

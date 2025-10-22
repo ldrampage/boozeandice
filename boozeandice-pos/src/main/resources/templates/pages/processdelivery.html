@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+								<li class="breadcrumb-item"><a href="#">Delivery</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Payment Summary</h3>
+									<div class="float-right">
+										<b class="badge badge-success">Delivery</b>
+									</div>
+
+
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Product</th>
+														<th th:if="${transaction.takeOut == true}">Package Fee</th>
+														<th>Quantity</th>
+														<th>Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="purchases : ${transaction.transactionItem}">
+														<td>
+															<img th:src="@{/images/} + ${purchases.product.imgLocation}"
+																alt="" style="height:52px; width:52px;" />
+															<p th:text="${purchases.product.name}"
+																class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
+															</p>
+														</td>
+														<td th:if="${transaction.takeOut == true}"
+															th:text="${purchases.product.packagingFee}"></td>
+														<td th:text="${purchases.quantity}"></td>
+														<td
+															th:text="${'P' + purchases.quantity * purchases.product.price}">
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<tbody>
+													<tr>
+														<td class="payment-title">Subtotal</td>
+														<td th:text="${'P' + transaction.subTotal}"></td>
+													</tr>
+													<tr th:if="${transaction.packaging > 0}">
+														<td class="payment-title">Packaging</td>
+														<td th:text="${'P' + transaction.packaging}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Discount</td>
+														<td th:text="${'P' + transaction.discount}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Total Amount Due</td>
+														<td class="text-success"><strong style="font-size: 32px;"
+																th:text="${'P' + transaction.total}"></strong></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VATable sales</td>
+														<td th:text="${'P' + transaction.vatableSales}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VAT (12%)</td>
+														<td th:text="${'P' + transaction.vatAmount}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		if (window.history.replaceState) {
+			window.history.replaceState(null, null, window.location.href);
+		}
+	</script>
+</body>
+
+</html>

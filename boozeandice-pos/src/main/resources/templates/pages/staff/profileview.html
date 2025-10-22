@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Staff</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Staff</a></li>
+								<li class="breadcrumb-item"><a href="#">Profile</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-3">
+							<!-- Profile Image -->
+							<div class="card card-primary card-outline">
+								<div class="card-body box-profile">
+									<div class="text-center">
+										<img class="profile-user-img img-fluid img-circle"
+											th:if="${staff.imgLocation == null}"
+											th:src="@{'/images/profile/default_pic.jpg'}" alt="User profile picture">
+
+										<img class="profile-user-img img-fluid img-circle"
+											th:if="${staff.imgLocation != null}"
+											th:src="@{'/images/profile/' +${staff.imgLocation}}"
+											alt="User profile picture">
+									</div>
+
+									<h3 class="profile-username text-center"><span
+											th:text="${staff.fname + ' ' + staff.lname}"></span></h3>
+
+									<p class="text-muted text-center">
+										<span th:if="${staff.jobPosition != null}"
+											th:text="${staff.jobPosition.name + '/' + staff.roles[0].name}"></span>
+										<span th:unless="${staff.jobPosition != null}"
+											th:text="${staff.roles[0].name}"></span>
+									</p>
+
+									<!--<ul class="list-group list-group-unbordered mb-3">
+										<li class="list-group-item">
+											<b>Followers</b> <a class="float-right">1,322</a>
+										</li>
+										<li class="list-group-item">
+											<b>Following</b> <a class="float-right">543</a>
+										</li>
+										<li class="list-group-item">
+											<b>Friends</b> <a class="float-right">13,287</a>
+										</li>
+									</ul>
+
+									<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
+								</div>
+								<!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+
+							<!-- About Me Box -->
+							<div class="card card-primary">
+								<div class="card-header">
+									<h3 class="card-title">About Me</h3>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body">
+									<!--<strong><i class="fas fa-book mr-1"></i> Education</strong>
+
+									<p class="text-muted">
+										B.S. in Computer Science from the University of Tennessee at Knoxville
+									</p> 
+
+									<hr>-->
+
+									<strong><i class="fas fa-map-marker-alt mr-1"></i> Mobile Number</strong>
+
+									<p class="text-muted" th:text="${staff.mobileNumber}"></p>
+
+									<!--<hr>
+
+									<strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+									
+									<p class="text-muted">
+										<span class="tag tag-danger">UI Design</span>
+										<span class="tag tag-success">Coding</span>
+										<span class="tag tag-info">Javascript</span>
+										<span class="tag tag-warning">PHP</span>
+										<span class="tag tag-primary">Node.js</span>
+									</p> -->
+
+									<hr>
+
+									<strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+
+									<p th:text="${staff.about}"></p>
+								</div>
+								<!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+
+						</div>
+
+
+
+						<!-- /.col -->
+						<div class="col-md-9" th:if="${staff.username == username}">
+							<div class="card">
+								<div class="card-header p-2">
+									<ul class="nav nav-pills">
+										<!--<li class="nav-item"><a class="nav-link active" href="#activity"
+												data-toggle="tab">Activity</a></li>
+										<li class="nav-item"><a class="nav-link" href="#timeline"
+												data-toggle="tab">Timeline</a></li> -->
+										<li class="nav-item"><a class="nav-link active" href="#settings"
+												data-toggle="tab">Settings</a></li>
+									</ul>
+								</div><!-- /.card-header -->
+								<div class="card-body">
+									<div class="tab-content">
+										<div class="active tab-pane" id="settings">
+											<form method="post" th:action="@{/staff/profileview/} + ${'?id=' + staff.id}" class="form-horizontal">
+												<div class="form-group row">
+													<label for="fname" class="col-sm-2 col-form-label">First
+														Name</label>
+													<div class="col-sm-10">
+														<input type="text" th:value="${staff.fname}" class="form-control" id="fname" name="fname"
+															placeholder="First name" required>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="mname" class="col-sm-2 col-form-label">Middle
+														Name</label>
+													<div class="col-sm-10">
+														<input type="text" th:value="${staff.mname}" class="form-control" id="mname" name="mname"
+															placeholder="Middle name">
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="mname" class="col-sm-2 col-form-label">Last Name</label>
+													<div class="col-sm-10">
+														<input type="text" th:value="${staff.lname}" class="form-control" id="lname" name="lname"
+															placeholder="Last name" required>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="uname" class="col-sm-2 col-form-label">Username</label>
+													<div class="col-sm-10">
+														<input type="text" th:value="${staff.username}" class="form-control" id="username" name="username"
+															placeholder="Username" readonly>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="mobile_number" class="col-sm-2 col-form-label">Mobile
+														Number</label>
+													<div class="col-sm-10">
+														<input type="text" th:value="${staff.mobileNumber}" class="form-control" id="mobile_number"
+															name="mobile_number" placeholder="Mobile number">
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="about" class="col-sm-2 col-form-label">About</label>
+													<div class="col-sm-10">
+														<textarea th:text="${staff.about}" class="form-control" id="about" name="about"
+															placeholder="About"></textarea>
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="offset-sm-2 col-sm-10">
+														<button type="submit" name="edit_userinfo_btn"
+															class="btn btn-success">Submit</button>
+													</div>
+												</div>
+											</form>
+											<hr/>
+											<div th:if="${message != null and message['status'] == 'success'}" class="alert alert-success alert-dismissible">
+												<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+												<h4 class="alert-heading">Well done!</h4>
+												<p th:text="${message['message']}"></p>
+											</div>
+
+											<div th:if="${message != null and message['status'] == 'error'}" class="alert alert-danger alert-dismissible">
+												<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+												<h4 class="alert-heading">Something went wrong!</h4>
+												<p th:text="${message['message']}"></p>
+											</div>
+											
+											<h4>Change password</h4>
+											<form method="post" th:action="@{/staff/profileview/} + ${'?id=' + staff.id}" class="form-horizontal">
+												<div class="form-group row">
+													<label for="current_password" class="col-sm-2 col-form-label">Current Password</label>
+													<div class="col-sm-10">
+														<input type="password" class="form-control" id="current_password" name="current_password"
+															placeholder="Current password" required>
+													</div>
+												</div>
+												<div class="form-group row">
+													<label for="new_password" class="col-sm-2 col-form-label">New Password</label>
+													<div class="col-sm-10">
+														<input type="password" class="form-control" id="new_password" name="new_password"
+															placeholder="New password" required>
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="offset-sm-2 col-sm-10">
+														<button type="submit" name="change_password_btn"
+															class="btn btn-primary">Submit</button>
+														<input type="hidden" name="username" th:value="${staff.username}" /> 
+													</div>
+												</div>
+											</form>
+
+										</div>
+										<!-- /.tab-pane -->
+									</div>
+									<!-- /.tab-content -->
+								</div><!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+						</div>
+						<!-- /.col -->
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+</body>
+
+</html>

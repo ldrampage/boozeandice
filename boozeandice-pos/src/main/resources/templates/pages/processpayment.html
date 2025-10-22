@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+								<li class="breadcrumb-item"><a href="#">Checkout</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Payment Summary</h3>
+									<div class="float-right">
+										<b class="badge badge-success"
+											th:if="${transaction.takeOut == false and transaction.isDelivery == false}">Dine
+											In</b>
+										<b class="badge badge-warning"
+											th:unless="${transaction.takeOut == false and transaction.isDelivery == false}">Take
+											Out</b>
+										<b class="badge badge-primary"
+											th:if="${transaction.takeOut == false and transaction.isDelivery == true}">Delivery</b>
+									</div>
+
+
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Product</th>
+														<th th:if="${transaction.takeOut == true}">Package Fee</th>
+														<th>Quantity</th>
+														<th>Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="purchases : ${transaction.transactionItem}">
+														<td>
+															<img th:src="@{/images/} + ${purchases.product.imgLocation}"
+																alt="" style="height:52px; width:52px;" />
+															<p th:text="${purchases.product.name}"
+																class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
+															</p>
+														</td>
+														<td th:if="${transaction.takeOut == true}"
+															th:text="${purchases.product.packagingFee}"></td>
+														<td th:text="${purchases.quantity}"></td>
+														<td
+															th:text="${'P' + purchases.quantity * purchases.product.price}">
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped">
+												<tbody>
+													<tr>
+														<td class="payment-title">Subtotal</td>
+														<td th:text="${'P' + transaction.subTotal}"></td>
+													</tr>
+													<tr th:if="${transaction.packaging > 0}">
+														<td class="payment-title">Packaging</td>
+														<td th:text="${'P' + transaction.packaging}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">Discount</td>
+														<td>
+															<p th:each=" discount : ${transaction.discount}"
+																th:text="${'P'+ discount.amount + ' --- ' + discount.reason}">
+															</p>
+														</td>
+													</tr>
+													<tr>
+														<td class="payment-title">Total Amount Due</td>
+														<td class="text-success"><strong style="font-size: 32px;"
+																th:text="${'P' + transaction.total}"></strong></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VATable sales</td>
+														<td th:text="${'P' + transaction.vatableSales}"></td>
+													</tr>
+													<tr>
+														<td class="payment-title">VAT (12%)</td>
+														<td th:text="${'P' + transaction.vatAmount}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div th:if="${transaction.isDelivery == true}" class="card">
+								<form method="post" th:action="@{/processpayment}">
+									<div class="card-header">
+										<h3 class="card-title">Shipment Address</h3>
+										<div class="float-right">
+											<b class="badge badge-primary">Delivery</b>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="form-group">
+											<label for="address">Address</label>
+											<input type="text"
+												th:attr="value=${transaction.shipment != null ? 
+												transaction.shipment.destinationAddress != null ? transaction.shipment.destinationAddress.additionalAddressDetails : '' : ''}"
+												id="address" name="address" placeholder="Complete address"
+												class="form-control" required>
+										</div>
+										<div class="form-group">
+											<label for="landmark">Landmark</label>
+											<input type="text"
+												th:attr="value=${transaction.shipment != null ? 
+												transaction.shipment.destinationAddress != null ? transaction.shipment.destinationAddress.landmark : '' : ''}"
+												id="landmark" name="landmark"
+												placeholder="Notable landmarks or reference points near the place."
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label>Estimated Delivery Date:</label>
+											<div class="input-group date" id="deliverydate" data-target-input="nearest">
+												<input type="text" th:attr="value=${transaction.shipment != null ? transaction.shipment.estimatedDeliveryDate != null ? 
+												 #dates.format(transaction.shipment.estimatedDeliveryDate,'MM/dd/yyyy') : '' : ''}" name="deliverydate"
+													class="form-control datetimepicker-input"
+													data-target="#deliverydate" required />
+												<div class="input-group-append" data-target="#deliverydate"
+													data-toggle="datetimepicker">
+													<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+												</div>
+											</div>
+										</div>
+										<div class='form-group'>
+											<input type="submit" name="shipment_address" value="Save"
+												class="btn btn-success float-right">
+											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
+											<input type="hidden" name="shipmentId"
+												th:attr="value=${transaction.shipment != null ? transaction.shipment.id : ''}">
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="card card-primary card-outline card-outline-tabs">
+								<div class="card-header p-0 border-bottom-0">
+									<ul class="nav nav-tabs" id="custom-tabs-four-cash-tab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" id="tabs-cash-tab" data-toggle="pill"
+												href="#custom-tabs-four-home" role="tab"
+												aria-controls="custom-tabs-four-home" aria-selected="true">CASH</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="custom-tabs-four-gcash-tab" data-toggle="pill"
+												href="#custom-tabs-four-profile" role="tab"
+												aria-controls="custom-tabs-four-profile" aria-selected="false">GCASH</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="custom-tabs-four-paymaya-tab" data-toggle="pill"
+												href="#custom-tabs-four-messages" role="tab"
+												aria-controls="custom-tabs-four-messages" aria-selected="false">PAY
+												MAYA</a>
+										</li>
+									</ul>
+								</div>
+								<div class="card-body">
+									<div class="tab-content" id="custom-tabs-four-tabContent">
+										<div class="tab-pane fade show active" id="custom-tabs-four-home"
+											role="tabpanel" aria-labelledby="custom-tabs-four-cash-tab">
+											<div class="row">
+												<div class="col-md-12">
+													<form id="chargeForm" method="post" th:action="@{/invoice}">
+														<div class="form-group">
+															<div class="row">
+																<div class="col-md-6">
+																	<label class="form-label" style="font-size: 18px;"
+																		for="cash_received">Amount Tendered</label>
+																	<input id="cash_received" type="number"
+																		style="font-size: 28px; font-weight:900; color:cornflowerblue; height:calc(2.5rem + 2px);"
+																		step="0.1" th:min="${transaction.total}"
+																		class="form-control input-lg"
+																		name="cash_received" required=""
+																		placeholder="Amount Tendered" />
+																	</di>
+																</div>
+																<div class="col-md-6">
+																	<label class="form-label" style="font-size: 18px;"
+																		for="cash_received">Change</label>
+																	<input type="hidden" step="0.1"
+																		th:value="${transaction.total}"
+																		id="transactionTotal" />
+																	<input id="change" type="text"
+																		style="font-size: 28px; font-weight:900; color:coral; height:calc(2.5rem + 2px);"
+																		class="form-control input-lg" name="change"
+																		required="" placeholder="Change" disabled />
+																</div>
+															</div>
+														</div>
+														<br />
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('20.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">P20</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('50.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-success btn-lg">P50</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('100.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-warning btn-lg">P100</button>
+															</div>
+														</div>
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('200.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-danger btn-lg">P200</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('500.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-warning btn-lg">P500</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('1000.0')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">P1000</button>
+															</div>
+														</div>
+														<div class="row" style="padding: 10px;">
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('')" type="button"
+																	class="btn btn-block btn-outline-success btn-lg">Clear</button>
+															</div>
+															<div class="col-md-4">
+																<button onclick="setCashReceivedValue('exact_amount')"
+																	type="button"
+																	class="btn btn-block btn-outline-primary btn-lg">Exact
+																	Amount</button>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Sold
+																To</label>
+															<div th:if="${transaction.customer != null}">
+																<input class="form-control" type="text"
+																	th:value="${transaction.customer.name}" disabled />
+																<input type="hidden"
+																	th:value="${transaction.customer.id}"
+																	id="registeredCustomer" name="registeredCustomer" />
+															</div>
+															<div th:unless="${transaction.customer != null}">
+																<input class="form-control" type="text" id="soldTo"
+																	name="soldTo" th:value="${transaction.soldTo}"
+																	placeholder="Sold To" required />
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label class="form-label">Table No.</label>
+															<select class="form-control select2bs4" id="tableno"
+																name="tableno">
+																<option value="0"></option>
+																<option th:each="tableNo : ${tableNoList}"
+																	th:text="${'Table ' + tableNo}"
+																	th:selected="${transaction.tableNo == tableNo}">
+																</option>
+															</select>
+														</div>
+														<table class="table table-bordered text-center">
+															<tbody>
+																<tr>
+																	<td>
+																		<input type="hidden" name="transactionId"
+																			th:value="${transaction.id}" />
+																		<button type="submit" name="cash_payment"
+																			class="btn btn-block bg-gradient-success btn-lg">CHARGE</button>
+													</form>
+													</td>
+													</tr>
+													<tr>
+														<td>
+															<form id="pay_later_form" method="post"
+																th:action="@{/processpayment}">
+																<input type="hidden" name="transactionId"
+																	th:value="${transaction.id}" />
+																<input type="hidden" name="pay_later_btn" />
+																<button type="submit"
+																	class="btn btn-block bg-gradient-info btn-lg">PAY
+																	LATER</button>
+															</form>
+														</td>
+													</tr>
+
+													<tr>
+														<td>
+															<form method="post" th:action="@{/}">
+																<input type="hidden" name="addMoreToPurchase" />
+																<input type="hidden" name="transactionId"
+																	th:value="${transaction.id}" />
+																<button type="submit"
+																	class="btn btn-block bg-gradient-secondary btn-lg">EDIT
+																	PURCHASE</button>
+															</form>
+														</td>
+													</tr>
+
+
+													</tbody>
+													</table>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+											aria-labelledby="custom-tabs-four-gcash-tab">
+											<div class="row">
+												<div class="col-md-12">
+													<form method="post" th:action="@{/invoice}">
+														<div class="form-group">
+															<label class="form-label" style="font-size: 24px;"
+																for="cash_received">Amount Tendered</label>
+															<input id="cash_received" type="number"
+																style="font-size: 28px; font-weight:900; color:cornflowerblue; height:calc(3.25rem + 2px);"
+																step="0.0" th:min="${transaction.total}"
+																th:value="${transaction.total}"
+																class="form-control input-lg" name="cash_received"
+																placeholder="Amount Tendered" required />
+														</div>
+														<div class="form-group">
+															<label class="form-label">Sold
+																To</label>
+															<div th:if="${transaction.customer != null}">
+																<input class="form-control" type="text"
+																	th:value="${transaction.customer.name}" disabled />
+																<input type="hidden"
+																	th:value="${transaction.customer.id}"
+																	id="registeredCustomer" name="registeredCustomer" />
+															</div>
+															<div th:unless="${transaction.customer != null}">
+																<input class="form-control" type="text" id="soldTo"
+																	name="soldTo" th:value="${transaction.soldTo}"
+																	placeholder="Sold To" />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Table No.</label>
+															<select class="form-control select2bs4" id="tableno"
+																name="tableno">
+																<option value="0"></option>
+																<option th:each="tableNo : ${tableNoList}"
+																	th:text="${'Table ' + tableNo}"
+																	th:selected="${transaction.tableNo == '1'}">
+																</option>
+															</select>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Phone no.</label>
+															<input type="text" class="form-control" name="phone_number"
+																required>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Reference no.</label>
+															<input type="text" class="form-control"
+																name="reference_number" required>
+														</div>
+														<table class="table table-bordered text-center">
+															<tbody>
+																<tr>
+																	<td>
+																		<input type="hidden" name="transactionId"
+																			th:value="${transaction.id}" />
+																		<button type="submit" name="gcash_payment"
+																			class="btn btn-block bg-gradient-success btn-lg">SUBMIT</button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</form>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
+											aria-labelledby="custom-tabs-four-paymaya-tab">
+											<div class="row">
+												<div class="col-md-12">
+													<form method="post" th:action="@{/invoice}">
+														<div class="form-group">
+															<label class="form-label" style="font-size: 24px;"
+																for="cash_received">Amount Tendered</label>
+															<input id="cash_received" type="number"
+																style="font-size: 28px; font-weight:900; color:cornflowerblue; height:calc(3.25rem + 2px);"
+																step="0.0" th:min="${transaction.total}"
+																th:value="${transaction.total}"
+																class="form-control input-lg" name="cash_received"
+																placeholder="Amount Tendered" required />
+														</div>
+														<div class="form-group">
+															<label class="form-label">Sold
+																To</label>
+															<div th:if="${transaction.customer != null}">
+																<input class="form-control" type="text"
+																	th:value="${transaction.customer.name}" disabled />
+																<input type="hidden"
+																	th:value="${transaction.customer.id}"
+																	id="registeredCustomer" name="registeredCustomer" />
+															</div>
+															<div th:unless="${transaction.customer != null}">
+																<input class="form-control" type="text" id="soldTo"
+																	name="soldTo" th:value="${transaction.soldTo}"
+																	placeholder="Sold To" required />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Table No.</label>
+															<select class="form-control select2bs4" id="tableno"
+																name="tableno">
+																<option value="0"></option>
+																<option th:each="tableNo : ${tableNoList}"
+																	th:text="${'Table ' + tableNo}"
+																	th:selected="${transaction.tableNo == '1'}">
+																</option>
+															</select>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Card Brand</label>
+															<select class="form-control select2bs4" id="cardBrand" name="cardBrand">
+																<option value="VISA">VISA</option>
+																<option value="MASTERCARD">MASTERCARD</option>
+																<option value="AMEX">AMEX</option>
+															</select>
+														</div>
+														<div class="form-group">
+															<label class="form-label">Reference no.</label>
+															<input type="text" class="form-control"
+																name="reference_number" required>
+														</div>
+
+														<table class="table table-bordered text-center">
+															<tbody>
+																<tr>
+																	<td>
+																		<input type="hidden" name="transactionId"
+																			th:value="${transaction.id}" />
+																		<button type="submit" name="paymaya_payment"
+																			class="btn btn-block bg-gradient-success btn-lg">SUBMIT</button>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+
+
+		function setCashReceivedValue(value) {
+			//console.dir(value);
+
+			var transactionTotal = $("#transactionTotal").val()
+
+			if (value === 'exact_amount') {
+				$("#cash_received").val(transactionTotal);
+			} else if (value === '') {
+				$("#cash_received").val('');
+			} else {
+				$("#cash_received").val(value);
+			}
+
+			if (value === "") {
+				$("#change").val("");
+
+			} else {
+				$("#change").val("P" + ($("#cash_received").val() - transactionTotal).toFixed(2));
+			}
+		}
+
+		$(document).ready(function () {
+			$("#cash_received").keyup(function () {
+				var inputValue = $(this).val();
+				var transactionTotal = $("#transactionTotal").val();
+				if (inputValue === "") {
+					$("#change").val("");
+
+				} else {
+					$("#change").val("P" + (inputValue - transactionTotal).toFixed(2));
+				}
+			})
+
+		})
+
+		$(document).ready(function () {
+			$("#pay_later_form").submit(function (event) {
+				event.preventDefault();
+
+				var soldTo = $('#soldTo').val();
+				var tableNo = $('#tableno').val();
+				var registeredCustomer = $("#registeredCustomer").val();
+
+				$('#pay_later_form').append('<input type="hidden" name="tableno" value="' + tableNo + '">');
+
+				if (soldTo != null) {
+					$('#pay_later_form').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
+				}
+
+				if (registeredCustomer != null) {
+					$('#pay_later_form').append('<input type="hidden" name="registeredCustomer" value="' + registeredCustomer + '">');
+				}
+
+				$('#pay_later_form')[0].submit();
+			})
+
+			var yesterday = new Date();
+			yesterday.setDate(yesterday.getDate() - 1);
+			//Date picker
+			$('#deliverydate').datetimepicker({
+				format: 'L',
+				minDate: yesterday
+			});
+
+		})
+
+		//Initialize Select2 Elements
+		$('.select2bs4').select2({
+			theme: 'bootstrap4'
+		})
+		function submitCategory() {
+
+		}
+
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+	<style>
+		@page {
+			size: 48mm 210mm;
+			margin: 0;
+		}
+
+		body {
+			margin: 0;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+		}
+
+		.invoice {
+			padding: 20px;
+			font-size: 12px;
+			font-family: monospace;
+		}
+	</style>
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="wrapper">
+			<!-- Main content -->
+			<div class="content-wrapper ">
+			<section class="invoice col-md-2 col-sm-4">
+				<b style="padding-left: 50px;" th:text="${business_name}"></b>
+				<p style="padding-left: 10px; margin-bottom: 0rem;" th:text="${business_address}"></p>
+				<p style="margin-bottom: .5rem;" th:text="${'Z-REPORT - ' + zdate }"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">SALES AND TAX SUMMARY</p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Net Sales ----- P' + salesTaxSummaryVO.totalNetSales}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Tax ----------- P' + salesTaxSummaryVO.totalTax}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Sales --------- P' + salesTaxSummaryVO.totalSales}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">SALES CATEGORIES</p>
+				<p style="margin-bottom: .3rem;" th:each="category : ${productCategoryList}" th:text="${category.name + ' --- (' + category.soldCount + ') --- P' + category.quantityNetSales}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Net Sales: (' + totalSoldCount + ') --- P' + totalQuantityNetSales}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">PAYMENT DETAILS</p>
+				<p style="margin-bottom: .3rem;" th:each="paymentDetails : ${paymentDetailsList}" th:text="${paymentDetails.paymentMethod + ' --- P' + paymentDetails.total}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Payments: P' + totalPayments}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'Payments - Sales: P' + totalPaymentsMinusTotalSales}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">PAYMAYA PAYMENT BREAKDOWN</p>
+				<p style="margin-bottom: .3rem;" th:text="${'AMEX --------- P' + pmpbd.amex}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'MASTERCARD --- P' + pmpbd.mastercard}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'VISA --------- P' + pmpbd.visa}"></p>
+				<p style="margin-bottom: .3rem;" th:text="${'TOTAL -------- P' + pmpbd.total}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">TOTAL PACKAGING</p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Packaging --- P' + totalPackaging}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">TOTAL DISCOUNTS</p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Discount --- P' + totalDiscounts}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom: .5rem;">TOTAL EXPENSE</p>
+				<p style="margin-bottom: .3rem;" th:text="${'Total Expense --- P' + totalExpense}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+			</section>
+			<!-- /.content -->
+			</div>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script type="text/javascript">
+        window.addEventListener("load", window.print());
+	</script>
+</body>
+
+</html>

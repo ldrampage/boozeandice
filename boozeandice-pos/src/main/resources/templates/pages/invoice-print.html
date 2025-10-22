@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+	<style>
+		@page {
+			size: 48mm 210mm;
+			margin: 0;
+		}
+
+		body {
+			margin: 0;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+		}
+
+		.invoice {
+			padding: 20px;
+			font-size: 12px;
+			font-family: monospace;
+		}
+	</style>
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="wrapper">
+			<!-- Main content -->
+			<div class="content-wrapper ">
+			<section class="invoice col-md-2 col-sm-4">
+				<b style="padding-left: 55px;" th:text="${business_name}"></b>
+				<p style="padding-left: 25px; margin-bottom:0px;">VAT REG TIN 000-000-000-000</p>
+				<p style="padding-left: 10px;">PUERTO GALLERA ORIENTAL MINDORO</p>
+				<p style="margin-bottom:0px;">Name:_____________________________</p>
+				<p style="margin-bottom:0px;">TIN:______________________________</p>
+				<p style="margin-bottom:0px;">ID No:____________________________</p>
+				<p style="margin-bottom:0px;">Address:__________________________</p>
+				<p>Signature:________________________</p>
+				<div th:each="transactionItem : ${transaction.transactionItem}">
+					<p style="margin-bottom:0px;"
+						th:text="${transactionItem.product.name + ' - ' + transactionItem.product.productCategory.name}">
+					</p>
+					<p style="margin-bottom:0px;" th:text="${transactionItem.quantity + ' X P' + transactionItem.productPriceAtTimeSold 
+					+ ' --------- ' 
+					+ 'P' + (transactionItem.productPriceAtTimeSold * transactionItem.quantity) + ' V'  }"></p>
+				</div>
+				<p th:if="${transaction.packaging != null && transaction.packaging > 0}" th:text="${'Packaging Fee: P' + transaction.packaging}"></p>
+				<p th:if="${transaction.discount != null && transaction.discount > 0}" th:text="${'Discount: P' + transaction.discount}"></p>
+
+				<p style="margin-bottom:0px; font-size:15px; font-weight:900;"
+					th:text="${'TOTAL --------- P' + transaction.total + ' ' }"></p>
+				<p style="margin-bottom:0px; font-size:15px; font-weight:900;"
+					th:text="${'CASH ---------- P' + transaction.cashReceived + ' '}"></p>
+				<p style="margin-bottom:0px; font-size:12px; font-weight:900;"
+					th:text="${'Change ------------ P' + (transaction.cashReceived - transaction.total ) + ' '}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom:0px;" th:text="${'Vatable --------------- ' + transaction.vatableSales}"></p>
+				<p style="margin-bottom:0px;" th:text="${'VAT Exempt Sales ------ 0.00' }"></p>
+				<p style="margin-bottom:0px;" th:text="${'Zero Rated Sales ------ 0.00' }"></p>
+				<p style="margin-bottom:0px;" th:text="${'VAT  ------------------- ' + transaction.vatAmount }"></p>
+				<p style="margin-bottom:0px; font-weight:900;"
+					th:text="${'Total  ----------------- ' + (transaction.total - transaction.vatAmount) }"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom:0px;" th:text="${'Total items : ' + totalItemsSold}"></p>
+				<p style="margin-bottom:0px;"
+					th:text="${'Cashier : ' + transaction.cashier.id + ' ' + transaction.cashier.fname + ' ' + transaction.cashier.lname}">
+				</p>
+				<p style="margin-bottom:0px;" th:text="${'Date: ' + #dates.format(transaction.transactionDateTime, 'dd/MMM/yyyy') + ' Time: ' 
+				+ #dates.format(transaction.transactionDateTime, 'hh:mm a')}"></p>
+				<p style="margin-bottom:0px;" th:text="${'Trmnl no: 001 -- Trans ID: ' + transaction.id}"></p>
+				<p style="margin-bottom:0px;" th:text="${'This serves as your sales invoice'}"></p>
+				<p style="margin-bottom:0px;" th:text="${'SI No: ' + transaction.invoiceNumber}"></p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px;">
+					Exchange of item for reasons other than those
+				</p>
+				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px; ">
+					provided under the Consumer Act will only be 
+				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px; ">
+					allowed within 7 days from date of purchase.
+				</p>
+				<p style="margin-bottom:0px; font-weight: 900; font-size: 9px; ">
+					Please present your Tape Receipt.
+				</p>
+				<p style="margin-bottom:0px;">***********************************</p>
+				<!-- TODO IT COMPANY SECTION -->
+			</section>
+			<!-- /.content -->
+			</div>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		window.addEventListener("load", window.print());
+	</script>
+</body>
+
+</html>

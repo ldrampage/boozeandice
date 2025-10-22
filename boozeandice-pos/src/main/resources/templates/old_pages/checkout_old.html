@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="crm_body_bg">
+
+	<!-- main content part here -->
+
+	<aside th:insert="~{fragments/sidebar :: sidebar}"></aside>
+
+	<section class="main_content dashboard_part large_header_bg">
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div class="main_content_iner overly_inner">
+			<div class="container-fluid p-0 ">
+				<!-- page title  -->
+				<div class="row">
+					<div class="col-12">
+						<div class="page_title_box d-flex align-items-center justify-content-between">
+							<div class="page_title_left">
+								<h3 class="f_s_30 f_w_700 text_white">Checkout</h3>
+								<ol class="breadcrumb page_bradcam mb-0">
+									<li class="breadcrumb-item"><a href="javascript:void(0);"
+											th:text="${business_name}"></a></li>
+									<li class="breadcrumb-item"><a href="javascript:void(0);">POS Interface</a></li>
+									<li class="breadcrumb-item active">Checkout</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="white_card">
+							<div class="white_card_header border_bottom_1px">
+								<h4 class="card-title mb-0">Order Summary</h4>
+							</div>
+							<!--end white_card_header border_bottom_1px-->
+							<div class="card-body">
+								<div class="table-responsive shopping-cart">
+									<table class="table mb-0">
+										<thead>
+											<tr>
+												<th class="border-top-0">Product</th>
+												<th class="border-top-0">Quantity</th>
+												<th class="border-top-0">Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="purchases : ${transaction.transactionItem}">
+												<td>
+													<img th:src="@{/images/} + ${purchases.product.imgLocation}" alt=""
+														height="52" />
+													<p th:text="${purchases.product.name}"
+														class="d-inline-block align-middle mb-0 product-name f_s_16 f_w_600 color_theme2">
+													</p>
+												</td>
+												<td th:text="${purchases.quantity}"></td>
+												<td th:text="${'Php ' + purchases.quantity * purchases.product.price}">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--end re-table-->
+								<div class="total-payment">
+									<table class="table mb-0">
+										<tbody>
+											<tr>
+												<td class="payment-title">Subtotal</td>
+												<td th:text="${'Php ' + transaction.subTotal}"></td>
+											</tr>
+											<tr>
+												<td class="payment-title">Total Amount Due</td>
+												<td class="text-success"><strong style="font-size: 32px;"
+														th:text="${'Php ' + transaction.total}"></strong></td>
+											</tr>
+											<tr>
+												<td class="payment-title">VATable sales</td>
+												<td th:text="${'Php ' + transaction.vatableSales}"></td>
+											</tr>
+											<tr>
+												<td class="payment-title">VAT (12%)</td>
+												<td th:text="${'Php ' + transaction.vatAmount}"></td>
+											</tr>
+
+										</tbody>
+									</table>
+									<!--end table-->
+								</div>
+								<!--end total-payment-->
+							</div>
+							<!--end card-body-->
+						</div>
+						<!--end card-->
+					</div>
+					<!--end col-->
+					<div class="col-lg-6">
+						<div class="white_card mb_20">
+							<div class="white_card_header border_bottom_1px">
+								<h4 class="card-title mb-0">Billing Details</h4>
+							</div>
+							<!--end white_card_header border_bottom_1px-->
+							<div class="card-body">
+								<form id="chargeForm" method="post" th:action="@{/invoice}">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="mb-3"><label class="form-label" style="font-size: 24px;"
+													for="cash_received">Cash
+													Received</label>
+												<input id="cash_received" type="number"
+													style="font-size: 32px; font-weight:900; color:cornflowerblue"
+													step="0.0" th:min="${transaction.total}" class="form-control"
+													name="cash_received" required="" placeholder="Cash Received" />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="mb-3">
+												<label class="form-label col-xl-3 col-lg-3 col-form-label">Sold
+													To</label>
+												<div th:if="${transaction.customer != null}">
+													<input th:value="${transaction.customer.fname}" class="form-control"
+														type="text" id="registeredCustomer" name="registeredCustomer"
+														disabled />
+												</div>
+												<div th:unless="${transaction.customer != null}">
+													<input class="form-control" type="text" id="soldTo" name="soldTo"
+														th:value="${transaction.soldTo}" placeholder="Sold To" required />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="mb-3"><label class="form-label" for="table_no">Table No.</label>
+												<select class="form-select" name="table_no" id="table_no">
+													<option value="1" th:selected="${transaction.tableNo == '1'}">Table
+														1</option>
+													<option value="2" th:selected="${transaction.tableNo == '2'}">Table
+														2</option>
+													<option value="3" th:selected="${transaction.tableNo == '3'}">Table
+														3</option>
+													<option value="4" th:selected="${transaction.tableNo == '4'}">Table
+														4</option>
+													<option value="5" th:selected="${transaction.tableNo == '5'}">Table
+														5</option>
+												</select>
+											</div>
+
+										</div>
+									</div>
+
+							</div>
+							<!--end card-body-->
+						</div>
+						<!--end card-->
+						<div class="white_card">
+							<div class="white_card_header border_bottom_1px">
+								<h4 class="card-title mb-0">Action</h4>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<input type="hidden" name="transactionId" th:value="${transaction.id}" />
+										<button type="submit" name="cash_payment"
+											class="btn_2 mt-1 mb-1 w-100">CHARGE</button>
+										</form>
+										<form id="pay_later_form" method="post" th:action="@{/checkout}">
+											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
+											<input type="hidden" name="pay_later_btn" />
+											<button type="submit" class="btn_3 mt-1 mb-1 w-100">PAY
+												LATER</button>
+										</form>
+										<!--<form method="post" th:action="@{/}">
+											<button type="submit" name="pay_later" class="btn_3 mt-1 mb-1 w-100"
+												style="text-align: center;">PAY LATER</button>
+										</form>-->
+										<form method="post" th:action="@{/}">
+											<input type="hidden" name="addMoreToPurchase" />
+											<input type="hidden" name="transactionId" th:value="${transaction.id}" />
+											<button type="submit" name="cash_payment" class="btn_4 mt-1 mb-1 w-100">ADD
+												/ DEDUCT PURCHASE</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end col-->
+
+				</div>
+
+			</div>
+		</div>
+
+		<!-- footer part -->
+		<div th:insert="~{fragments/footer :: footer}"></div>
+	</section>
+	<!-- main content part end -->
+
+	<div id="back-top" style="display: none;">
+		<a title="Go to Top" href="#">
+			<i class="ti-angle-up"></i>
+		</a>
+	</div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		$(document).ready(function () {
+			$("#pay_later_form").submit(function (event) {
+				event.preventDefault();
+
+				var soldTo = $('#soldTo').val();
+				var tableNo = $('#table_no').val();
+				if (soldTo.trim() === '') {
+					alert("Sold To Field is Required!");
+					return;
+				}
+
+				$('#pay_later_form').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
+				$('#pay_later_form').append('<input type="hidden" name="table_no" value="' + tableNo + '">');
+				$('#pay_later_form')[0].submit();
+			})
+
+		})
+	</script>
+	<!--<script>
+		$(document).ready(function () {
+			$("#chargeForm").submit(function (event) {
+				event.preventDefault();
+
+				var soldTo = $('#soldTo').val();
+				var cashReceived = $('#cash_received').val();
+
+				if (soldTo.trim() === '') {
+					alert("Sold To Field is Required!");
+					return;
+				}
+
+				if (cashReceived.trim() === '') {
+					alert("Cash Received Field is Required!");
+					return;
+				}
+
+				if (!isValidNumber(cashReceived)) {
+					alert("Cash Received must be a valid number!");
+					return;
+				}
+
+				$('#chargeForm').append('<input type="hidden" name="soldTo" value="' + soldTo + '">');
+				$('#chargeForm').append('<input type="hidden" name="cash_received" value="' + cashReceived + '">');
+
+				$('#chargeForm')[0].submit();
+
+			})
+		});
+
+		// Function to check if a value is a valid number
+		function isValidNumber(value) {
+			return !isNaN(value);
+		}
+	</script> -->
+</body>
+
+</html>

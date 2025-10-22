@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Product Category Edit</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<div th:if="${message != null and message['status'] == 'success'}"
+						class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully edited a category.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}"
+						class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Edit Category</h3>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/product/category/edit}">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="category_name">Category Name</label>
+													<input th:value="${category.name}" type="text" class="form-control"
+														id="category_name" name="category_name"
+														placeholder="Category Name" required>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="category_description">Category
+														Description</label>
+													<textarea class="form-control" th:value="${category.description}"
+														id="category_description" name="category_description"
+														placeholder="Category Description"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+</body>
+
+</html>

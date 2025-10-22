@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Product Stock Transfer</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<div th:if="${message != null and message['status'] == 'success'}"
+						class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully transferred a stock.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}"
+						class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Transfer Stock</h3>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/product/stocks/transfer/}"
+										th:if="${setPsts.size > 0}">
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="product">Product Stock
+														Destination</label>
+													<input type="text" class="form-control" id="pstd" name="pstd"
+														step="0" min="0" th:value="${pstd.name + ' - ' + '(' + pstd.stocks + ')'}" required disabled>
+													<input type="hidden" id="pstdid" name="pstdid"
+														th:value="${pstd.id}" />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="product">Product Stock Source</label>
+													<select class="form-control select2" id="pstsid" name="pstsid" required>
+														<option th:each="psts : ${setPsts}"
+															th:value="${psts.id}" th:text="${psts.name + ' - ' + '(' + psts.stocks + ')' }">
+														</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label class="form-label" for="quantity">Quantity of stocks to transfer</label>
+													<input type="number" class="form-control" id="quantity"
+														name="quantity" step="0" min="0" placeholder="quantity"
+														required>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="notes">Notes</label>
+													<textarea class="form-control" id="notes" name="notes"
+														placeholder="notes"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<button type="submit" name="processTransfer" class="btn btn-primary">Submit</button>
+													<input type="hidden" name="created_by" th:value="${username}" />
+												</div>
+											</div>
+										</div>
+									</form>
+
+									<div th:unless="${setPsts.size > 0}" class="alert alert-danger alert-dismissible">
+										<button type="button" class="close" data-dismiss="alert"
+											aria-hidden="true">&times;</button>
+										<h4 class="alert-heading">No product with a different version or all stock
+											source has zero stock. Please contact your administrator.</h4>
+										<!--<p th:text="${psts.name + ' no stock available for this stock source.'}"></p>-->
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		//Initialize Select2 Elements
+		$('.select2').select2()
+	</script>
+</body>
+
+</html>

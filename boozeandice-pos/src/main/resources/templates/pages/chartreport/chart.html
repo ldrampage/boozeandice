@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Charts</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Charts</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-success">
+								<div class="card-header">
+									<h3 class="card-title">Monthly Recap Chart</h3>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+											<i class="fas fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-tool" data-card-widget="remove">
+											<i class="fas fa-times"></i>
+										</button>
+									</div>
+									<div style="display: none;">
+										<span id="monthlyRecapJanuary"
+											th:data-revenue="${monthlyRecapJanuary != null ? monthlyRecapJanuary.revenue : 0}"
+											th:data-cost="${monthlyRecapJanuary != null ? monthlyRecapJanuary.cost : 0}"
+											th:data-profit="${monthlyRecapJanuary != null ? monthlyRecapJanuary.profit : 0}"></span>
+										<span id="monthlyRecapFebruary"
+											th:data-revenue="${monthlyRecapFebruary != null ? monthlyRecapFebruary.revenue : 0}"
+											th:data-cost="${monthlyRecapFebruary != null ? monthlyRecapFebruary.cost : 0}"
+											th:data-profit="${monthlyRecapFebruary != null ? monthlyRecapFebruary.profit : 0}"></span>
+										<span id="monthlyRecapMarch"
+											th:data-revenue="${monthlyRecapMarch != null ? monthlyRecapMarch.revenue : 0}"
+											th:data-cost="${monthlyRecapMarch != null ? monthlyRecapMarch.cost : 0}"
+											th:data-profit="${monthlyRecapMarch != null ? monthlyRecapMarch.profit : 0}"></span>
+										<span id="monthlyRecapApril"
+											th:data-revenue="${monthlyRecapApril != null ? monthlyRecapApril.revenue : 0}"
+											th:data-cost="${monthlyRecapApril != null ? monthlyRecapApril.cost : 0}"
+											th:data-profit="${monthlyRecapApril != null ? monthlyRecapApril.profit : 0}"></span>
+										<span id="monthlyRecapMay"
+											th:data-revenue="${monthlyRecapMay != null ? monthlyRecapMay.revenue : 0}"
+											th:data-cost="${monthlyRecapMay != null ? monthlyRecapMay.cost : 0}"
+											th:data-profit="${monthlyRecapMay != null ? monthlyRecapMay.profit : 0}"></span>
+										<span id="monthlyRecapJune"
+											th:data-revenue="${monthlyRecapJune != null ? monthlyRecapJune.revenue : 0}"
+											th:data-cost="${monthlyRecapJune != null ? monthlyRecapJune.cost : 0}"
+											th:data-profit="${monthlyRecapJune != null ? monthlyRecapJune.profit : 0}"></span>
+										<span id="monthlyRecapJuly"
+											th:data-revenue="${monthlyRecapJuly != null ? monthlyRecapJuly.revenue : 0}"
+											th:data-cost="${monthlyRecapJuly != null ? monthlyRecapJuly.cost : 0}"
+											th:data-profit="${monthlyRecapJuly != null ? monthlyRecapJuly.profit : 0}"></span>
+										<span id="monthlyRecapAugust"
+											th:data-revenue="${monthlyRecapAugust != null ? monthlyRecapAugust.revenue : 0}"
+											th:data-cost="${monthlyRecapAugust != null ? monthlyRecapAugust.cost : 0}"
+											th:data-profit="${monthlyRecapAugust != null ? monthlyRecapAugust.profit : 0}"></span>
+										<span id="monthlyRecapSeptember"
+											th:data-revenue="${monthlyRecapSeptember != null ? monthlyRecapSeptember.revenue : 0}"
+											th:data-cost="${monthlyRecapSeptember != null ? monthlyRecapSeptember.cost : 0}"
+											th:data-profit="${monthlyRecapSeptember != null ? monthlyRecapSeptember.profit : 0}"></span>
+										<span id="monthlyRecapOctober"
+											th:data-revenue="${monthlyRecapOctober != null ? monthlyRecapOctober.revenue : 0}"
+											th:data-cost="${monthlyRecapOctober != null ? monthlyRecapOctober.cost : 0}"
+											th:data-profit="${monthlyRecapOctober != null ? monthlyRecapOctober.profit : 0}"></span>
+										<span id="monthlyRecapNovember"
+											th:data-revenue="${monthlyRecapNovember != null ? monthlyRecapNovember.revenue : 0}"
+											th:data-cost="${monthlyRecapNovember != null ? monthlyRecapNovember.cost : 0}"
+											th:data-profit="${monthlyRecapNovember != null ? monthlyRecapNovember.profit : 0}"></span>
+										<span id="monthlyRecapDecember"
+											th:data-revenue="${monthlyRecapDecember != null ? monthlyRecapDecember.revenue : 0}"
+											th:data-cost="${monthlyRecapDecember != null ? monthlyRecapDecember.cost : 0}"
+											th:data-profit="${monthlyRecapDecember != null ? monthlyRecapDecember.profit : 0}"></span>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12">
+											<form id="mrcfty_dateform" method="post" th:action="@{/chart/}">
+												<div class="form-group float-left">
+													<label>Date:</label>
+													<div class="input-group date" id="mrcftydate"
+														data-target-input="nearest">
+														<input type="text" id="mrcfty_date" th:value="${mrcfty_date}"
+															name="mrcfty_date" class="form-control datetimepicker-input"
+															data-target="#mrcftydate" />
+														<div class="input-group-append" data-target="#mrcftydate"
+															data-toggle="datetimepicker">
+															<div class="input-group-text"><i class="fa fa-calendar"></i>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" name="mrcfty_date_submit" />
+
+												</div>
+											</form>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="chart">
+												<canvas id="monthlyRecapBarChart"
+													style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-4 col-6">
+											<div class="description-block border-right">
+												<!--<span class="description-percentage text-success"><i
+														class="fas fa-caret-up"></i> 17%</span> -->
+												<h4 style="color: rgba(60,141,188,0.9);" class="description-header"
+													th:text="${'P' + totalRevenue}"></h4>
+												<span class="description-text">TOTAL REVENUE | YTD</span>
+											</div>
+											<!-- /.description-block -->
+										</div>
+										<!-- /.col -->
+										<div class="col-sm-4 col-6">
+											<div class="description-block border-right">
+												<!--<span class="description-percentage text-warning"><i
+														class="fas fa-caret-left"></i> 0%</span> -->
+												<h4 class="description-header" th:text="${'P'+totalCost}"></h4>
+												<span class="description-text">TOTAL COST | YTD</span>
+											</div>
+											<!-- /.description-block -->
+										</div>
+										<!-- /.col -->
+										<div class="col-sm-4 col-6">
+											<div class="description-block border-right">
+												<!--<span class="description-percentage text-success"><i
+														class="fas fa-caret-up"></i> 20%</span>-->
+												<h4 style="color: rgba(147, 250, 165, 1);" class="description-header"
+													th:text="${'P'+totalProfit}"></h4>
+												<span class="description-text">TOTAL PROFIT | YTD</span>
+											</div>
+											<!-- /.description-block -->
+										</div>
+									</div>
+								</div>
+								<!-- /.card-body -->
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="card card-primary">
+								<div class="card-header border-0">
+									<h3 class="card-title">Monthly Best Selling Products</h3>
+									<div class="card-tools">
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-download"></i>
+										</a>
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-bars"></i>
+										</a>
+									</div>
+								</div>
+								<div class="card-body table-responsive">
+									<div class="row">
+										<div class="col-md-12">
+											<form id="mbspdateform" method="post" th:action="@{/chart/}">
+												<div class="form-group float-left">
+													<label>Date:</label>
+													<div class="input-group date" id="mbspdate"
+														data-target-input="nearest">
+														<input type="text" id="mbsp_date" th:value="${mbsp_date}"
+															name="mbsp_date" class="form-control datetimepicker-input"
+															data-target="#mbspdate" />
+														<div class="input-group-append" data-target="#mbspdate"
+															data-toggle="datetimepicker">
+															<div class="input-group-text"><i class="fa fa-calendar"></i>
+															</div>
+														</div>
+													</div>
+													<input type="hidden" name="mbsp_date_submit" />
+
+												</div>
+											</form>
+										</div>
+									</div>
+									<table id="mbsp_table" class="table table-striped table-valign-middle">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<!--<th>Price</th> -->
+												<th>Sales</th>
+												<th>Revenue</th>
+												<th>Cost</th>
+												<th>Profit</th>
+												<!--<th>More</th> -->
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="product : ${mbspList}">
+												<td>
+													<img th:src="@{/images/} + ${product.imgLocation}"
+														class="img-circle img-size-32 mr-2">
+													<span th:text="${product.productName}"></span>
+												</td>
+												<!--<td>$13 USD</td> -->
+												<td>
+													<!--<small class="text-success mr-1">
+														<i class="fas fa-arrow-up"></i>
+														12%
+													</small> -->
+													<span th:text="${product.itemsSold}"></span> Sold
+												</td>
+												<td th:text="${'P' + product.revenue}"></td>
+												<td th:text="${'P' + product.cost}"></td>
+												<td th:text="${'P' + product.profit}"></td>
+												<!--<td>
+													<a href="#" class="text-muted">
+														<i class="fas fa-search"></i>
+													</a>
+												</td> -->
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-info">
+								<div class="card-header border-0">
+									<h3 class="card-title">All Time Best Selling Products</h3>
+									<div class="card-tools">
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-download"></i>
+										</a>
+										<a href="#" class="btn btn-tool btn-sm">
+											<i class="fas fa-bars"></i>
+										</a>
+									</div>
+								</div>
+								<div class="card-body table-responsive">
+									<table id="atbsp_table" class="table table-striped table-valign-middle">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<!--<th>Price</th> -->
+												<th>Sales</th>
+												<th>Revenue</th>
+												<th>Cost</th>
+												<th>Profit</th>
+												<!--<th>More</th> -->
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="product : ${productAllTimeBestSeller}">
+												<td>
+													<img th:src="@{/images/} + ${product.imgLocation}"
+														class="img-circle img-size-32 mr-2">
+													<span th:text="${product.productName}"></span>
+												</td>
+												<!--<td>$13 USD</td> -->
+												<td>
+													<!--<small class="text-success mr-1">
+														<i class="fas fa-arrow-up"></i>
+														12%
+													</small> -->
+													<span th:text="${product.itemsSold}"></span> Sold
+												</td>
+												<td th:text="${'P' + product.revenue}"></td>
+												<td th:text="${'P' + product.cost}"></td>
+												<td th:text="${'P' + product.profit}"></td>
+												<!--<td>
+													<a href="#" class="text-muted">
+														<i class="fas fa-search"></i>
+													</a>
+												</td> -->
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<!-- DataTables  & Plugins -->
+	<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+
+	<script>
+		//Date picker
+		$('#mrcftydate').datetimepicker({
+			format: 'YYYY',
+			viewMode: 'years',
+			minViewMode: 'years',
+			minDate: new Date(2023, 0, 1),
+			//defaultDate: new Date()
+		});
+
+		$("#mrcfty_date").on("blur", function () {
+			$("#mrcfty_dateform").submit(); // Submit the form on input field blur
+		});
+
+		$('#mbspdate').datetimepicker({
+			format: "MM-YYYY",
+			viewMode: "months",
+			minViewMode: "months"
+
+		});
+
+		$("#mbsp_date").on("blur", function () {
+			$("#mbspdateform").submit(); // Submit the form on input field blur
+		});
+
+
+		$("#atbsp_table").DataTable({
+			"responsive": true, "lengthChange": false, "autoWidth": false,
+			//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+			"searching": true,
+			"order": []
+
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+		$("#mbsp_table").DataTable({
+			"responsive": true, "lengthChange": false, "autoWidth": false,
+			//"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+			"searching": true,
+			"order": [],
+			"pageLength": 5
+
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+		$(function () {
+
+			var monthlyBarChartData = {
+				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+				datasets: [
+					{
+						label: 'Revenue',
+						backgroundColor: 'rgba(60,141,188,0.9)',
+						borderColor: 'rgba(60,141,188,0.8)',
+						pointRadius: false,
+						pointColor: '#3b8bba',
+						pointStrokeColor: 'rgba(60,141,188,1)',
+						pointHighlightFill: '#fff',
+						pointHighlightStroke: 'rgba(60,141,188,1)',
+						data: [$("#monthlyRecapJanuary").data("revenue"),
+							$("#monthlyRecapFebruary").data("revenue"), 
+							$("#monthlyRecapMarch").data("revenue"), 
+							$("#monthlyRecapApril").data("revenue"), 
+							$("#monthlyRecapMay").data("revenue"), 
+							$("#monthlyRecapJune").data("revenue"), 
+							$("#monthlyRecapJuly").data("revenue"), 
+							$("#monthlyRecapAugust").data("revenue"), 
+							$("#monthlyRecapSeptember").data("revenue"),
+							$("#monthlyRecapOctober").data("revenue"), 
+							$("#monthlyRecapNovember").data("revenue"), 
+							$("#monthlyRecapDecember").data("revenue")]
+					},
+					{
+						label: 'Cost',
+						backgroundColor: 'rgba(210, 214, 222, 1)',
+						borderColor: 'rgba(210, 214, 222, 1)',
+						pointRadius: false,
+						pointColor: 'rgba(210, 214, 222, 1)',
+						pointStrokeColor: '#c1c7d1',
+						pointHighlightFill: '#fff',
+						pointHighlightStroke: 'rgba(220,220,220,1)',
+						data: [$("#monthlyRecapJanuary").data("cost"),
+							$("#monthlyRecapFebruary").data("cost"), 
+							$("#monthlyRecapMarch").data("cost"), 
+							$("#monthlyRecapApril").data("cost"), 
+							$("#monthlyRecapMay").data("cost"), 
+							$("#monthlyRecapJune").data("cost"), 
+							$("#monthlyRecapJuly").data("cost"), 
+							$("#monthlyRecapAugust").data("cost"), 
+							$("#monthlyRecapSeptember").data("cost"),
+							$("#monthlyRecapOctober").data("cost"), 
+							$("#monthlyRecapNovember").data("cost"), 
+							$("#monthlyRecapDecember").data("cost")]
+					},
+					{
+						label: 'Profit',
+						backgroundColor: 'rgba(147, 250, 165, 1)',
+						borderColor: 'rgba(210, 214, 222, 1)',
+						pointRadius: false,
+						pointColor: 'rgba(210, 214, 222, 1)',
+						pointStrokeColor: '#c1c7d1',
+						pointHighlightFill: '#fff',
+						pointHighlightStroke: 'rgba(220,220,220,1)',
+						data: [$("#monthlyRecapJanuary").data("profit"),
+							$("#monthlyRecapFebruary").data("profit"), 
+							$("#monthlyRecapMarch").data("profit"), 
+							$("#monthlyRecapApril").data("profit"), 
+							$("#monthlyRecapMay").data("profit"), 
+							$("#monthlyRecapJune").data("profit"), 
+							$("#monthlyRecapJuly").data("profit"), 
+							$("#monthlyRecapAugust").data("profit"), 
+							$("#monthlyRecapSeptember").data("profit"),
+							$("#monthlyRecapOctober").data("profit"), 
+							$("#monthlyRecapNovember").data("profit"), 
+							$("#monthlyRecapDecember").data("profit")]
+					},
+				]
+			}
+
+			//-------------
+			//- MONTY RECAP BAR CHART -
+			//-------------
+			var monthlyRecapbarChartCanvas = $('#monthlyRecapBarChart').get(0).getContext('2d')
+			var monthlyBarChartDataSet = $.extend(true, {}, monthlyBarChartData)
+			var temp0 = monthlyBarChartDataSet.datasets[0]
+			var temp1 = monthlyBarChartDataSet.datasets[1]
+			monthlyBarChartDataSet.datasets[0] = temp0
+			monthlyBarChartDataSet.datasets[1] = temp1
+
+			var ticksStyle = {
+				fontColor: '#495057',
+				fontStyle: 'bold'
+			}
+
+			var monthlyRecapbarChartOptions = {
+				responsive: true,
+				maintainAspectRatio: false,
+				datasetFill: false,
+				tooltips: {
+					mode: "index",
+					intersect: true
+				},
+				hover: {
+					mode: "index",
+					intersect: true
+				},
+				legend: {
+					display: true
+				},
+				scales: {
+					yAxes: [{
+						ticks: $.extend({
+							beginAtZero: true,
+							callback: function (value) {
+								if (value >= 1000) {
+									value /= 1000
+									value += 'k'
+								}
+
+								return 'P' + value;
+							}
+						}, ticksStyle)
+					}]
+				}
+			}
+
+			new Chart(monthlyRecapbarChartCanvas, {
+				type: 'bar',
+				data: monthlyBarChartDataSet,
+				options: monthlyRecapbarChartOptions
+			})
+
+		})
+
+	</script>
+</body>
+
+</html>

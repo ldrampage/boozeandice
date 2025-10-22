@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">POS Interface</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">POS Interface</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div th:if="${cashDrawerToday != null}" class="row">
+						<div class="col-12">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="card">
+										<div class="card-header" style="padding:25px;">
+											<div class="main-title2 ">
+												<div class="row">
+													<div class="col-md-6">
+														<form id="category_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="hidden" name="fetchByCategory" />
+																<select onchange="submitCategory()"
+																	class="form-control select2bs4" name="categoryId"
+																	placeholder="Category">
+																	<option value="all">All...</option>
+																	<option th:each="category : ${productCategoryList}"
+																		th:value="${category.id}"
+																		th:text="${category.name}"
+																		th:selected="${category.id == categoryFilterValue}">
+																	</option>
+																</select>
+															</div>
+														</form>
+													</div>
+													<div class="col-md-6">
+														<form id="search_product_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="text" id="search_input"
+																	name="searchByProductName" class="form-control"
+																	placeholder="Search by product name" />
+															</div>
+														</form>
+													</div>
+												</div>
+												<br>
+												<div class="row">
+													<div class="col-md-12">
+														<form id="barcodeprocess_form" method="post" th:action="@{/}">
+															<div class="input-group">
+																<input type="text" id="barcode_input"
+																	name="barcodeprocess" class="form-control"
+																	placeholder="Barcode" />
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<!--<div class="visible-scroll always-visible scroll-demo ps-container ps-theme-default ps-active-x ps-active-y"
+													style="height:780px;"> -->
+											<!-- <div class="horrizontal_width" style="width: 1800px;"> -->
+											<div class="row my-4" th:each="entry : ${productsDisplay}">
+												<div class="col-md-4 text-center" th:each="product: ${entry}">
+													<div class="position-relative">
+														<div class="ribbon-wrapper ribbon-lg">
+															<div th:if="${product.stocks > 0}" class="ribbon bg-success">
+																In-stock
+															</div>
+															<div th:unless="${product.stocks > 0}" class="ribbon bg-danger">
+																Out-of-stock
+															</div>
+														</div>
+														<!--Ribbon Default <br />
+														<small>.ribbon-wrapper.ribbon-lg .ribbon</small> -->
+														<form th:id="${'form_' + product.id}" method="post"
+															th:action="@{/}">
+															<input type="hidden" th:value="${product.id}"
+																name="productId" />
+															<input class="quantityclass" type="hidden"
+																name="purchased_quantity" />
+															<input type="hidden" name="purchase" />
+															<button th:disabled="${product.stocks <= 0}" type="button"
+																onclick="injectToModalSubmitTheFormId(this)"
+																data-target="#modal-default" data-toggle="modal"
+																class="btn btn-block btn-default btn-lg"
+																name="purchase">
+																<img th:src="@{/images/} + ${product.imgLocation}"
+																	alt="No Image Available"
+																	class="d-block mx-auto my-4" style="width:50%;">
+																<div class="row my-2">
+																	<div class="col"><span class="badge_btn_3 mb-1"
+																			style="font-size:14px;"
+																			th:if="${product.productCategory != null}"
+																			th:text="${product.productCategory.name}"></span>
+																		<a href="#"
+																			class="f_w_900 color_text_5 f_s_21 d-block"
+																			th:text="${product.name}"></a>
+																	</div>
+																</div>
+																<div class="row my-2">
+																	<div class="col">
+																		<h4 class="mt-0 badge badge-success"
+																			style="font-size: 90%;"
+																			th:text="${'Php ' + product.price}">
+
+																			<!--<small class="text-muted font-14"><del>Php 99.00</del></small>-->
+																		</h4>
+																	</div>
+																</div>
+															</button>
+														</form>
+														</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="card">
+										<div class="card-body">
+											<div class="row">
+												<div class="col-12">
+													<table class="table table-hover text-nowrap">
+														<thead>
+															<tr>
+																<th>Product</th>
+																<th>Price</th>
+																<th>Quantity</th>
+																<th>Action</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="product : ${productToPurchaseList}">
+																<td><img th:src="@{/images/} + ${product.imgLocation} "
+																		alt="N/A" style="height:50px; width:50px;">
+																	<p class="d-inline-block align-middle mb-0"><a
+																			href=""
+																			class="d-inline-block align-middle mb-0 f_w_600 color_theme2"
+																			th:text="${product.name}"></a></p>
+																</td>
+																<td th:text="${'Php ' + product.price}"></td>
+																<td style="width:15%">
+																	<input th:onChange="quantityHandler(this)"
+																		th:class="${'form-control ' + '_product'}"
+																		type="number" inputmode="numeric" min="1"
+																		th:max="${product.stocks}" step="0"
+																		th:value="${product.qtyToPurchase == 0 ? 1 : product.qtyToPurchase}"
+																		th:name="${'product_' + product.id}">
+																</td>
+																<form method="post" th:action="@{/}">
+																	<td>
+																		<input type="hidden" th:value="${product.id}"
+																			name="productId" />
+																		<button name="removePurchase" type="submit"
+																			class="btn btn-sm btn-outline-dark">
+																			Remove
+																		</button>
+																	</td>
+																</form>
+															</tr>
+														</tbody>
+													</table>
+													<div th:if="${productToPurchaseList == null or productToPurchaseList.size <= 0}"
+														style="text-align: center;">
+														<h5>No data available in table</h5>
+													</div>
+
+													<form
+														th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}"
+														id="processPaymentForm" method="post"
+														th:action="@{/processpayment}">
+														<div class="card">
+															<div class="card-body">
+																<div class="row">
+																	<div class="col-md-12">
+																		<div class="form-check">
+																			<input style="width: 2em; height:2em;"
+																				type="checkbox" class="form-check-input"
+																				id="takeout" name="takeout">
+																			<label
+																				style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
+																				class="form-check-label"
+																				for="takeout">Take away</label>
+																		</div>
+
+																		<div class="form-check">
+																			<input style="width: 2em; height:2em;"
+																				type="checkbox" class="form-check-input"
+																				id="isDelivery" name="isDelivery">
+																			<label
+																				style="margin-top: 0.5rem; margin-left: 1.5rem; margin-bottom: 0.5rem;"
+																				class="form-check-label"
+																				for="isDelivery">For Delivery</label>
+																		</div>
+																		<div class="form-group">
+																			<label for="customer">Customer</label>
+																			<input type="hidden"
+																				name="processPaymentCreateTransaction" />
+																			<select class="form-control select2bs4"
+																				id="customer" name="customerId">
+																				<option value=""
+																					th:selected="${customerFilterValue == null}">
+																					None</option>
+																				<option
+																					th:each="customer : ${customerList}"
+																					th:value="${customer.id}"
+																					th:selected="${customerFilterValue == customer.id}"
+																					th:text="${customer.emailAddress}">
+																				</option>
+																			</select>
+																		</div>
+																		<div class="form-group">
+																			<label for="discount">Discount</label>
+																			<select class="form-control select2bs4"
+																				id="discount" name="discount">
+																				<option value="" selected>None</option>
+																				<option
+																					th:value="${seniorCitizenDiscount}">
+																					Senior
+																					Citizen and PWD
+																				</option>
+																			</select>
+																		</div>
+
+																		<div class="row">
+																			<div class="col-md-6">
+																				<div class="form-group">
+																					<label for="custom_discount">Custom
+																						Discount Amount</label>
+																					<input class="form-control"
+																						type="number" min="0"
+																						step="0.01"
+																						placeholder="Enter discount amount"
+																						id="custom_discount"
+																						name="custom_discount">
+																				</div>
+																			</div>
+																			<div class="col-md-6">
+																				<label
+																					for="custom_discount">Reason</label>
+																				<select class="form-control select2bs4"
+																					id="custom_discount_reason"
+																					name="custom_discount_reason">
+																					<option th:value="wholesale">
+																						Wholesale
+																					</option>
+																				</select>
+																			</div>
+																		</div>
+
+																		<table class="table">
+																			<tbody>
+																				<tr>
+																					<td style="text-align: center;"><a
+																							th:href="@{/}"
+																							class="btn btn-block bg-gradient-secondary btn-lg"><i
+																								class="far fa-times-circle font_s_18"></i>
+																							Cancel</a></td>
+																					<td style="text-align: center;">
+																						<button id="processpayment"
+																							class="btn btn-block bg-gradient-primary btn-lg"><i
+																								class="fas fa-shopping-bag font_s_18"></i>
+																							Process Payment</button>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</form>
+													<!--<div class="card"
+												th:if="${productToPurchaseList != null and productToPurchaseList.size() > 0}">
+												<div class="card-body">
+													<div class="row">
+														<div class="col-md-12">
+															<div class="total-payment">
+																<table class="table">
+																	<tbody>
+																		<tr>
+																			<td style="text-align: center;"><a
+																					th:href="@{/}"
+																					class="btn btn-block bg-gradient-secondary btn-lg"><i
+																						class="far fa-times-circle font_s_18"></i>
+																					Cancel</a></td>
+																			<td style="text-align: center;">
+																				<button id="checkoutButton"
+																					class="btn btn-block bg-gradient-success btn-lg"><i
+																						class="fas fa-shopping-bag font_s_18"></i>
+																					Checkout</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> -->
+												</div>
+											</div><!-- /.card-body -->
+										</div>
+										<!-- /.card -->
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:unless="${cashDrawerToday != null}" class="row">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">
+										Setup the cashdrawer
+									</h4>
+								</div>
+								<div class="card-body">
+									<div class="col-lg-12">
+										<form method="post" th:action="@{/cashdrawer}">
+											<h2 class="color_gray f_w_700" style="text-align: center;">Create
+												Starting
+												Cash for Today</h2>
+											<a th:href="${'/cashdrawer/create'}" type="submit" name="cash_payment"
+												class="btn btn-block bg-gradient-success btn-lg"
+												style="text-align: center;">Create</a>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+
+			<div class="modal fade" id="modal-default">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<!--<div class="modal-header">
+							<h4 class="modal-title">Default Modal</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div> -->
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<input type="number" id="quantitymodal" step="0" min="1" value="1"
+											class="form-control" placeholder="Quantity" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="0"
+											class="btn btn-block btn-secondary btn-lg">0</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="1"
+											class="btn btn-block btn-secondary btn-lg">1</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="2"
+											class="btn btn-block btn-secondary btn-lg">2</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="3"
+											class="btn btn-block btn-secondary btn-lg">3</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="4"
+											class="btn btn-block btn-secondary btn-lg">4</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="5"
+											class="btn btn-block btn-secondary btn-lg">5</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="6"
+											class="btn btn-block btn-secondary btn-lg">6</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="7"
+											class="btn btn-block btn-secondary btn-lg">7</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="8"
+											class="btn btn-block btn-secondary btn-lg">8</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="9"
+											class="btn btn-block btn-secondary btn-lg">9</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+								</div>
+								<div class="col-md-4">
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button id="submitQuantity" onclick="submitTheFormAlongWithQuantity(this)"
+											class="btn btn-block btn-success btn-lg">Submit</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button onclick="quantityHandlerBtn(this)" value="clear"
+											class="btn btn-block btn-primary btn-lg">Clear</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<button type="button" class="btn btn-block btn-danger btn-lg"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+						<!--<div class="modal-footer justify-content-between">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Save changes</button>
+						</div> -->
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		//Initialize Select2 Elements
+		$('.select2bs4').select2({
+			theme: 'bootstrap4'
+		})
+		function submitCategory() {
+			var categoryForm = $("#category_form");
+			categoryForm.submit();
+		}
+
+		$(document).ready(function () {
+
+			$(document).on("click", "#processpayment", function () {
+				var processPaymentForm = $("#processPaymentForm");
+				var inputFields = $("._product");
+				inputFields.each(function (index, element) {
+					//console.dir(element.value);
+					//console.dir(element.name);
+					processPaymentForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
+				})
+
+				//var formFields = checkoutForm.find("input, select, textarea");
+
+				//formFields.each(function (index, element) {
+				//	console.dir(element);
+				//});
+
+				//
+				processPaymentForm.submit();
+
+			})
+
+			$(document).on("click", "#processdelivery", function () {
+				var processPaymentForm = $("#processPaymentForm");
+				var inputFields = $("._product");
+				inputFields.each(function (index, element) {
+					//console.dir(element.value);
+					//console.dir(element.name);
+					processPaymentForm.append('<input type="hidden" name="' + element.name + '" value="' + element.value + '">');
+				})
+				processPaymentForm.append('<input type="hidden" name="processdelivery"/>')
+				//var formFields = checkoutForm.find("input, select, textarea");
+
+				//formFields.each(function (index, element) {
+				//	console.dir(element);
+				//});
+
+				//
+				processPaymentForm.submit();
+
+			})
+		})
+
+		function quantityHandler(inputElement) {
+			var value = inputElement.value;
+			var name = inputElement.name;
+			//console.log("Product ID: " + name.replace("product_", ""));
+			//console.log("Input Value: " + value);
+
+			var data = {
+				productId_QH: name.replace("product_", ""),
+				value_QH: value,
+				quantityHandler: "quantityHandler"
+
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/",
+				data: data,
+				success: function (response) {
+					//console.dir("Success");
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					//console.error("Error: ");
+				}
+
+			})
+		}
+
+		//function setQuantityValue() {
+		//	let userInput = prompt("Enter quantity: ");
+		//	if (userInput.trim === "") {
+		//		alert("Value cannot be blank")
+		//	} else if (!isNaN(userInput)) {
+
+		//	} else {
+		//		alert("Please enter a valid numeric value.")
+		//	}
+		//	const inputElements = document.getElementsByClassName("quantityclass")
+		//	for (let i = 0; i < inputElements.length; i++) {
+		//		inputElements[i].value = userInput;
+		//	}
+		//}
+
+		function injectToModalSubmitTheFormId(inputElement) {
+			var formElementId = inputElement.form.id;
+			$("#submitQuantity").val(formElementId);
+		}
+
+		function quantityHandlerBtn(inputElement) {
+			var value = inputElement.value;
+			//console.dir(value);
+			if (value === "clear") {
+				$("#quantitymodal").val("");
+			} else {
+				$("#quantitymodal").val($("#quantitymodal").val() + value);
+
+			}
+		}
+
+		function submitTheFormAlongWithQuantity(inputElement) {
+			const inputElements = document.getElementsByClassName("quantityclass")
+			for (let i = 0; i < inputElements.length; i++) {
+				inputElements[i].value = $("#quantitymodal").val();
+			}
+			//console.dir(inputElement.value);
+			$("#" + inputElement.value).submit();
+		}
+
+		$(document).ready(function () {
+			$("#search_input").on("keydown", function (event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					$("#search_product_form").submit();
+				}
+			});
+		});
+
+		$(document).ready(function () {
+			$("#barcode_input").on("keydown", function (event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					$("#barcodeprocess_form").submit();
+				}
+			});
+		});
+
+	</script>
+</body>
+
+</html>

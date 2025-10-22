@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Cash Drawer</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Cash Drawer</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Cash Drawer</h3>
+									<div class="card-tools">
+										<form id="cashdrawerdateform" method="post" th:action="@{/cashdrawer}">
+											<div class="form-group float-left">
+												<label>Date:</label>
+												<div class="input-group date" id="cashdrawerdate"
+													data-target-input="nearest">
+													<input type="text" id="cashdrawer_date"
+														th:value="${cashDrawerDate}" name="cashdrawer_date"
+														class="form-control datetimepicker-input"
+														data-target="#cashdrawerdate" />
+													<div class="input-group-append" data-target="#cashdrawerdate"
+														data-toggle="datetimepicker">
+														<div class="input-group-text"><i class="fa fa-calendar"></i>
+														</div>
+													</div>
+												</div>
+												<input type="hidden" name="cashdrawerdate_date_submit" />
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="card-body">
+									<div th:if="${cashDrawerToday != null}" class="row">
+										<div class="col-lg-12">
+											<div th:if="${cashDrawerToday != null}" class="row">
+												<div class="col-lg-12">
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Starting
+																		Cash
+																	</h5>
+																	<h3 class="color_gray f_w_700"
+																		th:text="${'P' + cashDrawerToday.startingCash}">
+																	</h3>
+																</td>
+																<!--<form method="post" th:action="@{/cashdrawer}">
+														<td style="text-align: center;">
+
+															<input type="number" class="form-control"
+																th:value="${cashDrawerToday.startingCash}" step="100"
+																id="starting_cash" name="starting_cash" />
+
+														</td>
+														<td>
+															<button type="submit" name="editStartingCash"
+																class="btn btn-outline-success mb-3">
+																<i
+																		class="fas fa-shopping-bag font_s_18"></i>
+																EDIT
+															</button>
+														</td>
+													</form> -->
+															</tr>
+														</tbody>
+													</table>
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Cash added
+																	</h5>
+																	<h3 class="color_gray f_w_700"
+																		th:text="${'P' + cashDrawerToday.totalCashAdded}">
+																	</h3>
+																</td>
+																<form method="post" th:action="@{/cashdrawer}">
+																	<td style="text-align: center;">
+
+																		<input type="number" class="form-control"
+																			step="0.01" id="add_cash" name="add_cash"
+																			required />
+
+																	</td>
+																	<td>
+																		<button type="submit" name="add_cash_btn"
+																			class="btn btn-outline-success mb-3"
+																			th:disabled="${customDate == true or validTerminal == false}">
+																			<!--<i
+																		class="fas fa-shopping-bag font_s_18"></i>-->
+																			ADD CASH
+																		</button>
+																	</td>
+																</form>
+															</tr>
+														</tbody>
+													</table>
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Expenses</h5>
+																	<h3 class="color_gray f_w_700 "
+																		th:text="${'P' + cashDrawerToday.totalExpenses}">
+																	</h3>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Cash Sales
+																		Since</h5>
+																	<h3 class="color_gray f_w_700 "
+																		th:if="${cashDrawerToday.totalCashSales > 0}"
+																		th:text="${'P' + cashDrawerToday.totalCashSales}">
+																	</h3>
+																	<h3 class="color_gray f_w_700 "
+																		th:unless="${cashDrawerToday.totalCashSales > 0}">
+																		P0.0</h3>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Total Cash In Drawer</h5>
+																	<h3 class="color_gray f_w_700 "
+																		th:if="${cashDrawerToday.totalCashInDrawer > 0}"
+																		th:text="${'P' + cashDrawerToday.totalCashInDrawer}">
+																	</h3>
+																	<h3 class="color_gray f_w_700 "
+																		th:unless="${cashDrawerToday.totalCashInDrawer > 0}">
+																		P0.0</h3>
+
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Total Gcash Payments</h5>
+																	<h3 class="color_gray f_w_700 "
+																		th:if="${cashDrawerToday.totalGCashPayments > 0}"
+																		th:text="${'P' + cashDrawerToday.totalGCashPayments}">
+																	</h3>
+																	<h3 class="color_gray f_w_700 "
+																		th:unless="${cashDrawerToday.totalGCashPayments > 0}">
+																		P0.0</h3>
+
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+													<table class="table">
+														<tbody>
+															<tr>
+																<td>
+																	<h5 class="byer_name  f_s_16 f_w_600 color_theme2">
+																		Total Credit Card Payments</h5>
+																	<h3 class="color_gray f_w_700 "
+																		th:if="${cashDrawerToday.totalCreditCardPayments > 0}"
+																		th:text="${'P' + cashDrawerToday.totalCreditCardPayments}">
+																	</h3>
+																	<h3 class="color_gray f_w_700 "
+																		th:unless="${cashDrawerToday.totalCreditCardPayments > 0}">
+																		P0.0</h3>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+													<div class="single_update_news">
+
+													</div>
+													<!--<div class="single_update_news">
+											<h5 class="byer_name  f_s_16 f_w_600 color_theme2">Non-Cash Sales</h5>
+											<h3 class="color_gray f_w_700 ">Php 200.00</h3>
+										</div> -->
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div th:unless="${cashDrawerToday != null}" class="row">
+										<div th:if="${customDate == false}" class="col-lg-12">
+											<form method="post" th:action="@{/cashdrawer}">
+												<h2 class="color_gray f_w_700" style="text-align: center;">Create
+													Starting
+													Cash for Today</h2>
+												<a th:href="${'/cashdrawer/create'}" type="submit" name="cash_payment"
+													class="btn btn-block bg-gradient-success btn-lg"
+													style="text-align: center;">Create</a>
+											</form>
+										</div>
+										<div th:if="${customDate == true}" class="col-lg-12">
+											<h2 class="color_gray f_w_700" style="text-align: center;">NO TRANSACTION FOUND ON THIS DAY</h2>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div th:if="${cashDrawerToday != null}" class="col-md-6">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Expenses</h3>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/cashdrawer}">
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label for="expense_amount">Expense</label>
+													<input type="number" class="form-control" id="expense_amount"
+														name="expense_amount" placeholder="Expense Amount" required />
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="form-group">
+													<label for="expense_reason">Notes</label>
+													<textarea type="number" class="form-control" id="expense_reason"
+														name="expense_reason" placeholder="Enter expense reason"
+														required></textarea>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="form-group">
+													<input type="submit" name="add_expense" value="Add New Expense"
+														class="btn btn-md btn-success"
+														th:disabled="${customDate == true or validTerminal == false}" />
+												</div>
+											</div>
+										</div>
+									</form>
+
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="table-responsive">
+												<table class="table">
+													<thead>
+														<tr>
+															<th scope="col">#</th>
+															<th scope="col">Expense</th>
+															<th scope="col">Date Created</th>
+															<th scope="col">Notes</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="expense : ${expenseList}">
+															<th scope="row"><span th:text="${expense.id}"></span></th>
+															<td><span th:text="${'P' + expense.expense}"></span></td>
+															<td><span th:text="${expense.createdDate}"></span></td>
+															<td><span th:text="${expense.note}"></span></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		$('#cashdrawerdate').datetimepicker({
+			format: 'L'
+
+		});
+		$("#cashdrawer_date").on("blur", function () {
+			$("#cashdrawerdateform").submit(); // Submit the form on input field blur
+		});
+	</script>
+</body>
+
+</html>

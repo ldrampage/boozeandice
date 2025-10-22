@@ -1,0 +1,288 @@
+/* line 39, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 {
+  position: absolute;
+  top: -6.1px;
+  right: 10px;
+}
+
+/* line 44, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span {
+  display: block;
+  padding: 6px 4px 0px;
+  border-top-right-radius: 6px;
+  width: 60px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* line 52, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span.rib1-primary::before, .ribbon1 span.rib1-primary {
+  background: #1761fd;
+}
+
+/* line 55, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1.rib1-primary::after {
+  border-top-color: #1761fd;
+}
+
+/* line 58, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-top: 10px solid;
+  border-top-color: currentcolor;
+}
+
+/* line 68, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span.rib1-primary::before, .ribbon1 span.rib1-primary {
+  background: #1761fd;
+}
+
+/* line 71, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span::before {
+  height: 6px;
+  width: 4px;
+  left: -4px;
+  top: 0;
+}
+
+/* line 77, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span::before, .ribbon1 span::after {
+  position: absolute;
+  content: "";
+}
+
+/* line 81, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span.rib1-primary::after {
+  background: #0249df;
+}
+
+/* line 84, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span::after {
+  height: 6px;
+  width: 6px;
+  left: -6px;
+  top: 0;
+  border-radius: 8px 8px 0 0;
+}
+
+/* line 91, G:/admin_project/6 admin/sales/scss/_product.scss */
+.ribbon1 span::before, .ribbon1 span::after {
+  position: absolute;
+  content: "";
+}
+
+/* line 66, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.badge_btn_3 {
+  font-size: 11px;
+  font-weight: 700;
+  background: #E6F8FF;
+  display: inline-block;
+  border-radius: 2px;
+  padding: 5px 17px;
+  color: #0893C8;
+}
+
+/* line 74, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.badge_btn_3:hover {
+  color: #0893C8;
+}
+
+/* line 97, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_100 {
+  font-weight: 100;
+}
+
+/* line 100, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_200 {
+  font-weight: 200;
+}
+
+/* line 103, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_300 {
+  font-weight: 300;
+}
+
+/* line 106, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_400 {
+  font-weight: 400;
+}
+
+/* line 109, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_500 {
+  font-weight: 500;
+}
+
+/* line 112, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_600 {
+  font-weight: 600;
+}
+
+/* line 115, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_700 {
+  font-weight: 700;
+}
+
+/* line 118, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_800 {
+  font-weight: 800;
+}
+
+/* line 121, G:/admin_project/6 admin/sales/scss/_byer_table.scss */
+.f_w_900 {
+  font-weight: 900;
+}
+
+/* line 1676, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_11 {
+  font-size: 11px;
+}
+
+/* line 1679, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_12 {
+  font-size: 12px;
+}
+
+/* line 1682, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_13 {
+  font-size: 13px;
+}
+
+/* line 1685, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_14 {
+  font-size: 14px;
+}
+
+/* line 1688, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_15 {
+  font-size: 15px;
+}
+
+/* line 1691, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_16 {
+  font-size: 16px;
+}
+
+/* line 1694, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_18 {
+  font-size: 18px;
+}
+
+/* line 1697, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_19 {
+  font-size: 19px;
+}
+
+/* line 1700, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_20 {
+  font-size: 20px !important;
+}
+
+/* line 1703, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_17 {
+  font-size: 17px;
+}
+
+/* line 1706, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_28 {
+  font-size: 28px;
+}
+
+/* line 1709, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_40 {
+  font-size: 40px;
+}
+
+/* line 1712, G:/admin_project/6 admin/sales/scss/_reset.scss */
+.f_s_60 {
+  font-size: 60px;
+}
+
+
+
+
+/* line 28, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.color_text_1 {
+  color: #BDA5F8 !important;
+}
+
+/* line 31, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.color_text_2 {
+  color: #FFB98A !important;
+}
+
+/* line 34, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.color_text_3 {
+  color: #64C5B1 !important;
+}
+
+/* line 37, G:/admin_project/6 admin/sales/scss/_predefine.scss */
+.color_text_4 {
+  color: #97C0FF !important;
+}
+
+/* line 98, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .pro-price span {
+  font-size: 14px;
+  color: #8997bd;
+}
+
+/* line 102, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .quantity input {
+  width: 14%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  height: calc(24px + 12px);
+}
+
+/* line 109, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .custom-border {
+  width: 60px;
+  height: 2px;
+  background-color: #1d2c48;
+}
+
+/* line 114, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .product-review li {
+  margin: 0;
+}
+
+/* line 116, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .product-review li i {
+  font-size: 16px;
+}
+
+/* line 120, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .pro-price {
+  color: #303e67;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+/* line 126, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .pro-features {
+  margin-bottom: 20px;
+}
+
+/* line 128, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .pro-features li {
+  line-height: 26px;
+  color: #a4abc5;
+}
+
+/* line 131, G:/admin_project/6 admin/sales/scss/_product.scss */
+.single-pro-detail .pro-features li:before {
+  content: "\f00c" !important;
+  font-family: 'Font Awesome 5 Free' !important;
+  font-weight: 600;
+  font-size: 12px;
+  color: #03d87f !important;
+  display: inline-block;
+  margin-right: 8px;
+}

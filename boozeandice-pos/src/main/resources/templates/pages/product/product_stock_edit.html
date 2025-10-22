@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Product Stock Edit</a></li>
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<div th:if="${message != null and message['status'] == 'success'}"
+						class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully added a new stock. Go to the <a
+								th:href="${'/product/stocks'}">product stocks</a> see it.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}"
+						class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Edit Stock Form</h3>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/product/stocks/edit}">
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="product">Product</label>
+													<input type="text" id="product" class="form-control" name="product"
+														th:value="${product.name}" disabled />
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label class="form-label" for="quantity">Quantity</label>
+													<input type="number" th:value="${productStock.quantity}"
+														class="form-control" id="quantity" name="quantity" step="0"
+														min="0" placeholder="quantity" disabled>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label class="form-label" for="cost">Cost</label>
+													<input type="number" th:value="${productStock.cost}"
+														class="form-control" id="cost" name="cost" step="0.01" min="0"
+														placeholder="cost" required>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="purchasedate">Created Date</label>
+													<input type="text"
+														th:value="${#dates.format(productStock.createdDate, 'dd-MMM-yyy') + ' - ' + #dates.format(productStock.createdDate, 'hh:mm a')}"
+														class="form-control" name="createdDate" id="createdDate"
+														disabled />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="purchasedate">Purchase Date</label>
+													<input type="text"
+														th:value="${#dates.format(productStock.purchaseDate, 'dd-MMM-yyy')}"
+														class="form-control" name="purchasedate" id="purchasedate"
+														disabled />
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="barcodedigits">Barcode Digits</label>
+													<input type="text" th:value="${productStock.barcodeDigits}"
+														class="form-control" name="barcodedigits" id="barcodedigits"
+														disabled />
+												</div>
+											</div>
+											<div  class="col-md-4">
+												<div class="form-group">
+													<label class="form-label" for="barcodedigits">Barcode Image</label>
+												</div>
+												<img id="image" th:if="${productStock.barcodeImageLocation != null}" th:src="@{/images/barcode/} + ${productStock.barcodeImageLocation}"
+														alt="Existing Image" style="max-width:300px" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="notes">Notes</label>
+													<textarea class="form-control" id="notes" name="notes"
+														placeholder="notes"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<script>
+		//Initialize Select2 Elements
+		$('.select2').select2()
+
+	</script>
+</body>
+
+</html>

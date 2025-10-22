@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+	<div class="wrapper">
+
+		<div th:insert="~{fragments/preload :: preload}"></div>
+
+
+		<div th:insert="~{fragments/header :: header}"></div>
+		<div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Inventory</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Inventory</a></li>
+								<li class="breadcrumb-item"><a href="#">Product Edit</a></li>
+
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+				
+					<div th:if="${message != null and message['status'] == 'success'}" class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Well done!</h4>
+						<p>Aww yeah, you successfully edited a product.</p>
+					</div>
+
+					<div th:if="${message != null and message['status'] == 'error'}" class="alert alert-danger alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h4 class="alert-heading">Something went wrong!</h4>
+						<p th:text="${message['message']}"></p>
+					</div>
+
+				
+				
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">Product information</h3>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/product/products/edit}"
+										enctype="multipart/form-data">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="name">Name</label>
+													<input type="text" class="form-control" id="name" name="name"
+														th:value="${product.name}" placeholder="Name" required>
+												</div>
+											</div>
+
+										</div>
+										<div class="row">
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="price">Price</label>
+													<input type="number" class="form-control" id="price" name="price"
+														step="0.01" th:value="${product.price}" placeholder="Price">
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="cost">Cost</label>
+													<input type="number" class="form-control" id="cost" name="cost"
+														step="0.01" th:value="${product.cost}" placeholder="Cost">
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="packaging_fee">Packaging Fee</label>
+													<input type="number" class="form-control" id="packaging_fee" name="packaging_fee"
+														step="0.01" th:value="${product.packagingFee}" placeholder="Packaging Fee">
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label class="form-label" for="categoryId">Category</label>
+													<select class="form-control" id="categoryId" name="categoryId">
+														<option value="0"></option>
+														<option th:each="category : ${categoryList}"
+															th:value="${category.id}" th:text="${category.name}"
+															th:selected="${category.id == selectedValue}"></option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="description">Description</label>
+													<textarea class="form-control" id="description" name="description"
+														th:value="${product.description}"
+														placeholder="Description"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="form-label" for="description">Notes</label>
+													<textarea class="form-control" id="notes" name="notes"
+														th:value="${product.notes}" placeholder="Notes"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<div class="custom-file">
+														<input type="file" class="custom-file-input" id="file"
+															name="file" />
+														<label class="custom-file-label" for="file">Image File</label>
+													</div>
+												</div>
+											</div>
+											<div th:if="${product.imgLocation}" class=" col-md-6">
+												<label for="image">Current Image</label>
+												<img id="image" th:src="@{/images/} + ${product.imgLocation}"
+													alt="Existing Image" style="max-width:300px" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="form-label" for="manufacturer">Manufacturer</label>
+													<input type="text" class="form-control" id="manufacturer"
+														name="manufacturer" th:value="${product.manufacturer}"
+														placeholder="Manufacturer">
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+
+													<label class="form-label" for="supplier">Supplier</label>
+													<input type="text" class="form-control" id="supplier"
+														name="supplier" th:value="${product.supplier}"
+														placeholder="Supplier">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<input type="hidden" th:value="${product.id}" name="productId" />
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:insert="~{fragments/footer :: footer}"></div>
+	<div th:insert="~{fragments/footer-scripts :: footer}"></div>
+	<!-- bs-custom-file-input -->
+	<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
+	<script>
+		$(function () {
+			bsCustomFileInput.init();
+		});
+	</script>
+</body>
+
+</html>
