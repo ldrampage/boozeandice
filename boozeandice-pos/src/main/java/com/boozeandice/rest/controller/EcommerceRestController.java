@@ -1,4 +1,4 @@
-package com.boozeandice.controller;
+package com.boozeandice.rest.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

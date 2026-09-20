@@ -40,15 +40,6 @@ public class TransactionController {
 	@Autowired
 	private TransactionService transactionService; 
 	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private ShipmentRepository shipmentRepo;
-	
-	@Autowired
-	private AddressRepository addressRepo;
-	
 	@GetMapping(path="")
 	public String transaction(Model model) {
 		Set<Transaction> transactionList = transactionService.getAll();
@@ -61,36 +52,13 @@ public class TransactionController {
 	
 	@GetMapping(path="/view/{id}")
 	public String transactionViewPage(Model model, @PathVariable("id") String id) {
-		Transaction transaction = transactionService.getById(Long.valueOf(id));
-		Set<User> userList = userService.getByJobPositionId(Long.valueOf(7));
-		model.addAttribute("transaction", transaction);
-		model.addAttribute("deliveryDriver",userList);
+		transactionService.transactionViewPage(model, id);
 		return pageController.transactionViewPage(model);
 	}
 	
 	@PostMapping(path="/view/{id}")
 	public String transactionViewShipmentEdit(Model model, @PathVariable("id") String id, @RequestParam Map<String, String> parameters) throws ParseException {
-		for(Map.Entry<String, String> map : parameters.entrySet()) {
-			logger.debug(map.getKey() + ": " + map.getValue());
-		}
-		Transaction transaction = transactionService.getById(Long.valueOf(id));
-		User user = userService.getById(Long.valueOf(parameters.get("deliveryDriver")));
-		Shipment shipment = transaction.getShipment();
-		Date date = null;
-		date = new SimpleDateFormat("MM/dd/yyyy").parse(parameters.get("deliverydate"));
-		Address destinationAddress = shipment.getDestinationAddress();
-		destinationAddress.setAdditionalAddressDetails(parameters.get("address"));
-		destinationAddress.setLandmark(parameters.get("landmark"));
-		destinationAddress = addressRepo.save(destinationAddress);
-		
-		shipment.setDestinationAddress(destinationAddress);
-		shipment.setEstimatedDeliveryDate(date);
-		shipment.setDeliveryDriver(user);
-		shipment.setShipmentStatus(parameters.get("shipmentStatus"));
-		shipmentRepo.save(shipment);
-		
-		transaction.setShipment(shipment);
-		transactionService.save(transaction);
+		transactionService.transactionViewShipmentEdit(model, id, parameters);
 		return this.transactionViewPage(model,id);
 		
 	}

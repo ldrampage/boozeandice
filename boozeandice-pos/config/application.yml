@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: develop
   application:
     name: boozeandice
   servlet:
@@ -44,14 +44,14 @@ database-sync:
 #img upload location
 upload:
   product:
-    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\products
+    directory: C:\Projects\pos\boozeandice\boozeandice-pos\img\products
   profile:
-    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\profile
+    directory: C:\Projects\pos\boozeandice\boozeandice-pos\img\profile
   barcode:
-    directory: C:\Projects\boozeandicepos\boozeandice-pos\boozeandice\boozeandice-pos\img\barcodes
+    directory: C:\Projects\pos\boozeandice\boozeandice-pos\img\barcodes
   
 logging:
-  config: C:\Projects\boozeandicepos\boozeandice\boozeandice-pos\config\log4j2.xml
+  config: C:\Projects\pos\boozeandice\boozeandice-pos\config\log4j2.xml
   #level:
     #root: INFO
     #org:
@@ -70,7 +70,7 @@ logging:
 spring: 
   config:
     activate:
-      on-profile: dev
+      on-profile: develop
   datasource: 
     url: jdbc:mysql://localhost:3306/boozeandice
     username: root
