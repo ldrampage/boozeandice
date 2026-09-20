@@ -1,4 +1,4 @@
-package com.boozeandice.controller;
+package com.boozeandice.rest.controller;
 
 import java.io.IOException;
 import java.nio.file.Path;

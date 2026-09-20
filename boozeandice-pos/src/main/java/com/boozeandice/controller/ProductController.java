@@ -1,15 +1,5 @@
 package com.boozeandice.controller;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.boozeandice.config.UserDetailsImpl;
 import com.boozeandice.entity.Product;
-import com.boozeandice.entity.ProductCategory;
-import com.boozeandice.entity.ProductStock;
-import com.boozeandice.entity.User;
-import com.boozeandice.service.CategoryService;
 import com.boozeandice.service.ProductService;
-import com.boozeandice.service.ProductStockService;
-import com.boozeandice.service.UserService;
-import com.boozeandice.utility.BarcodeGenerator;
 
 @Controller
 @RequestMapping(path = "/product")
@@ -53,28 +33,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
-	@Autowired
-	private CategoryService categoryService;
-
-	@Autowired
-	private ProductStockService productStockService;
-	
-//	@Autowired
-//	private StockTransferTraceRepository stsRepo;
-
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private BarcodeGenerator barcodeGenerator;
-
-	@Value("${upload.product.directory}")
-	private String uploadDirectory;
-
 	@GetMapping(path = "/category")
 	public String productCategory(Model model) {
-		Set<ProductCategory> productCategoryList = categoryService.getAll();
-		model.addAttribute("productCategoryList", productCategoryList);
+		productService.getProductCategory(model);
 		return pageController.productCategory(model);
 	}
 
@@ -84,32 +45,16 @@ public class ProductController {
 
 	}
 
+	@GetMapping(path = "/category/edit/{id}")
+	public String productCategoryEditPage(Model model, @PathVariable String id) {
+		productService.productCategoryEditPagePrep(model, id);
+		return pageController.productCategoryEditPage(model);
+	}
+	
 	@PostMapping(path = "/category/add")
 	public String productCategoryCreateProcess(Model model, @RequestParam Map<String, String> parameters) {
-		ProductCategory productCategory = new ProductCategory();
-		productCategory.setName(parameters.get("category_name"));
-		productCategory.setDescription(parameters.get("category_description"));
-		Map<String, String> message = new HashMap<String, String>();
-
-		try {
-			categoryService.save(productCategory);
-			message.put("status", "success");
-		} catch (Exception e) {
-			message.put("status", "error");
-			message.put("message", e.getMessage());
-			e.printStackTrace();
-		}
-		model.addAttribute("message", message);
+		productService.productCategoryCreateProcessPrep(model, parameters);
 		return pageController.productCategoryCreatePage(model);
-	}
-
-	@GetMapping(path = "/category/edit/{id}")
-	public String productCategoryEditPage(Model model, @PathVariable("id") String id) {
-
-		ProductCategory category = categoryService.getById(Long.valueOf(id));
-
-		model.addAttribute("category", category);
-		return pageController.productCategoryEditPage(model);
 	}
 
 //	@GetMapping(path="/cateegory")
@@ -125,8 +70,7 @@ public class ProductController {
 
 	@GetMapping(path = "/stocks")
 	public String productStocks(Model model) {
-		List<ProductStock> productStockList = productStockService.getAll();
-		model.addAttribute("productStockList", productStockList);
+		productService.productStocks(model);
 		return pageController.productStocks(model);
 	}
 
@@ -218,21 +162,6 @@ public class ProductController {
 //
 //	}
 
-	@PostMapping(path = "/stocks")
-	public String productStocksSearch(Model model, @RequestParam("search") String search) {
-		logger.debug("productStocksSearch -> search: " + search);
-		Set<Product> productList = productService.searchByName(search);
-		List<ProductStock> productStockList = new ArrayList<ProductStock>();
-
-		ProductStock productStock = null;
-		for (Product product : productList) {
-			productStockList.addAll(productStockService.getByProduct(product));
-		}
-
-		model.addAttribute("search", search);
-		model.addAttribute("productStockList", productStockList);
-		return pageController.productStocks(model);
-	}
 
 	@GetMapping(path = "/stocks/add")
 	public String productStocksAdd(Model model, @RequestParam(value = "id", required = false) String productId) {
@@ -245,73 +174,30 @@ public class ProductController {
 		return pageController.productStocksAdd(model);
 	}
 
-	@PostMapping(path = "/stocks/add")
-	public String productStocksAddProcess(Model model, @RequestParam Map<String, String> parameters) {
-		Map<String, String> message = new HashMap<String, String>();
-		ProductStock productStock = new ProductStock();
-
-		try {
-			Product product = productService.getById(Long.valueOf(parameters.get("product")));
-			User user = userService.getByUsername(parameters.get("username"));
-			Date purchaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("purchasedate").trim());
-
-			productStock.setProduct(product);
-			productStock.setQuantity(Long.valueOf(parameters.get("quantity")));
-			productStock.setCost(Double.valueOf(parameters.get("cost")));
-			productStock.setPurchaseDate(purchaseDate);
-			productStock.setNotes(parameters.get("notes"));
-			productStock.setCreatedBy(user);
-			productStock.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-
-			Long newStockBatch = productStock.getQuantity();
-			product.setStocks(product.getStocks() + newStockBatch);
-
-			productStock = productStockService.save(productStock);
-
-			// Generate barcode start
-			logger.debug("generatebarcode: " + parameters.get("generatebarcode"));
-			if (parameters.get("generatebarcode") != null && parameters.get("generatebarcode").equals("on")) {
-				Map<String, String> barcodeInfoMap = barcodeGenerator.generateUPCABarcode(
-						productStock.getId().toString(), product.getId().toString(), product.getName(), 100, 50);
-				productStock.setBarcodeDigits(Long.valueOf(barcodeInfoMap.get("barcodeDigits")));
-				productStock.setBarcodeDigitsv2(barcodeInfoMap.get("barcodeDigitsv2"));
-				productStock.setBarcodeImageLocation(barcodeInfoMap.get("barcodeImgLocation"));
-			}
-			// Generate barcode end
-
-			productStockService.save(productStock);
-
-			message.put("status", "success");
-		} catch (Exception ex) {
-			message.put("status", "error");
-			message.put("message", ex.getMessage());
-			ex.printStackTrace();
-		}
-
-		Set<Product> productList = productService.getAll();
-		model.addAttribute("productList", productList);
-		model.addAttribute("message", message);
-		return pageController.productStocksAdd(model);
-	}
-
 	@GetMapping(path = "/stocks/edit/{id}")
 	public String productStocksEdit(Model model, @PathVariable(value = "id", required = false) String productStockId) {
-		logger.debug(productStockId);
-		ProductStock productStock = productStockService.getById(Long.valueOf(productStockId));
-
-		model.addAttribute("productStock", productStock);
-		model.addAttribute("product", productStock.getProduct());
+		productService.productStocksEdit(model, productStockId);
 		return pageController.productStocksEdit(model);
 	}
 
 	@GetMapping(path = "/stocks/printbarcode/{id}")
 	public String productStockPrintBarcode(Model model,
 			@PathVariable(value = "id", required = false) String productStockId) {
-		logger.debug("In productStockPrintBarcode() -> productStockId=" + productStockId);
-		ProductStock productStock = productStockService.getById(Long.valueOf(productStockId));
-		model.addAttribute("productName", productStock.getProduct().getName());
-		model.addAttribute("barcodeImageLocation", productStock.getBarcodeImageLocation());
+		productService.productStockPrintBarcode(model, productStockId);
 		return pageController.productStockPrintBarcodePage(model);
+	}
+	
+
+	@PostMapping(path = "/stocks/add")
+	public String productStocksAddProcess(Model model, @RequestParam Map<String, String> parameters) {
+		productService.productStocksAddProcessPrep(model, parameters);
+		return pageController.productStocksAdd(model);
+	}
+	
+	@PostMapping(path = "/stocks")
+	public String productStocksSearch(Model model, @RequestParam String search) {
+		productService.productStocksSearch(model, search);
+		return pageController.productStocks(model);
 	}
 
 	/**
@@ -328,21 +214,7 @@ public class ProductController {
 
 	@GetMapping(path = "/products/view/{productStockId}")
 	public String productView(Model model, @PathVariable("productStockId") Long productId) {
-		Product product = productService.getById(productId);
-		List<ProductStock> productStockList = null;
-		Double totalCost = 0.0;
-		if (product.getProductStock() != null) {
-			productStockList = productStockService.getByProduct(product);
-			for (ProductStock ps : productStockList) {
-				totalCost = totalCost + ps.getCost();
-			}
-		}
-
-		// TODO to add trasactions in the products view
-
-		model.addAttribute("totalCost", totalCost);
-		model.addAttribute("productStockList", productStockList);
-		model.addAttribute("product", product);
+		productService.productView(model, productId);
 		return pageController.productView(model);
 	}
 
@@ -355,129 +227,28 @@ public class ProductController {
 
 	@GetMapping(path = "/products/edit/{productId}")
 	public String productEdit(Model model, @PathVariable("productId") Long productId) {
-		Product product = productService.getById(productId);
-		Set<ProductCategory> productCategoryList = categoryService.getAll();
-		logger.debug(product.getName());
-		logger.debug(product.getImgLocation());
-		model.addAttribute("product", product);
-		model.addAttribute("selectedValue", product.getProductCategory().getId());
-		model.addAttribute("categoryList", productCategoryList);
+		productService.productEdit(model, productId);
 		return pageController.productEdit(model);
 	}
 
 	@GetMapping(path = "/products/add")
 	public String productAdd(Model model) {
-		Map<String, String> message = new HashMap<String, String>();
-		Set<ProductCategory> productCategoryList = categoryService.getAll();
-		model.addAttribute("categoryList", productCategoryList);
-		model.addAttribute("message", message);
+		productService.productAdd(model);
 		return pageController.productAdd(model);
 	}
 
 	@PostMapping(path = "/products/add")
 	public String productAddProcess(Model model, @RequestParam Map<String, String> parameters,
-			@RequestParam("file") MultipartFile file) {
-		Product product = new Product();
-		product.setName(parameters.get("name"));
-		product.setDescription(parameters.get("description"));
-		product.setManufacturer(parameters.get("manufacturer"));
-		product.setSupplier(parameters.get("supplier"));
-		product.setNotes(parameters.get("notes"));
-		product.setPrice(Double.valueOf(parameters.get("price")));
-
-		if (parameters.get("packaging_fee") != null && !parameters.get("packaging_fee").isBlank())
-			product.setPackagingFee(Double.valueOf(parameters.get("packaging_fee")));
-		else
-			product.setPackagingFee(0.0);
-
-		if (parameters.get("cost") != null && !parameters.get("cost").isBlank())
-			product.setCost(Double.valueOf(parameters.get("cost")));
-		else
-			product.setCost(0.0);
-
-		Path filePath = null;
-		Map<String, String> message = new HashMap<String, String>();
-		try {
-			if (!file.isEmpty()) {
-				filePath = Paths.get(uploadDirectory, file.getOriginalFilename());
-				Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-				product.setImgLocation(file.getOriginalFilename());
-			}
-			ProductCategory productCategory = categoryService.getById(Long.valueOf(parameters.get("categoryId")));
-			product.setProductCategory(productCategory);
-			
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-			User user = userService.getByUsername(userDetails.getUsername());
-			product.setCreatedBy(user); 
-			product.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-
-			product = productService.save(product);
-			message.put("status", "success");
-
-		} catch (Exception e) {
-			message.put("status", "error");
-			message.put("message", e.getMessage());
-			e.printStackTrace();
-		}
-
-		Set<ProductCategory> productCategoryList = categoryService.getAll();
-
-		model.addAttribute("categoryList", productCategoryList);
-		model.addAttribute("product", product);
-		model.addAttribute("message", message);
+			@RequestParam MultipartFile file) {
+		productService.productAddProcess(model, parameters, file);
 		return pageController.productAdd(model);
 	}
 
 	@PostMapping(path = "/products/edit")
 	public String productEditProcess(Model model, @RequestParam Map<String, String> parameters,
-			@RequestParam("file") MultipartFile file) {
-
-		Product product = productService.getById(Long.valueOf(parameters.get("productId")));
-		product.setName(parameters.get("name"));
-		product.setDescription(parameters.get("description"));
-		product.setManufacturer(parameters.get("manufacturer"));
-		product.setNotes(parameters.get("notes"));
-		product.setSupplier(parameters.get("supplier"));
-		product.setPrice(Double.valueOf(parameters.get("price")));
-
-		if (parameters.get("packaging_fee") != null && !parameters.get("packaging_fee").isBlank())
-			product.setPackagingFee(Double.valueOf(parameters.get("packaging_fee")));
-
-		if (parameters.get("cost") != null && !parameters.get("cost").isBlank())
-			product.setCost(Double.valueOf(parameters.get("cost")));
-
-		Path filePath = null;
-		Map<String, String> message = new HashMap<String, String>();
-		try {
-
-			// delete existing image file
-			if (!file.isEmpty()) {
-				if (product.getImgLocation() != null) {
-					Path imagePath = Paths.get(uploadDirectory, product.getImgLocation());
-					if (Files.exists(imagePath)) {
-						Files.delete(imagePath);
-					}
-				}
-				// save the new image file
-				filePath = Paths.get(uploadDirectory, file.getOriginalFilename());
-				Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-				product.setImgLocation(file.getOriginalFilename());
-			}
-
-			ProductCategory productCategory = categoryService.getById(Long.valueOf(parameters.get("categoryId")));
-			product.setProductCategory(productCategory);
-
-			product = productService.save(product);
-			message.put("status", "success");
-
-		} catch (Exception e) {
-			message.put("status", "error");
-			message.put("message", e.getMessage());
-			e.printStackTrace();
-		}
-		model.addAttribute("message", message);
-		return this.productEdit(model, product.getId());
+			@RequestParam MultipartFile file) {
+		productService.productEditProcess(model, parameters, file);
+		return this.productEdit(model, Long.valueOf(model.getAttribute("id").toString()));
 	}
 
 	@PostMapping(path = "/products")
@@ -495,9 +266,9 @@ public class ProductController {
 	 * Utility
 	 * 
 	 */
-	private String removeWordIgnoreCase(String word, String originalString) {
-		String regex = "(?i)\\b\\s*" + word + "\\s*\\b"; // (?i) for case-insensitive
-		return originalString.replaceAll(regex, "");
-	}
+//	private String removeWordIgnoreCase(String word, String originalString) {
+//		String regex = "(?i)\\b\\s*" + word + "\\s*\\b"; // (?i) for case-insensitive
+//		return originalString.replaceAll(regex, "");
+//	}
 
 }
