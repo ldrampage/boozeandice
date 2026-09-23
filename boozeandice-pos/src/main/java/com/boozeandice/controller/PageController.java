@@ -276,8 +276,8 @@ public class PageController {
 		try {
 			localHostMachine = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			logger.error(e.getMessage());
 			e.printStackTrace();
+			throw new com.boozeandice.exceptions.UnknownHostException(e.getMessage(), e.getCause());
 		}
 		
 		logger.debug("localHostMachine: " + localHostMachine.getHostName());
