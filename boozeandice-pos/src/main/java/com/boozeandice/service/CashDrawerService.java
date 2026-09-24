@@ -27,6 +27,7 @@ import com.boozeandice.entity.Expense;
 import com.boozeandice.entity.Transaction;
 import com.boozeandice.entity.User;
 import com.boozeandice.enums.PaymentMethod;
+import com.boozeandice.exceptions.InvalidDateFormatException;
 import com.boozeandice.repository.CashDrawerRepository;
 
 @Service
@@ -115,8 +116,7 @@ public class CashDrawerService implements Serializable {
 				cashDrawer = cashDrawerService.getByCreatedDate(cashDrawerDate);
 				customDate = true;
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new InvalidDateFormatException(e.getMessage(), e.getCause());
 			}
 			
 			

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import com.boozeandice.exceptions.UnhandledIOException;
+
 @Service
 public class DatabaseSyncService {
 	
@@ -45,8 +47,8 @@ public class DatabaseSyncService {
 			
 			
 		} catch(Exception e) {
-			logger.error(e.getMessage());
 			e.printStackTrace();
+			throw new UnhandledIOException(e.getMessage(), e.getCause());
 		}
 		logger.debug("Out executeScript()");
 	}
